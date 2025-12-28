@@ -1,0 +1,1 @@
+import{g as t}from"./index.CB87Sc6I.js";const o=t.timeline({defaults:{ease:"power3.out"}});o.to(".hero-image",{opacity:1,scale:1,duration:1,delay:.2}).to(".hero-subtitle",{opacity:1,y:0,duration:.8},"-=0.5").to(".hero-title",{opacity:1,y:0,duration:.8},"-=0.6").to(".hero-role",{opacity:1,y:0,duration:.8},"-=0.6").to(".hero-buttons",{opacity:1,y:0,duration:.8},"-=0.6");
