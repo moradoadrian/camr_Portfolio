@@ -1,0 +1,83 @@
+---
+
+---
+
+<div
+  class="custom-cursor hidden md:block fixed top-0 left-0 w-4 h-4 bg-purple-500 pointer-events-none z-[9999] mix-blend-difference"
+>
+</div>
+<div
+  class="cursor-follower hidden md:block fixed top-0 left-0 w-8 h-8 border-2 border-purple-400 pointer-events-none z-[9998] transition-transform duration-100 ease-out"
+>
+</div>
+
+<script>
+  import { gsap } from "gsap";
+
+  const cursor = document.querySelector(".custom-cursor");
+  const follower = document.querySelector(".cursor-follower");
+
+  let mouseX = 0;
+  let mouseY = 0;
+  let followerX = 0;
+  let followerY = 0;
+
+  document.addEventListener("mousemove", (e) => {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+
+    gsap.to(cursor, {
+      x: mouseX - 8, // Center the cursor (w-4 = 16px / 2 = 8)
+      y: mouseY - 8,
+      duration: 0,
+    });
+  });
+
+  // Smooth follower animation loop
+  gsap.ticker.add(() => {
+    followerX += (mouseX - followerX) * 0.15; // Slightly faster follow
+    followerY += (mouseY - followerY) * 0.15;
+
+    gsap.set(follower, {
+      x: followerX - 16, // Center the follower (w-8 = 32px / 2 = 16)
+      y: followerY - 16,
+    });
+  });
+
+  // Hover effects
+  const links = document.querySelectorAll("a, button");
+
+  links.forEach((link) => {
+    link.addEventListener("mouseenter", () => {
+      gsap.to(cursor, { scale: 0.5, backgroundColor: "#fff", duration: 0.2 });
+      gsap.to(follower, {
+        scale: 1.5,
+        borderColor: "#fff",
+        rotation: 45,
+        duration: 0.3,
+      });
+    });
+
+    link.addEventListener("mouseleave", () => {
+      gsap.to(cursor, { scale: 1, backgroundColor: "#a855f7", duration: 0.2 });
+      gsap.to(follower, {
+        scale: 1,
+        borderColor: "#c084fc",
+        rotation: 0,
+        duration: 0.3,
+      });
+    });
+  });
+</script>
+
+<style>
+  body {
+    cursor: none; /* Hide default cursor */
+  }
+
+  @media (max-width: 768px) {
+    body {
+      cursor: auto; /* Restore default cursor on mobile */
+    }
+  }
+</style>

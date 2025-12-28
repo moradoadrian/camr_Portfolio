@@ -1,0 +1,29 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Hero from "../components/Hero.astro";
+import Projects from "../components/Projects.astro";
+import Experience from "../components/Experience.astro";
+import Contact from "../components/Contact.astro";
+
+// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
+// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+---
+
+<Layout>
+  <main class="relative z-10">
+    <Hero />
+    <Experience />
+    <Projects />
+    <Contact />
+  </main>
+
+  <footer
+    class="py-8 text-center text-slate-500 text-sm relative z-10 border-t border-slate-800 mt-20 font-mono"
+  >
+    <p>
+      // &copy; {new Date().getFullYear()} Cesar Adrian Morado Rodriguez. <span
+        class="text-purple-500">End_of_Line</span
+      >
+    </p>
+  </footer>
+</Layout>

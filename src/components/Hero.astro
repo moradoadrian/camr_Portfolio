@@ -1,0 +1,139 @@
+---
+
+---
+
+<section
+  class="min-h-screen flex flex-col justify-center items-center relative overflow-hidden px-4"
+>
+  <div
+    class="z-10 flex flex-col md:flex-row items-center gap-8 md:gap-16 max-w-6xl mx-auto"
+  >
+    <!-- Profile Image -->
+    <div
+      class="hero-image relative w-48 h-48 md:w-64 md:h-64 shrink-0 opacity-0 scale-50"
+    >
+      <div
+        class="absolute inset-0 bg-purple-600 opacity-20 translate-x-2 translate-y-2"
+      >
+      </div>
+      <img
+        src="/1757554006561.jpg"
+        alt="Cesar Adrian Morado Rodriguez"
+        class="relative w-full h-full object-cover border-2 border-purple-500 grayscale hover:grayscale-0 transition-all duration-500"
+      />
+      <!-- Corner Accents -->
+      <div
+        class="absolute -top-2 -left-2 w-4 h-4 border-t-2 border-l-2 border-purple-500"
+      >
+      </div>
+      <div
+        class="absolute -bottom-2 -right-2 w-4 h-4 border-b-2 border-r-2 border-purple-500"
+      >
+      </div>
+    </div>
+
+    <!-- Text Content -->
+    <div class="text-center md:text-left">
+      <h2
+        class="hero-subtitle text-xl md:text-2xl text-purple-400 font-pixel mb-2 opacity-0 translate-y-10"
+      >
+        &lt;Hola_Mundo /&gt;
+      </h2>
+      <h1
+        class="hero-title text-5xl md:text-7xl font-bold font-pixel text-white mb-4 opacity-0 translate-y-10 tracking-tight"
+      >
+        Cesar Adrian<br />
+        <span class="text-purple-500">Morado Rodriguez</span>
+      </h1>
+      <p
+        class="hero-role text-xl md:text-2xl text-slate-400 mb-8 opacity-0 translate-y-10 font-mono border-l-2 border-purple-500 pl-4"
+      >
+        > Desarrollador de Proyectos de Innovación<span class="animate-pulse"
+          >_</span
+        >
+      </p>
+
+      <div
+        class="hero-buttons flex gap-4 justify-center md:justify-start opacity-0 translate-y-10 font-pixel text-xl"
+      >
+        <a
+          href="#projects"
+          class="px-8 py-3 bg-purple-600 hover:bg-purple-700 text-white border-2 border-transparent hover:border-white transition-all transform hover:-translate-y-1"
+        >
+          [ VER_PROYECTOS ]
+        </a>
+        <a
+          href="/Ing-Cesar-Adrian-Morado-Rodriguez-DESARROLLADOR DE PROYECTOS DE INNOVACIÓN.pdf"
+          target="_blank"
+          class="px-8 py-3 border-2 border-purple-500 text-purple-400 hover:bg-purple-500/10 transition-all transform hover:-translate-y-1"
+        >
+          [ DESCARGAR_CV ]
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="absolute bottom-10 animate-bounce">
+    <svg
+      class="w-6 h-6 text-purple-500"
+      fill="none"
+      stroke="currentColor"
+      viewBox="0 0 24 24"
+    >
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
+    </svg>
+  </div>
+</section>
+
+<script>
+  import { gsap } from "gsap";
+
+  const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
+
+  tl.to(".hero-image", {
+    opacity: 1,
+    scale: 1,
+    duration: 1,
+    delay: 0.2,
+  })
+    .to(
+      ".hero-subtitle",
+      {
+        opacity: 1,
+        y: 0,
+        duration: 0.8,
+      },
+      "-=0.5"
+    )
+    .to(
+      ".hero-title",
+      {
+        opacity: 1,
+        y: 0,
+        duration: 0.8,
+      },
+      "-=0.6"
+    )
+    .to(
+      ".hero-role",
+      {
+        opacity: 1,
+        y: 0,
+        duration: 0.8,
+      },
+      "-=0.6"
+    )
+    .to(
+      ".hero-buttons",
+      {
+        opacity: 1,
+        y: 0,
+        duration: 0.8,
+      },
+      "-=0.6"
+    );
+</script>
