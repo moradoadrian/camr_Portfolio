@@ -1,0 +1,73 @@
+---
+const techCategories = [
+  {
+    name: "FRONTEND_CORE",
+    icon: "💻",
+    skills: [
+      { name: "Angular", icon: `<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2L2 5.5L3.5 19L12 22L20.5 19L22 5.5L12 2Z" fill="#DD0031"/><path d="M12 2L2 5.5L3.5 19L12 22V2Z" fill="#C3002F"/><path d="M12 4.5L18.5 18H15.5L14 14.5H10L8.5 18H5.5L12 4.5Z" fill="white"/><path d="M12 4.5V14.5H14L12 4.5Z" fill="white"/><path d="M12 7.5L10.5 11H13.5L12 7.5Z" fill="#DD0031"/></svg>` },
+      { name: "TypeScript", icon: `<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12Z" fill="#3178C6"/><path d="M15.5 16.5V15.25C15.5 14.5 15 14.25 14.5 14.25H13V11.5H14.5V10H11.5V14.25H12.5C13 14.25 13.25 14.5 13.25 15V15.5C13.25 16 13 16.25 12.5 16.25H11V16.5H15.5ZM9.5 16.5V11.5H11V10H6.5V11.5H8V16.5H9.5Z" fill="white"/></svg>` },
+      { name: "JavaScript", icon: `<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12Z" fill="#F7DF1E"/><path d="M7.5 16.5V11.5H9V16.5H7.5ZM12.5 16.5V15.25C12.5 14.5 12 14.25 11.5 14.25H10V11.5H11.5V10H8.5V14.25H9.5C10 14.25 10.25 14.5 10.25 15V15.5C10.25 16 10 16.25 9.5 16.25H8V16.5H12.5Z" fill="black"/></svg>` },
+      { name: "HTML5", icon: `<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 2L4.5 19L12 21L19.5 19L21 2H3Z" fill="#E34F26"/><path d="M12 19.5L17.5 18L18.5 4H12V19.5Z" fill="#EF652A"/><path d="M12 8.5H7.5L8 14H12V16H8.5L8.2 11H12V8.5Z" fill="white"/></svg>` },
+      { name: "Tailwind", icon: `<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12.0002 6C12.0002 6 13.5002 2 17.5002 3C21.5002 4 21.5002 8 19.0002 10.5C16.5002 13 15.0002 12 16.0002 10C17.0002 8 18.5002 7.5 19.0002 8.5C19.5002 9.5 18.5002 11.5 16.0002 11.5C13.5002 11.5 12.0002 8.5 12.0002 6Z" fill="#38BDF8"/><path d="M6.00024 12C6.00024 12 7.50024 8 11.5002 9C15.5002 10 15.5002 14 13.0002 16.5C10.5002 19 9.00024 18 10.0002 16C11.0002 14 12.5002 13.5 13.0002 14.5C13.5002 15.5 12.5002 17.5 10.0002 17.5C7.50024 17.5 6.00024 14.5 6.00024 12Z" fill="#38BDF8"/></svg>` },
+    ]
+  },
+  {
+    name: "BACKEND_&_DATA",
+    icon: "🗄️",
+    skills: [
+      { name: "Node.js", icon: `<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2L3 7V17L12 22L21 17V7L12 2Z" fill="#339933"/><path d="M12 10V18M12 10L18 7M12 10L6 7" stroke="white" stroke-width="2"/></svg>` },
+      { name: "Firebase", icon: `<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3.89 15.67L11.99 20.19L20.1 15.67L18.67 4.92C18.67 4.92 18.62 4.47 18.24 4.47C17.86 4.47 17.76 4.87 17.76 4.87L14.56 11.14L12.66 7.44C12.66 7.44 12.51 7.14 12.14 7.14C11.77 7.14 11.62 7.44 11.62 7.44L3.89 15.67Z" fill="#FFCA28"/><path d="M11.99 20.19L3.89 15.67L2.79 4.62C2.79 4.62 2.74 4.17 3.12 4.17C3.5 4.17 3.6 4.57 3.6 4.57L11.99 20.19Z" fill="#FFA000"/><path d="M11.99 20.19L14.56 11.14L17.76 4.87C17.76 4.87 17.96 4.47 18.24 4.47C18.52 4.47 18.67 4.92 18.67 4.92L21.21 17.42C21.21 17.42 21.36 18.17 20.1 18.87L11.99 20.19Z" fill="#FFCA28"/></svg>` },
+      { name: "MySQL", icon: `<svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/></svg>` },
+    ]
+  },
+  {
+    name: "TOOLS_&_OTHERS",
+    icon: "🛠️",
+    skills: [
+      { name: "Git", icon: `<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2L2 12L12 22L22 12L12 2Z" fill="#F05032"/><path d="M12 16V8M12 8L9 11M12 8L15 11" stroke="white" stroke-width="2"/></svg>` },
+      { name: "Capacitor", icon: `<svg viewBox="0 0 512 512" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M464 64H48C21.5 64 0 85.5 0 112v288c0 26.5 21.5 48 48 48h416c26.5 0 48-21.5 48-48V112c0-26.5-21.5-48-48-48zM128 352c-17.7 0-32-14.3-32-32s14.3-32 32-32 32 14.3 32 32-14.3 32-32 32zm128 0c-17.7 0-32-14.3-32-32s14.3-32 32-32 32 14.3 32 32-14.3 32-32 32zm128 0c-17.7 0-32-14.3-32-32s14.3-32 32-32 32 14.3 32 32-14.3 32-32 32z"/></svg>` },
+      { name: "VS Code", icon: `<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2 12L7 2L17 22L22 12L17 2L7 22L2 12Z" fill="#007ACC"/></svg>` },
+    ]
+  }
+];
+---
+
+<section id="technologies" class="py-20 px-4 relative border-t border-slate-800 bg-slate-950">
+  <div class="max-w-6xl mx-auto">
+    <h2 class="text-4xl md:text-5xl font-bold text-center mb-16 font-pixel text-purple-400">
+      &lt;Tech_Stack /&gt;
+    </h2>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      {techCategories.map((category) => (
+        <div class="tech-category group">
+          <div class="bg-slate-900/50 border-2 border-slate-700 p-6 h-full hover:border-purple-500 transition-all duration-300 relative overflow-hidden">
+            <!-- Header -->
+            <div class="flex items-center gap-3 mb-6 border-b border-slate-700 pb-4">
+              <span class="text-2xl">{category.icon}</span>
+              <h3 class="font-mono text-lg text-purple-300 font-bold tracking-wider">
+                {category.name}
+              </h3>
+            </div>
+
+            <!-- Grid -->
+            <div class="grid grid-cols-2 gap-4">
+              {category.skills.map((skill) => (
+                <div class="flex flex-col items-center justify-center p-3 bg-slate-800/50 border border-slate-700 hover:bg-purple-900/20 hover:border-purple-500/50 transition-all duration-300 group/skill cursor-default">
+                  <div class="w-8 h-8 mb-2 text-slate-300 group-hover/skill:text-white transition-colors" set:html={skill.icon} />
+                  <span class="text-xs font-mono text-slate-400 group-hover/skill:text-purple-300 text-center">
+                    {skill.name}
+                  </span>
+                </div>
+              ))}
+            </div>
+
+            <!-- Decorative Corner -->
+            <div class="absolute top-0 right-0 w-4 h-4 border-t-2 border-r-2 border-purple-500 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+            <div class="absolute bottom-0 left-0 w-4 h-4 border-b-2 border-l-2 border-purple-500 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
