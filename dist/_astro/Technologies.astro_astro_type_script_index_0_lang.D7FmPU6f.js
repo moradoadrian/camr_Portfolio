@@ -1,0 +1,1 @@
+import{g as r}from"./index.CB87Sc6I.js";import{S as t}from"./ScrollTrigger.Cv03IO65.js";r.registerPlugin(t);const g=document.querySelectorAll(".tech-category");g.forEach((o,e)=>{r.fromTo(o,{opacity:0,y:40},{scrollTrigger:{trigger:o,start:"top bottom-=100",toggleActions:"play none none reverse"},opacity:1,y:0,duration:.8,delay:e*.12,ease:"power3.out"})});
