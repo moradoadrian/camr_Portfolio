@@ -4,86 +4,206 @@
 
 <section
   id="contact"
-  class="py-20 px-4 relative overflow-hidden border-t border-slate-800"
+  class="py-24 px-4 relative overflow-hidden border-t border-slate-900 bg-slate-950/20"
 >
-  <div class="max-w-4xl mx-auto text-center relative z-10">
-    <h2 class="text-4xl md:text-5xl font-bold mb-8 font-pixel text-purple-400">
+  <div class="max-w-5xl mx-auto text-center relative z-10 font-mono">
+    <h2 class="text-4xl md:text-5xl font-bold mb-8 font-pixel text-purple-400" data-i18n="contact.title">
       &lt;Initialize_Connection /&gt;
     </h2>
-    <p class="text-xl text-slate-400 mb-12 max-w-2xl mx-auto font-mono">
-      // Estoy siempre abierto a nuevas oportunidades y colaboraciones.
+    
+    <p class="text-base md:text-lg text-slate-400 mb-12 max-w-2xl mx-auto">
+      <span data-i18n="contact.subtitle">// Estoy siempre abierto a nuevas oportunidades y colaboraciones técnicas.</span>
       <br />
-      <span class="text-purple-500">if</span> (project.isInteresting) <span
+      <span class="text-purple-500">if</span> (project.isInteresting || role.isSenior) <span
         class="text-purple-500"
-        >{}
+        >&#123;
         <br />
-        &nbsp;&nbsp;contactMe();
+        &nbsp;&nbsp;establishSecureConnection();
         <br />
-        <span class="text-purple-500"></span></span
-      >
+        &#125;</span>
     </p>
 
-    <div
-      class="flex flex-col md:flex-row gap-6 justify-center items-center font-mono"
-    >
-      <a
-        href="mailto:cesar.morado@example.com"
-        class="group relative px-8 py-4 bg-slate-950 hover:bg-slate-900 border-2 border-slate-700 hover:border-purple-500 transition-all duration-300 flex items-center gap-4 min-w-[250px]"
-      >
-        <div
-          class="p-2 bg-slate-800 group-hover:bg-purple-900/50 transition-colors border border-slate-600"
+    <!-- Contact Grid -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mb-16 text-left">
+      
+      <!-- Email Card -->
+      <div class="group relative p-5 bg-slate-955 border-2 border-slate-800 hover:border-purple-500 transition-all duration-300 flex items-center gap-4 rounded-md">
+        <a
+          href="mailto:moradoadrian@gmail.com"
+          class="flex items-center gap-4 w-full"
         >
-          <svg
-            class="w-6 h-6 text-purple-400"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
-            ></path>
+          <div class="p-2.5 bg-slate-900 group-hover:bg-purple-900/40 transition-colors border border-slate-700 rounded">
+            <svg class="w-6 h-6 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+            </svg>
+          </div>
+          <div>
+            <p class="text-[9px] text-slate-500 group-hover:text-purple-400 tracking-widest uppercase" data-i18n="contact.emailService">EMAIL_SERVICE</p>
+            <p class="text-xs text-white font-bold group-hover:text-purple-300">moradoadrian@gmail.com</p>
+          </div>
+        </a>
+        <!-- Copy Button -->
+        <button
+          class="copy-btn absolute top-3 right-3 text-slate-600 hover:text-purple-400 transition-colors cursor-pointer"
+          data-copy="moradoadrian@gmail.com"
+          aria-label="Copiar correo electrónico"
+        >
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path>
           </svg>
-        </div>
-        <div class="text-left">
-          <p class="text-xs text-slate-500 group-hover:text-purple-400">
-            EXECUTE_MAIL_CLIENT
-          </p>
-          <p class="text-white font-bold group-hover:text-purple-300">
-            Send_Email()
-          </p>
-        </div>
-      </a>
+        </button>
+      </div>
 
+      <!-- LinkedIn Card -->
       <a
         href="https://www.linkedin.com/in/moradoadrian/"
         target="_blank"
-        class="group relative px-8 py-4 bg-slate-950 hover:bg-slate-900 border-2 border-slate-700 hover:border-blue-500 transition-all duration-300 flex items-center gap-4 min-w-[250px]"
+        rel="noopener noreferrer"
+        class="group relative p-5 bg-slate-955 border-2 border-slate-800 hover:border-blue-500 transition-all duration-300 flex items-center gap-4 rounded-md"
       >
-        <div
-          class="p-2 bg-slate-800 group-hover:bg-blue-900/50 transition-colors border border-slate-600"
-        >
-          <svg
-            class="w-6 h-6 text-blue-400"
-            fill="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"
-            ></path>
+        <div class="p-2.5 bg-slate-900 group-hover:bg-blue-900/40 transition-colors border border-slate-700 rounded">
+          <svg class="w-6 h-6 text-blue-400" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"></path>
           </svg>
         </div>
-        <div class="text-left">
-          <p class="text-xs text-slate-500 group-hover:text-blue-400">
-            CONNECT_NETWORK
-          </p>
-          <p class="text-white font-bold group-hover:text-blue-300">
-            Open_LinkedIn()
-          </p>
+        <div>
+          <p class="text-[9px] text-slate-500 group-hover:text-blue-400 tracking-widest uppercase" data-i18n="contact.profNet">PROFESSIONAL_NET</p>
+          <p class="text-xs text-white font-bold group-hover:text-blue-300">linkedin/moradoadrian</p>
         </div>
       </a>
+
+      <!-- GitHub Card -->
+      <a
+        href="https://github.com/moradoadrian/"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="group relative p-5 bg-slate-955 border-2 border-slate-800 hover:border-slate-400 transition-all duration-300 flex items-center gap-4 rounded-md"
+      >
+        <div class="p-2.5 bg-slate-900 group-hover:bg-slate-800 transition-colors border border-slate-700 rounded">
+          <svg class="w-6 h-6 text-slate-300" fill="currentColor" viewBox="0 0 24 24">
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"></path>
+          </svg>
+        </div>
+        <div>
+          <p class="text-[9px] text-slate-500 group-hover:text-slate-400 tracking-widest uppercase" data-i18n="contact.codeRepos">CODE_REPOS</p>
+          <p class="text-xs text-white font-bold group-hover:text-slate-300">github/moradoadrian</p>
+        </div>
+      </a>
+
+      <!-- WhatsApp Card -->
+      <div class="group relative p-5 bg-slate-955 border-2 border-slate-800 hover:border-emerald-500 transition-all duration-300 flex items-center gap-4 rounded-md">
+        <a
+          href="https://wa.me/524614210058"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="flex items-center gap-4 w-full"
+        >
+          <div class="p-2.5 bg-slate-900 group-hover:bg-emerald-950/40 transition-colors border border-slate-700 rounded">
+            <svg class="w-6 h-6 text-emerald-400" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.5-5.739-1.451L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.825 1.451 5.436 0 9.86-4.42 9.863-9.864.001-2.637-1.03-5.115-2.903-6.99-1.872-1.873-4.347-2.907-6.98-2.907-5.442 0-9.87 4.42-9.872 9.863-.001 1.758.465 3.475 1.353 4.996l-.995 3.637 3.709-.972zm12.56-6.666c-.302-.152-1.785-.882-2.057-.982-.273-.099-.471-.148-.669.149-.197.297-.767.967-.94 1.165-.173.199-.347.223-.649.071-.302-.151-1.272-.469-2.423-1.496-.895-.798-1.5-1.784-1.675-2.086-.173-.302-.018-.465.132-.615.136-.135.302-.35.454-.526.151-.175.201-.3.302-.501.101-.201.05-.378-.026-.528-.075-.151-.669-1.612-.916-2.207-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.785-.73 2.034-1.433.248-.703.248-1.306.173-1.432-.074-.128-.272-.203-.574-.355z"></path>
+            </svg>
+          </div>
+          <div>
+            <p class="text-[9px] text-slate-500 group-hover:text-emerald-400 tracking-widest uppercase" data-i18n="contact.instantMsg">INSTANT_MSG</p>
+            <p class="text-xs text-white font-bold group-hover:text-emerald-300" data-i18n="contact.whatsapp">WhatsApp Me</p>
+          </div>
+        </a>
+        <!-- Copy Button -->
+        <button
+          class="copy-btn absolute top-3 right-3 text-slate-600 hover:text-emerald-400 transition-colors cursor-pointer"
+          data-copy="+524614210058"
+          aria-label="Copiar teléfono"
+        >
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Download CV Card -->
+      <a
+        href="/Ing-Cesar-Adrian-Morado-Rodriguez-2026.pdf"
+        target="_blank"
+        class="group relative p-5 bg-slate-955 hover:bg-slate-900 border-2 border-slate-800 hover:border-purple-500 transition-all duration-300 flex items-center gap-4 rounded-md"
+      >
+        <div class="p-2.5 bg-slate-900 group-hover:bg-purple-900/40 transition-colors border border-slate-700 rounded">
+          <svg class="w-6 h-6 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+          </svg>
+        </div>
+        <div>
+          <p class="text-[9px] text-slate-500 group-hover:text-purple-400 tracking-widest uppercase" data-i18n="contact.documentPull">DOWNLOAD_CV</p>
+          <p class="text-xs text-white font-bold group-hover:text-purple-300">Get_CV.pdf</p>
+        </div>
+      </a>
+
+      <!-- Location Card -->
+      <div
+        class="group relative p-5 bg-slate-950 border-2 border-slate-800 flex items-center gap-4 rounded-md"
+      >
+        <div class="p-2.5 bg-slate-900 border border-slate-700 rounded">
+          <svg class="w-6 h-6 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+          </svg>
+        </div>
+        <div>
+          <p class="text-[9px] text-slate-500 tracking-widest uppercase" data-i18n="contact.geoCoordinates">GEO_COORDINATES</p>
+          <p class="text-xs text-white font-bold">Guanajuato, México 🇲🇽</p>
+        </div>
+      </div>
     </div>
   </div>
+
+  <!-- Toast Notification element -->
+  <div
+    id="toast"
+    class="fixed bottom-6 right-6 z-[110] bg-slate-900 border-2 border-purple-500 px-4 py-3 rounded shadow-[0_0_20px_rgba(168,85,247,0.2)] flex items-center gap-2 transform translate-y-20 opacity-0 transition-all duration-300 font-mono text-xs text-purple-300 hidden"
+  >
+    <span class="font-bold select-none text-purple-400">[i] COP_SUCCESS:</span>
+    <span id="toast-message">Copied to clipboard!</span>
+  </div>
 </section>
+
+<script>
+  const toast = document.getElementById("toast");
+  const toastMsg = document.getElementById("toast-message");
+
+  const showToast = (message: string) => {
+    if (!toast || !toastMsg) return;
+    toastMsg.innerText = message;
+    toast.classList.remove("hidden");
+    // Force layout reflow
+    toast.offsetHeight;
+    toast.classList.remove("translate-y-20", "opacity-0");
+    
+    setTimeout(() => {
+      toast.classList.add("translate-y-20", "opacity-0");
+      setTimeout(() => {
+        toast.classList.add("hidden");
+      }, 300);
+    }, 2500);
+  };
+
+  document.querySelectorAll(".copy-btn").forEach((btn) => {
+    btn.addEventListener("click", async (e) => {
+      e.stopPropagation();
+      e.preventDefault();
+      
+      const textToCopy = btn.getAttribute("data-copy") || "";
+      if (!textToCopy) return;
+
+      try {
+        await navigator.clipboard.writeText(textToCopy);
+        // Get translated message
+        const isEn = document.documentElement.getAttribute("lang") === "en";
+        const successMsg = isEn ? "Copied to clipboard!" : "¡Copiado al portapapeles!";
+        showToast(successMsg);
+      } catch (err) {
+        const isEn = document.documentElement.getAttribute("lang") === "en";
+        const errorMsg = isEn ? "Failed to copy to clipboard." : "Error al copiar al portapapeles.";
+        showToast(errorMsg);
+      }
+    });
+  });
+</script>

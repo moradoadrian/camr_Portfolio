@@ -1,0 +1,510 @@
+---
+interface Certification {
+  key: string;
+  title: string;
+  issuer: string;
+  date: string;
+  duration: string;
+  description: string;
+  skills: string[];
+  preview: string;
+  images: string[];
+  group: "big" | "unir";
+}
+
+const certifications: Certification[] = [
+  {
+    key: "cert1",
+    title: "Curso de Iniciación al Desarrollo con IA",
+    issuer: "BIG School",
+    date: "03/10/2025",
+    duration: "6",
+    description: "Certificado de asistencia a las jornadas formativas \"Desarrollo con IA\", enfocado en los fundamentos del desarrollo de aplicaciones utilizando Inteligencia Artificial.",
+    skills: ["AI", "Prompt Engineering"],
+    preview: "/1.- Certificadi Iniciacion con IA.jpeg",
+    images: ["/1.- Certificadi Iniciacion con IA.jpeg"],
+    group: "big"
+  },
+  {
+    key: "cert2",
+    title: "Desarrollo con IA: de 0 a Producción",
+    issuer: "BIG School",
+    date: "14/03/2026",
+    duration: "6",
+    description: "Certificado de asistencia al curso \"Desarrollo con IA: de 0 a Producción\", centrado en el uso práctico de herramientas de IA para crear aplicaciones listas para producción.",
+    skills: ["AI", "LLMs", "DevOps"],
+    preview: "/2.- Certificado desarrollo con IA.jpeg",
+    images: ["/2.- Certificado desarrollo con IA.jpeg"],
+    group: "big"
+  },
+  {
+    key: "cert3",
+    title: "Ciberseguridad y Hacking Ético",
+    issuer: "BIG School",
+    date: "10/04/2026",
+    duration: "6",
+    description: "Certificado de asistencia a las jornadas de Ciberseguridad y Hacking Ético, enfocadas en vulnerabilidades, defensa digital y buenas prácticas de seguridad informática.",
+    skills: ["Security", "Hacking", "Linux"],
+    preview: "/3.-Certificado ciberseguridad.jpeg",
+    images: ["/3.-Certificado ciberseguridad.jpeg"],
+    group: "big"
+  },
+  {
+    key: "cert4",
+    title: "Curso de Gestión de Proyectos Ágiles: Design Thinking y Scrum",
+    issuer: "Universidad Internacional de La Rioja (UNIR México)",
+    date: "27 de marzo de 2026",
+    duration: "32",
+    description: "Certificación enfocada en metodologías ágiles para la gestión de proyectos, incluyendo Scrum, Design Thinking, trabajo colaborativo y transformación organizacional.",
+    skills: ["Scrum", "Agile", "Design Thinking", "Project Management"],
+    preview: "/1 Proyectos Agiles.png",
+    images: ["/1 Proyectos Agiles.png", "/2 Proyectos Agiles.png"],
+    group: "unir"
+  },
+  {
+    key: "cert5",
+    title: "Diplomado en Soft Skills y Habilidades Directivas",
+    issuer: "Universidad Internacional de La Rioja (UNIR México)",
+    date: "25 de mayo de 2025",
+    duration: "100",
+    description: "Diplomado orientado al desarrollo de habilidades directivas, liderazgo, comunicación efectiva, negociación, inteligencia emocional, toma de decisiones y gestión del cambio.",
+    skills: ["Liderazgo", "Comunicación", "Negociación", "Inteligencia Emocional", "Gestión Cambio"],
+    preview: "/1 Soft Skills.png",
+    images: ["/1 Soft Skills.png", "/2 Soft Skills.png"],
+    group: "unir"
+  }
+];
+
+const bigSchoolCerts = certifications.filter(c => c.group === "big");
+const unirCerts = certifications.filter(c => c.group === "unir");
+---
+
+<section id="certifications" class="py-24 px-4 relative border-t border-slate-900 bg-slate-950/30 overflow-hidden">
+  <div class="absolute top-1/3 right-1/10 w-96 h-96 bg-purple-900/5 rounded-full blur-3xl pointer-events-none"></div>
+
+  <div class="max-w-6xl mx-auto relative z-10">
+    <div class="text-center mb-20">
+      <h2 class="text-4xl md:text-5xl font-bold font-pixel text-purple-400 mb-4 tracking-wider" data-i18n="cert.title">
+        &lt;Certificaciones /&gt;
+      </h2>
+      <p class="font-mono text-xs text-slate-500 max-w-md mx-auto" data-i18n="cert.subtitle">
+        // Formación continua y certificaciones profesionales
+      </p>
+    </div>
+
+    <!-- Group 1: BIG School -->
+    <div class="mb-16">
+      <div class="flex items-center gap-3 mb-8 border-b border-slate-800 pb-2">
+        <!-- BIG School Logo SVG -->
+        <svg class="w-5 h-5 text-purple-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+        </svg>
+        <h3 class="text-lg md:text-xl font-bold font-pixel text-white tracking-wide uppercase">BIG School</h3>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+        {
+          bigSchoolCerts.map((cert) => (
+            <div class="cert-card group relative bg-slate-955 border-2 border-slate-800 hover:border-purple-500/80 transition-all duration-300 hover:shadow-[0_0_20px_rgba(168,85,247,0.08)] p-6 rounded-md flex flex-col justify-between h-full opacity-0 translate-y-10">
+              
+              <div>
+                {/* Real Certificate Image Preview */}
+                <div 
+                  class="view-cert-btn aspect-[4/3] overflow-hidden border border-slate-800 rounded mb-5 relative group-hover:border-purple-500/40 transition-colors cursor-pointer group/preview outline-none"
+                  data-images={JSON.stringify(cert.images)}
+                  data-title={cert.title}
+                  aria-label={`Visualizar certificado de ${cert.title}`}
+                >
+                  <img
+                    src={cert.preview}
+                    alt={cert.title}
+                    class="w-full h-full object-cover transform group-hover/preview:scale-103 transition-transform duration-500"
+                  />
+                  <div class="absolute inset-0 bg-slate-950/40 group-hover/preview:bg-slate-950/80 flex items-center justify-center opacity-0 group-hover/preview:opacity-100 transition-all duration-300">
+                    <span class="text-[10px] font-mono font-bold text-white px-2.5 py-1.5 bg-purple-600 border border-white/20 shadow-lg tracking-wider" data-i18n="cert.hoverHint">
+                      CLICK PARA VISUALIZAR
+                    </span>
+                  </div>
+                </div>
+
+                <div class="font-mono">
+                  <h3 class="text-lg font-bold text-white mb-3 font-pixel tracking-wide flex items-start gap-1.5">
+                    <span class="text-purple-500 font-bold shrink-0">&gt;</span>
+                    <span data-i18n={`cert.${cert.key}.title`}>{cert.title}</span>
+                  </h3>
+                  
+                  <div class="space-y-1 text-[11px] text-slate-500 mb-4 uppercase tracking-wider font-semibold border-l border-slate-800 pl-3">
+                    <p>
+                      <span data-i18n="cert.issuerLabel">Institución</span>: <span class="text-slate-400" data-i18n={`cert.${cert.key}.issuer`}>{cert.issuer}</span>
+                    </p>
+                    <p>
+                      <span data-i18n="cert.dateLabel">Fecha</span>: <span class="text-slate-400" data-i18n={`cert.${cert.key}.date`}>{cert.date}</span>
+                    </p>
+                    <p>
+                      <span data-i18n="cert.durationLabel">Duración</span>: <span class="text-slate-400">{cert.duration} <span data-i18n="cert.hours">horas</span></span>
+                    </p>
+                  </div>
+
+                  <p class="text-xs text-slate-400 leading-relaxed text-justify mb-5 font-mono" data-i18n={`cert.${cert.key}.desc`}>
+                    {cert.description}
+                  </p>
+                </div>
+              </div>
+
+              <!-- Bottom elements: tech skills & actions -->
+              <div class="font-mono mt-4 pt-4 border-t border-slate-800/80 flex flex-col gap-4">
+                <div class="flex flex-wrap gap-1.5">
+                  {cert.skills.map(skill => (
+                    <span class="px-2 py-0.5 text-[9px] bg-slate-900 border border-slate-800 text-slate-500 rounded-sm">
+                      {skill}
+                    </span>
+                  ))}
+                </div>
+
+                <div class="flex justify-between items-center gap-2">
+                  <button
+                    class="view-cert-btn text-[10px] text-purple-400 hover:text-purple-300 font-bold flex items-center gap-1 transition-colors group/link uppercase cursor-pointer bg-transparent border-none p-0 outline-none"
+                    data-images={JSON.stringify(cert.images)}
+                    data-title={cert.title}
+                    data-i18n="cert.view"
+                    aria-label={`Ver certificado de ${cert.title}`}
+                  >
+                    Ver certificado
+                  </button>
+
+                  <button
+                    class="download-cert-btn text-[10px] text-slate-400 hover:text-purple-400 font-bold flex items-center gap-1 transition-colors group/link uppercase cursor-pointer bg-transparent border-none p-0 outline-none"
+                    data-images={JSON.stringify(cert.images)}
+                    data-title={cert.title}
+                    data-i18n="cert.download"
+                    aria-label={`Descargar de ${cert.title}`}
+                  >
+                    Descargar
+                  </button>
+                </div>
+              </div>
+
+              <!-- Corner decorators -->
+              <div class="absolute top-0 right-0 w-2.5 h-2.5 border-t border-r border-slate-800 group-hover:border-purple-500 transition-colors"></div>
+              <div class="absolute bottom-0 left-0 w-2.5 h-2.5 border-b border-l border-slate-800 group-hover:border-purple-500 transition-colors"></div>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+
+    <!-- Group 2: UNIR -->
+    <div>
+      <div class="flex items-center gap-3 mb-8 border-b border-slate-800 pb-2">
+        <!-- UNIR Crest Logo SVG -->
+        <svg class="w-5 h-5 text-purple-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.168.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+        </svg>
+        <h3 class="text-lg md:text-xl font-bold font-pixel text-white tracking-wide uppercase">UNIR (Universidad Internacional de La Rioja)</h3>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+        {
+          unirCerts.map((cert) => (
+            <div class="cert-card group relative bg-slate-955 border-2 border-slate-800 hover:border-purple-500/80 transition-all duration-300 hover:shadow-[0_0_20px_rgba(168,85,247,0.08)] p-6 rounded-md flex flex-col justify-between h-full opacity-0 translate-y-10">
+              
+              <div>
+                {/* Real Certificate Image Preview */}
+                <div 
+                  class="view-cert-btn aspect-[4/3] overflow-hidden border border-slate-800 rounded mb-5 relative group-hover:border-purple-500/40 transition-colors cursor-pointer group/preview outline-none"
+                  data-images={JSON.stringify(cert.images)}
+                  data-title={cert.title}
+                  aria-label={`Visualizar certificado de ${cert.title}`}
+                >
+                  <img
+                    src={cert.preview}
+                    alt={cert.title}
+                    class="w-full h-full object-cover transform group-hover/preview:scale-103 transition-transform duration-500"
+                  />
+                  <div class="absolute inset-0 bg-slate-950/40 group-hover/preview:bg-slate-950/80 flex items-center justify-center opacity-0 group-hover/preview:opacity-100 transition-all duration-300">
+                    <span class="text-[10px] font-mono font-bold text-white px-2.5 py-1.5 bg-purple-600 border border-white/20 shadow-lg tracking-wider" data-i18n="cert.hoverHint">
+                      CLICK PARA VISUALIZAR
+                    </span>
+                  </div>
+                  
+                  {/* Visual indicator for multi-page documents */}
+                  <div class="absolute bottom-2 right-2 bg-purple-950/80 border border-purple-500/40 text-purple-300 text-[8px] font-mono px-2 py-0.5 rounded shadow z-10">
+                    MULTI_PAGE ({cert.images.length})
+                  </div>
+                </div>
+
+                <div class="font-mono">
+                  <h3 class="text-lg font-bold text-white mb-3 font-pixel tracking-wide flex items-start gap-1.5">
+                    <span class="text-purple-500 font-bold shrink-0">&gt;</span>
+                    <span data-i18n={`cert.${cert.key}.title`}>{cert.title}</span>
+                  </h3>
+                  
+                  <div class="space-y-1 text-[11px] text-slate-500 mb-4 uppercase tracking-wider font-semibold border-l border-slate-800 pl-3">
+                    <p>
+                      <span data-i18n="cert.issuerLabel">Institución</span>: <span class="text-slate-400" data-i18n={`cert.${cert.key}.issuer`}>{cert.issuer}</span>
+                    </p>
+                    <p>
+                      <span data-i18n="cert.dateLabel">Fecha</span>: <span class="text-slate-400" data-i18n={`cert.${cert.key}.date`}>{cert.date}</span>
+                    </p>
+                    <p>
+                      <span data-i18n="cert.durationLabel">Duración</span>: <span class="text-slate-400">{cert.duration} <span data-i18n="cert.hours">horas</span></span>
+                    </p>
+                  </div>
+
+                  <p class="text-xs text-slate-400 leading-relaxed text-justify mb-5 font-mono" data-i18n={`cert.${cert.key}.desc`}>
+                    {cert.description}
+                  </p>
+                </div>
+              </div>
+
+              <!-- Bottom elements: tech skills & actions -->
+              <div class="font-mono mt-4 pt-4 border-t border-slate-800/80 flex flex-col gap-4">
+                <div class="flex flex-wrap gap-1.5">
+                  {cert.skills.map(skill => (
+                    <span class="px-2 py-0.5 text-[9px] bg-slate-900 border border-slate-800 text-slate-500 rounded-sm">
+                      {skill}
+                    </span>
+                  ))}
+                </div>
+
+                <div class="flex justify-between items-center gap-2">
+                  <button
+                    class="view-cert-btn text-[10px] text-purple-400 hover:text-purple-300 font-bold flex items-center gap-1 transition-colors group/link uppercase cursor-pointer bg-transparent border-none p-0 outline-none"
+                    data-images={JSON.stringify(cert.images)}
+                    data-title={cert.title}
+                    data-i18n="cert.view"
+                    aria-label={`Ver certificado de ${cert.title}`}
+                  >
+                    Ver certificado
+                  </button>
+
+                  <button
+                    class="download-cert-btn text-[10px] text-slate-400 hover:text-purple-400 font-bold flex items-center gap-1 transition-colors group/link uppercase cursor-pointer bg-transparent border-none p-0 outline-none"
+                    data-images={JSON.stringify(cert.images)}
+                    data-title={cert.title}
+                    data-i18n="cert.download"
+                    aria-label={`Descargar de ${cert.title}`}
+                  >
+                    Descargar
+                  </button>
+                </div>
+              </div>
+
+              <!-- Corner decorators -->
+              <div class="absolute top-0 right-0 w-2.5 h-2.5 border-t border-r border-slate-800 group-hover:border-purple-500 transition-colors"></div>
+              <div class="absolute bottom-0 left-0 w-2.5 h-2.5 border-b border-l border-slate-800 group-hover:border-purple-500 transition-colors"></div>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal / Lightbox Visor for document rendering with zoom & controls -->
+  <div id="cert-modal" class="fixed inset-0 z-[100] bg-slate-950/80 backdrop-blur-sm hidden items-center justify-center p-4">
+    <div class="bg-slate-900 border-2 border-purple-500 rounded-md max-w-4xl w-full h-[90vh] flex flex-col relative font-mono shadow-[0_0_50px_rgba(168,85,247,0.3)]">
+      <!-- Visor Header styled as a premium terminal -->
+      <div class="flex items-center justify-between border-b border-purple-500/30 px-4 py-3 bg-slate-950">
+        <span class="text-xs text-purple-400 font-bold select-none">&gt; VISOR_DE_DOCUMENTOS.EXE</span>
+        <button id="modal-close-btn" class="text-slate-400 hover:text-purple-400 text-xs font-bold border border-slate-800 hover:border-purple-500 px-3 py-1 rounded transition-all outline-none" aria-label="Cerrar visor">&times; CLOSE</button>
+      </div>
+
+      <!-- Controls toolbar -->
+      <div class="bg-slate-950/80 border-b border-slate-800 px-4 py-2 flex flex-wrap gap-4 items-center justify-between text-xs text-slate-400 font-mono">
+        <!-- Page Nav -->
+        <div class="flex items-center gap-2">
+          <button id="modal-prev-btn" class="px-2.5 py-1 bg-slate-900 hover:bg-purple-950/40 border border-slate-800 hover:border-purple-500/50 text-[10px] rounded transition-colors">&lt; PREV</button>
+          <span id="modal-page-counter" class="text-[10px] tracking-wider text-purple-400 font-bold">PAGE_01_OF_01</span>
+          <button id="modal-next-btn" class="px-2.5 py-1 bg-slate-900 hover:bg-purple-950/40 border border-slate-800 hover:border-purple-500/50 text-[10px] rounded transition-colors">NEXT &gt;</button>
+        </div>
+
+        <!-- Zoom and download controls -->
+        <div class="flex items-center gap-3">
+          <button id="modal-zoomin-btn" class="px-2 py-0.5 bg-slate-900 hover:bg-slate-800 border border-slate-800 rounded font-bold text-sm" aria-label="Acercar">+</button>
+          <button id="modal-zoomout-btn" class="px-2 py-0.5 bg-slate-900 hover:bg-slate-800 border border-slate-800 rounded font-bold text-sm" aria-label="Alejar">-</button>
+          
+          <button id="modal-download-btn" class="px-3 py-1 bg-purple-600 hover:bg-purple-700 text-white text-[10px] font-bold rounded transition-colors uppercase">Descargar</button>
+        </div>
+      </div>
+
+      <!-- Document Viewport -->
+      <div class="flex-1 overflow-auto p-6 flex items-center justify-center bg-slate-950/30">
+        <div class="relative max-w-full max-h-full transition-transform duration-200 ease-out" id="modal-img-container">
+          <img id="modal-img" src="" alt="Certificado" class="max-w-full max-h-[60vh] object-contain border border-slate-800 shadow-2xl rounded" />
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  import { gsap } from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  // Scroll entrance animation
+  const cards = document.querySelectorAll(".cert-card");
+  cards.forEach((card, index) => {
+    gsap.to(card, {
+      scrollTrigger: {
+        trigger: card,
+        start: "top bottom-=80",
+        toggleActions: "play none none reverse",
+      },
+      opacity: 1,
+      y: 0,
+      duration: 0.8,
+      delay: index * 0.12,
+      ease: "power3.out",
+    });
+  });
+
+  // Lightbox Modal State
+  let activeImages: string[] = [];
+  let activeIndex = 0;
+  let activeZoom = 1.0;
+  let activeTitle = "";
+
+  const modal = document.getElementById("cert-modal");
+  const modalImg = document.getElementById("modal-img") as HTMLImageElement;
+  const modalImgContainer = document.getElementById("modal-img-container");
+  const pageCounter = document.getElementById("modal-page-counter");
+  
+  const prevBtn = document.getElementById("modal-prev-btn");
+  const nextBtn = document.getElementById("modal-next-btn");
+  const zoomInBtn = document.getElementById("modal-zoomin-btn");
+  const zoomOutBtn = document.getElementById("modal-zoomout-btn");
+  const downloadBtn = document.getElementById("modal-download-btn");
+  const closeBtn = document.getElementById("modal-close-btn");
+
+  const updateModal = () => {
+    if (!modalImg || !pageCounter || !modalImgContainer) return;
+    
+    // Update Image source
+    modalImg.src = activeImages[activeIndex];
+    
+    // Reset Zoom scale and transform
+    modalImgContainer.style.transform = `scale(${activeZoom})`;
+    
+    // Update Counter
+    pageCounter.innerText = `PAGE_0${activeIndex + 1}_OF_0${activeImages.length}`;
+
+    // Enable/disable page navigation buttons depending on image count
+    if (activeImages.length <= 1) {
+      prevBtn?.setAttribute("disabled", "true");
+      nextBtn?.setAttribute("disabled", "true");
+      prevBtn?.classList.add("opacity-30", "pointer-events-none");
+      nextBtn?.classList.add("opacity-30", "pointer-events-none");
+    } else {
+      prevBtn?.removeAttribute("disabled");
+      nextBtn?.removeAttribute("disabled");
+      prevBtn?.classList.remove("opacity-30", "pointer-events-none");
+      nextBtn?.classList.remove("opacity-30", "pointer-events-none");
+    }
+  };
+
+  const openModal = (images: string[], title: string) => {
+    activeImages = images;
+    activeIndex = 0;
+    activeZoom = 1.0;
+    activeTitle = title;
+    
+    updateModal();
+    
+    modal?.classList.remove("hidden");
+    modal?.classList.add("flex");
+    document.body.classList.add("overflow-hidden");
+  };
+
+  const closeModal = () => {
+    if (!modal) return;
+    modal.classList.remove("flex");
+    modal.classList.add("hidden");
+    document.body.classList.remove("overflow-hidden");
+  };
+
+  // Nav actions
+  prevBtn?.addEventListener("click", () => {
+    if (activeImages.length > 1) {
+      activeIndex = (activeIndex - 1 + activeImages.length) % activeImages.length;
+      updateModal();
+    }
+  });
+
+  nextBtn?.addEventListener("click", () => {
+    if (activeImages.length > 1) {
+      activeIndex = (activeIndex + 1) % activeImages.length;
+      updateModal();
+    }
+  });
+
+  // Zoom actions
+  zoomInBtn?.addEventListener("click", () => {
+    if (activeZoom < 2.5) {
+      activeZoom += 0.25;
+      updateModal();
+    }
+  });
+
+  zoomOutBtn?.addEventListener("click", () => {
+    if (activeZoom > 0.5) {
+      activeZoom -= 0.25;
+      updateModal();
+    }
+  });
+
+  // Download action
+  downloadBtn?.addEventListener("click", () => {
+    activeImages.forEach((src, idx) => {
+      const a = document.createElement("a");
+      a.href = src;
+      const ext = src.split('.').pop() || 'png';
+      a.download = `${activeTitle.replace(/\s+/g, '_')}_page${idx + 1}.${ext}`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    });
+  });
+
+  // Bind Openers
+  document.querySelectorAll(".view-cert-btn").forEach((btn) => {
+    btn.addEventListener("click", (e) => {
+      e.preventDefault();
+      const imagesAttr = btn.getAttribute("data-images");
+      const titleAttr = btn.getAttribute("data-title");
+      if (imagesAttr && titleAttr) {
+        openModal(JSON.parse(imagesAttr), titleAttr);
+      }
+    });
+  });
+
+  // Bind Downloads from cards directly
+  document.querySelectorAll(".download-cert-btn").forEach((btn) => {
+    btn.addEventListener("click", (e) => {
+      e.preventDefault();
+      const imagesAttr = btn.getAttribute("data-images");
+      const titleAttr = btn.getAttribute("data-title");
+      if (imagesAttr && titleAttr) {
+        const images = JSON.parse(imagesAttr) as string[];
+        images.forEach((src, idx) => {
+          const a = document.createElement("a");
+          a.href = src;
+          const ext = src.split('.').pop() || 'png';
+          a.download = `${titleAttr.replace(/\s+/g, '_')}_page${idx + 1}.${ext}`;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+        });
+      }
+    });
+  });
+
+  closeBtn?.addEventListener("click", closeModal);
+  modal?.addEventListener("click", (e) => {
+    if (e.target === modal) closeModal();
+  });
+  window.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") closeModal();
+  });
+</script>

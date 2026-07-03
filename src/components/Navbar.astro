@@ -1,9 +1,11 @@
 ---
 const links = [
-  { name: "Inicio", href: "#top" },
-  { name: "Experiencia", href: "#experience" },
-  { name: "Proyectos", href: "#projects" },
-  { name: "Contacto", href: "#contact" },
+  { key: "home", name: "Inicio", href: "#top" },
+  { key: "about", name: "Sobre Mí", href: "#about" },
+  { key: "experience", name: "Experiencia", href: "#experience" },
+  { key: "certifications", name: "Certificaciones", href: "#certifications" },
+  { key: "projects", name: "Proyectos", href: "#projects" },
+  { key: "contact", name: "Contacto", href: "#contact" },
 ];
 ---
 
@@ -17,46 +19,88 @@ const links = [
     <a
       href="#"
       class="text-lg font-bold text-purple-400 hover:text-purple-300 transition-colors"
+      data-i18n="navbar.logo"
     >
       ~/camr_portfolio
     </a>
 
     <!-- Desktop Menu -->
-    <ul class="hidden md:flex gap-8">
+    <ul class="hidden md:flex gap-8 items-center">
       {
         links.map((link) => (
           <li>
             <a
               href={link.href}
-              class="text-sm text-slate-400 hover:text-purple-400 transition-colors relative group flex items-center gap-1"
+              class="nav-link text-sm text-slate-400 hover:text-purple-400 transition-colors relative group flex items-center gap-1"
             >
               <span class="text-purple-600 opacity-0 group-hover:opacity-100 transition-opacity">></span>
-              {link.name}
+              <span data-i18n={`navbar.${link.key}`}>{link.name}</span>
             </a>
           </li>
         ))
       }
+      <!-- Language Selector Desktop -->
+      <li class="ml-4">
+        <div class="lang-selector font-mono text-xs flex items-center border border-slate-800 bg-slate-900/60 p-0.5 rounded">
+          <button 
+            id="lang-btn-es" 
+            class="px-2 py-1 rounded transition-all duration-300 text-purple-400 font-bold bg-purple-500/10" 
+            aria-label="Cambiar idioma a Español"
+          >
+            ES
+          </button>
+          <span class="text-slate-700 px-0.5 select-none">|</span>
+          <button 
+            id="lang-btn-en" 
+            class="px-2 py-1 rounded transition-all duration-300 text-slate-500 hover:text-slate-300" 
+            aria-label="Switch language to English"
+          >
+            EN
+          </button>
+        </div>
+      </li>
     </ul>
 
-    <!-- Mobile Menu Button -->
-    <button
-      class="md:hidden text-purple-400 hover:text-purple-300 focus:outline-none border border-slate-700 p-1"
-      id="mobile-menu-btn"
-    >
-      <span class="sr-only">Open menu</span>
-      <svg
-        class="w-6 h-6"
-        fill="none"
-        stroke="currentColor"
-        viewBox="0 0 24 24"
+    <!-- Mobile Lang Selector and Menu Button -->
+    <div class="flex items-center gap-4 md:hidden">
+      <div class="lang-selector font-mono text-[10px] flex items-center border border-slate-800 bg-slate-900/60 p-0.5 rounded">
+        <button 
+          id="lang-btn-es-mob" 
+          class="px-1.5 py-0.5 rounded transition-all duration-300 text-purple-400 font-bold bg-purple-500/10" 
+          aria-label="Cambiar idioma a Español"
+        >
+          ES
+        </button>
+        <span class="text-slate-700 px-0.5 select-none">|</span>
+        <button 
+          id="lang-btn-en-mob" 
+          class="px-1.5 py-0.5 rounded transition-all duration-300 text-slate-500 hover:text-slate-300" 
+          aria-label="Switch language to English"
+        >
+          EN
+        </button>
+      </div>
+
+      <button
+        class="text-purple-400 hover:text-purple-300 focus:outline-none border border-slate-700 p-1"
+        id="mobile-menu-btn"
       >
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="2"
-          d="M4 6h16M4 12h16M4 18h16"></path>
-      </svg>
-    </button>
+        <span class="sr-only">Open menu</span>
+        <svg
+          class="w-6 h-6"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M4 6h16M4 12h16M4 18h16"
+          ></path>
+        </svg>
+      </button>
+    </div>
   </div>
 
   <!-- Mobile Menu Overlay -->
@@ -75,7 +119,8 @@ const links = [
           stroke-linecap="round"
           stroke-linejoin="round"
           stroke-width="2"
-          d="M6 18L18 6M6 6l12 12"></path>
+          d="M6 18L18 6M6 6l12 12"
+        ></path>
       </svg>
     </button>
     <div class="flex flex-col gap-6 items-start">
@@ -83,9 +128,10 @@ const links = [
         links.map((link) => (
           <a
             href={link.href}
-            class="text-2xl font-bold text-slate-300 hover:text-purple-400 transition-colors mobile-link flex items-center gap-2"
+            class="nav-link text-2xl font-bold text-slate-300 hover:text-purple-400 transition-colors mobile-link flex items-center gap-2"
           >
-            <span class="text-purple-600">></span> {link.name}
+            <span class="text-purple-600">></span> 
+            <span data-i18n={`navbar.${link.key}`}>{link.name}</span>
           </a>
         ))
       }
@@ -103,9 +149,11 @@ const links = [
   // Scroll effect
   window.addEventListener("scroll", () => {
     if (window.scrollY > 50) {
-      navbar?.classList.add("py-2");
+      navbar?.classList.add("bg-slate-950/98", "shadow-[0_4px_30px_rgba(0,0,0,0.8)]", "border-purple-500/20");
+      navbar?.classList.remove("bg-slate-950/90");
     } else {
-      navbar?.classList.remove("py-2");
+      navbar?.classList.remove("bg-slate-950/98", "shadow-[0_4px_30px_rgba(0,0,0,0.8)]", "border-purple-500/20");
+      navbar?.classList.add("bg-slate-950/90");
     }
   });
 
@@ -121,4 +169,40 @@ const links = [
   mobileLinks.forEach((link) => {
     link.addEventListener("click", toggleMenu);
   });
+
+  // Active Section Tracker using IntersectionObserver
+  const sections = document.querySelectorAll("section");
+  const navLinks = document.querySelectorAll(".nav-link");
+
+  const observerOptions = {
+    root: null,
+    rootMargin: "-25% 0px -55% 0px",
+    threshold: 0
+  };
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        const id = entry.target.getAttribute("id");
+        navLinks.forEach((link) => {
+          const href = link.getAttribute("href");
+          if (href === `#${id}` || (id === "top" && href === "#top")) {
+            link.classList.add("text-purple-400", "font-bold");
+            link.classList.remove("text-slate-400", "text-slate-300");
+          } else {
+            link.classList.remove("text-purple-400", "font-bold");
+            if (link.classList.contains("mobile-link")) {
+              link.classList.add("text-slate-300");
+            } else {
+              link.classList.add("text-slate-400");
+            }
+          }
+        });
+      }
+    });
+  }, observerOptions);
+
+  sections.forEach((section) => observer.observe(section));
+  const bodyTop = document.getElementById("top");
+  if (bodyTop) observer.observe(bodyTop);
 </script>

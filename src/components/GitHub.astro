@@ -1,0 +1,69 @@
+---
+
+---
+
+<section id="github" class="py-20 px-4 bg-slate-900/10 border-t border-slate-900 relative overflow-hidden">
+  <div class="max-w-4xl mx-auto relative z-10 font-mono">
+    <div class="text-center mb-12">
+      <h2 class="text-4xl md:text-5xl font-bold font-pixel text-purple-400 mb-4 tracking-wider" data-i18n="github.title">
+        &lt;GitHub_Activity /&gt;
+      </h2>
+      <p class="text-xs text-slate-500 max-w-md mx-auto" data-i18n="github.subtitle">
+        // Repository telemetry and code contributions
+      </p>
+    </div>
+
+    <!-- GitHub Panel -->
+    <div class="bg-slate-900/40 border-2 border-slate-800 rounded-md overflow-hidden hover:border-purple-500/40 transition-colors shadow-2xl">
+      <!-- Title bar -->
+      <div class="bg-slate-950 px-4 py-2 flex items-center justify-between border-b border-slate-800">
+        <span class="text-xs text-slate-500 font-bold font-mono">API.GITHUB.COM/USERS/MORADOADRIAN</span>
+        <span class="text-xs text-purple-400 font-bold select-none">&gt;_</span>
+      </div>
+
+      <!-- Terminal Body -->
+      <div class="p-6 md:p-8 space-y-6 text-sm text-slate-300 font-mono">
+        <div class="flex items-center gap-2 pb-3 border-b border-slate-800/60">
+          <span class="text-purple-500 font-bold">$</span>
+          <span class="text-white font-bold">curl https://api.github.com/users/moradoadrian/stats</span>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-6 leading-relaxed">
+          <div class="space-y-3">
+            <div>
+              <span class="text-purple-400 font-bold" data-i18n="github.repo">Primary Repository:</span>
+              <p class="text-slate-300 text-xs">moradoadrian/camr_Portfolio</p>
+            </div>
+            <div>
+              <span class="text-purple-400 font-bold" data-i18n="github.status">Operational Status:</span>
+              <p class="text-green-400 text-xs font-semibold" data-i18n="github.statusVal">Active Development</p>
+            </div>
+          </div>
+
+          <div class="space-y-3">
+            <div>
+              <span class="text-purple-400 font-bold" data-i18n="github.commits">Logged Commits:</span>
+              <p class="text-slate-300 text-xs">320+ commits</p>
+            </div>
+            <div>
+              <span class="text-purple-400 font-bold" data-i18n="github.contrib">Annual Contributions:</span>
+              <p class="text-slate-300 text-xs">450+ in the last year</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="pt-6 border-t border-slate-800/60 flex justify-center md:justify-start">
+          <a
+            href="https://github.com/moradoadrian"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="px-6 py-2.5 border-2 border-purple-500 text-purple-400 hover:bg-purple-500/10 transition-all font-pixel text-xs"
+            data-i18n="github.btn"
+          >
+            [ GO_TO_GITHUB ]
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

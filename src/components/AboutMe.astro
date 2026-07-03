@@ -1,0 +1,169 @@
+---
+const coreSkills = [
+  { name: "Angular", level: "Expert" },
+  { name: "TypeScript", level: "Expert" },
+  { name: "Firebase", level: "Advanced" },
+  { name: ".NET / C#", level: "Advanced" },
+  { name: "REST APIs", level: "Advanced" },
+  { name: "SQL & Databases", level: "Advanced" },
+  { name: "UX / UI Design", level: "Intermediate" }
+];
+
+const specialties = [
+  "Angular",
+  "TypeScript",
+  "Firebase",
+  "REST APIs",
+  "SQL",
+  "UI/UX",
+  "Clean Code",
+  "Arquitectura Frontend"
+];
+---
+
+<section id="about" class="py-24 px-4 bg-slate-900/20 border-t border-slate-900 relative overflow-hidden">
+  <!-- Glowing subtle lights -->
+  <div class="absolute -top-40 -right-40 w-96 h-96 bg-purple-900/10 rounded-full blur-3xl pointer-events-none"></div>
+
+  <div class="max-w-6xl mx-auto relative z-10 font-mono">
+    <div class="text-center mb-16">
+      <h2 class="text-4xl md:text-5xl font-bold font-pixel text-purple-400 mb-4 tracking-wider" data-i18n="about.title">
+        &lt;About_Me /&gt;
+      </h2>
+      <p class="text-xs text-slate-500 max-w-md mx-auto" data-i18n="about.subtitle">
+        // PROFILE_DETAILS_AND_SKILLSET
+      </p>
+    </div>
+
+    <!-- Biography Panel -->
+    <div class="grid md:grid-cols-12 gap-8 items-stretch mb-8">
+      <!-- Biography & Presentation (8 Columns on desktop) -->
+      <div class="md:col-span-7 bg-slate-950/80 border-2 border-slate-800 p-6 md:p-8 rounded-md relative flex flex-col justify-between hover:border-purple-500/40 transition-colors group">
+        <div>
+          <div class="flex items-center justify-between mb-6 pb-2 border-b border-slate-800">
+            <span class="text-xs text-purple-400 font-bold" data-i18n="about.cfgLabel">&gt; SYSTEM_PROFILE.CFG</span>
+            <span class="text-[9px] text-slate-600" data-i18n="about.status">STATUS: ONLINE</span>
+          </div>
+
+          <div class="space-y-4 text-sm text-slate-300 leading-relaxed text-justify font-mono">
+            <p data-i18n="about.bio1">
+              I am a <strong class="text-purple-400 font-semibold">Software Engineer</strong> with a strong focus on <strong class="text-white font-semibold">Frontend Web Development</strong> and building responsive, secure, and user-centric systems. My expertise centers on designing scalable applications with <strong class="text-purple-300">Angular</strong>, utilizing its full power from architecture and reactive state management to performance tuning.
+            </p>
+            <p data-i18n="about.bio2">
+              Over the last <strong class="text-white font-semibold">3+ years</strong> of professional experience, I have successfully digitized critical workflows for public administration (government systems) and automated complex tasks in clinical and corporate environments.
+            </p>
+            <p data-i18n="about.bio3">
+              I believe software development is the perfect union between engineering precision and creative problem solving. I am currently pursuing a Master's degree in Web UI Design & Development to continue bridging the gap between clean code and high-fidelity user experiences.
+            </p>
+          </div>
+        </div>
+
+        <div class="mt-8 pt-4 border-t border-slate-800 flex flex-wrap justify-between items-center gap-4 text-xs text-slate-500">
+          <div>
+            <span class="text-purple-400 font-bold" data-i18n="about.availability">&gt; AVAILABILITY:</span> 
+            <span data-i18n="about.availabilityValue">Immediate / Full-Time</span>
+          </div>
+          <div>
+            <span class="text-purple-400 font-bold" data-i18n="about.region">&gt; REGION:</span> 
+            <span data-i18n="about.regionValue">Guanajuato, MX (Remote)</span>
+          </div>
+        </div>
+
+        <!-- Corner decorators -->
+        <div class="absolute top-0 right-0 w-2.5 h-2.5 border-t border-r border-slate-700 group-hover:border-purple-500 transition-colors"></div>
+        <div class="absolute bottom-0 left-0 w-2.5 h-2.5 border-b border-l border-slate-700 group-hover:border-purple-500 transition-colors"></div>
+      </div>
+
+      <!-- Core Pillars & Stats (5 Columns on desktop) -->
+      <div class="md:col-span-5 bg-slate-950/80 border-2 border-slate-800 p-6 rounded-md hover:border-purple-500/40 transition-colors group relative flex flex-col justify-between">
+        <div>
+          <div class="flex items-center justify-between mb-6 pb-2 border-b border-slate-800">
+            <span class="text-xs text-purple-400 font-bold" data-i18n="about.competencies">&gt; CORE_COMPETENCIES</span>
+            <span class="text-[9px] text-slate-600">VER: 3.2.1</span>
+          </div>
+
+          <ul class="space-y-4 font-mono">
+            {coreSkills.map((skill) => (
+              <li class="flex flex-col gap-1">
+                <div class="flex justify-between text-xs font-mono">
+                  <span class="text-white">&gt; {skill.name}</span>
+                  <span class="text-purple-400 font-semibold" data-i18n={`tech.${skill.level.toLowerCase()}`}>{skill.level}</span>
+                </div>
+                <div class="w-full bg-slate-900 h-1.5 rounded overflow-hidden border border-slate-800">
+                  <div class={`h-full bg-purple-500 ${
+                    skill.level === 'Expert' ? 'w-[95%]' : 
+                    skill.level === 'Advanced' ? 'w-[80%]' : 
+                    'w-[60%]'
+                  }`}></div>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <!-- Corner decorators -->
+        <div class="absolute top-0 right-0 w-2.5 h-2.5 border-t border-r border-slate-700 group-hover:border-purple-500 transition-colors"></div>
+        <div class="absolute bottom-0 left-0 w-2.5 h-2.5 border-b border-l border-slate-700 group-hover:border-purple-500 transition-colors"></div>
+      </div>
+    </div>
+
+    <!-- What I Do & Enjoys Details -->
+    <div class="grid md:grid-cols-12 gap-8 items-stretch">
+      <!-- Detailed Columns -->
+      <div class="md:col-span-7 bg-slate-950/85 border-2 border-slate-800 p-6 md:p-8 rounded-md relative flex flex-col gap-6 hover:border-purple-500/40 transition-colors group">
+        <div>
+          <h4 class="text-xs text-purple-400 font-bold mb-2 uppercase tracking-widest" data-i18n="about.whatIDoTitle">
+            LO QUE HAGO
+          </h4>
+          <p class="text-xs text-slate-400 leading-relaxed text-justify" data-i18n="about.whatIDoText">
+            Desarrollo de interfaces de usuario robustas, aplicaciones web reactivas monopágina y sistemas de administración con alto nivel de seguridad.
+          </p>
+        </div>
+
+        <div>
+          <h4 class="text-xs text-purple-400 font-bold mb-2 uppercase tracking-widest" data-i18n="about.myApproachTitle">
+            MI ENFOQUE
+          </h4>
+          <p class="text-xs text-slate-400 leading-relaxed text-justify" data-i18n="about.myApproachText">
+            Arquitectura limpia, componentes modulares, reactividad optimizada (Signals), tipado estricto y un enfoque incansable en el rendimiento y accesibilidad.
+          </p>
+        </div>
+
+        <div>
+          <h4 class="text-xs text-purple-400 font-bold mb-2 uppercase tracking-widest" data-i18n="about.enjoyTitle">
+            QUÉ DISFRUTO DESARROLLAR
+          </h4>
+          <p class="text-xs text-slate-400 leading-relaxed text-justify" data-i18n="about.enjoyText">
+            Sistemas de formularios dinámicos complejos, utilidades interactivas offline-first y flujos de trabajo gubernamentales digitalizados de alto impacto.
+          </p>
+        </div>
+
+        <!-- Corner decorators -->
+        <div class="absolute top-0 right-0 w-2.5 h-2.5 border-t border-r border-slate-700 group-hover:border-purple-500 transition-colors"></div>
+        <div class="absolute bottom-0 left-0 w-2.5 h-2.5 border-b border-l border-slate-700 group-hover:border-purple-500 transition-colors"></div>
+      </div>
+
+      <!-- Specialties panel -->
+      <div class="md:col-span-5 bg-slate-950/85 border-2 border-slate-800 p-6 rounded-md relative flex flex-col justify-between hover:border-purple-500/40 transition-colors group">
+        <div>
+          <div class="flex items-center justify-between mb-6 pb-2 border-b border-slate-800">
+            <span class="text-xs text-purple-400 font-bold" data-i18n="about.specialtiesTitle">ESPECIALIDADES</span>
+            <span class="text-[9px] text-slate-600">CMD: SPEC</span>
+          </div>
+
+          <div class="grid grid-cols-2 gap-3">
+            {specialties.map(spec => (
+              <div class="border border-slate-800 p-3 flex items-center justify-center text-center text-xs text-slate-300 hover:border-purple-500/40 hover:bg-purple-950/10 transition-colors rounded">
+                &gt; {spec}
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <!-- Corner decorators -->
+        <div class="absolute top-0 right-0 w-2.5 h-2.5 border-t border-r border-slate-700 group-hover:border-purple-500 transition-colors"></div>
+        <div class="absolute bottom-0 left-0 w-2.5 h-2.5 border-b border-l border-slate-700 group-hover:border-purple-500 transition-colors"></div>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,6 +1,7 @@
 ---
 import Navbar from "../components/Navbar.astro";
 import CustomCursor from "../components/CustomCursor.astro";
+import 'overlayscrollbars/overlayscrollbars.css';
 ---
 
 <!doctype html>
@@ -10,7 +11,53 @@ import CustomCursor from "../components/CustomCursor.astro";
     <meta name="viewport" content="width=device-width" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
-    <title>Cesar Adrian Morado Rodriguez - Portfolio</title>
+    
+    <!-- Primary Meta Tags -->
+    <title>Cesar Adrian Morado Rodriguez | Senior Frontend Engineer & Angular Specialist</title>
+    <meta name="title" content="Cesar Adrian Morado Rodriguez | Senior Frontend Engineer & Angular Specialist" />
+    <meta name="description" content="Senior Frontend Developer & Software Engineer specializing in Angular, TypeScript, and Firebase. 4+ years experience building scalable government portals & enterprise software." />
+    <meta name="keywords" content="Angular, Angular 17, TypeScript, Firebase, .NET, FastAPI, Frontend Developer, Software Engineer, Guanajuato, Mexico" />
+    <meta name="author" content="Cesar Adrian Morado Rodriguez" />
+    <link rel="canonical" href="https://github.com/moradoadrian" />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://github.com/moradoadrian" />
+    <meta property="og:title" content="Cesar Adrian Morado Rodriguez | Senior Frontend Engineer" />
+    <meta property="og:description" content="Specialist in Angular, TypeScript, and Firebase. View projects, experience logs, and download CV." />
+    <meta property="og:image" content="/constanciasI.png" />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content="https://github.com/moradoadrian" />
+    <meta property="twitter:title" content="Cesar Adrian Morado Rodriguez | Senior Frontend Engineer" />
+    <meta property="twitter:description" content="Specialist in Angular, TypeScript, and Firebase. View projects, experience logs, and download CV." />
+    <meta property="twitter:image" content="/constanciasI.png" />
+
+    <!-- JSON-LD Structured Data for Person/Portfolio -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "Cesar Adrian Morado Rodriguez",
+        "jobTitle": "Software Engineer",
+        "url": "https://github.com/moradoadrian",
+        "sameAs": [
+          "https://www.linkedin.com/in/moradoadrian/",
+          "https://github.com/moradoadrian/"
+        ],
+        "knowsAbout": [
+          "Software Development",
+          "Web Applications",
+          "Angular",
+          "TypeScript",
+          "Firebase",
+          "FastAPI",
+          "C#"
+        ]
+      }
+    </script>
+
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -22,6 +69,38 @@ import CustomCursor from "../components/CustomCursor.astro";
     class="bg-slate-950 text-slate-200 font-mono overflow-x-hidden"
     id="top"
   >
+    <!-- Scroll Progress Bar -->
+    <div id="scroll-progress" class="fixed top-0 left-0 h-[3px] bg-purple-500 z-[100] w-0 transition-all duration-100 shadow-[0_0_8px_rgba(168,85,247,0.8)]"></div>
+
+    <!-- Initial System Loader -->
+    <div id="initial-loader" class="fixed inset-0 bg-slate-950 z-[99999] flex items-center justify-center font-mono text-xs md:text-sm text-purple-400 p-6">
+      <div class="max-w-md w-full border border-purple-500/20 bg-slate-900/50 p-6 rounded shadow-2xl relative">
+        <div class="flex items-center justify-between border-b border-purple-500/20 pb-2 mb-4 text-[10px] text-slate-500">
+          <span>&gt; INITIALIZING_SYSTEM.EXE</span>
+          <span>VER 3.0.0</span>
+        </div>
+        <div id="loader-terminal-content" class="space-y-1.5 h-32 overflow-y-auto">
+          <!-- Lines will type in here -->
+        </div>
+        <div class="flex items-center gap-1 mt-4 pt-2 border-t border-purple-500/20 text-[10px] text-slate-500">
+          <span>$</span>
+          <span class="w-1.5 h-3 bg-purple-400 animate-pulse"></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Back to Top Button -->
+    <a
+      href="#top"
+      id="back-to-top"
+      class="fixed bottom-6 right-6 z-[90] bg-slate-900/80 hover:bg-purple-600 border-2 border-purple-500 hover:border-white text-purple-400 hover:text-white p-3 rounded-md transition-all duration-300 transform translate-y-20 opacity-0 shadow-[0_0_15px_rgba(168,85,247,0.4)] flex items-center justify-center cursor-pointer group"
+      aria-label="Volver arriba"
+    >
+      <svg class="w-4 h-4 transform group-hover:-translate-y-0.5 transition-transform" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M5 10l7-7m0 0l7 7m-7-7v18"></path>
+      </svg>
+    </a>
+
     <CustomCursor />
     <Navbar />
 
@@ -41,8 +120,212 @@ import CustomCursor from "../components/CustomCursor.astro";
     <script>
       import { gsap } from "gsap";
       import { ScrollTrigger } from "gsap/ScrollTrigger";
+      import { OverlayScrollbars } from 'overlayscrollbars';
+      import es from '../../public/assets/i18n/es.json';
+      import en from '../../public/assets/i18n/en.json';
 
       gsap.registerPlugin(ScrollTrigger);
+
+      // Translation Management
+      const translations = { es, en };
+      let currentLang = 'es';
+
+      const translatePage = (lang) => {
+        const dict = translations[lang as 'es' | 'en'];
+        if (!dict) return;
+
+        document.querySelectorAll('[data-i18n]').forEach((el) => {
+          const key = el.getAttribute('data-i18n');
+          if (!key) return;
+          const value = dict[key as keyof typeof dict];
+          if (value) {
+            if (el.tagName === 'SPAN' || el.tagName === 'H1' || el.tagName === 'H2' || el.tagName === 'H3' || el.tagName === 'H4' || el.tagName === 'P' || el.tagName === 'A' || el.tagName === 'LI') {
+              el.innerHTML = value;
+            } else {
+              el.textContent = value;
+            }
+          }
+        });
+
+        // Translate Tooltips dynamically
+        document.querySelectorAll('[data-i18n-tooltip]').forEach((el) => {
+          const key = el.getAttribute('data-i18n-tooltip');
+          if (!key) return;
+          const value = dict[key as keyof typeof dict];
+          if (value) {
+            el.setAttribute('data-tooltip', value);
+          }
+        });
+
+        // SEO and Meta Updates
+        document.title = dict['seo.title'] || document.title;
+        
+        const metaDesc = document.querySelector('meta[name="description"]');
+        if (metaDesc) metaDesc.setAttribute('content', dict['seo.description']);
+        
+        const titleMeta = document.querySelector('meta[name="title"]');
+        if (titleMeta) titleMeta.setAttribute('content', dict['seo.title']);
+
+        // Open Graph
+        const ogTitle = document.querySelector('meta[property="og:title"]');
+        if (ogTitle) ogTitle.setAttribute('content', dict['seo.title']);
+        
+        const ogDesc = document.querySelector('meta[property="og:description"]');
+        if (ogDesc) ogDesc.setAttribute('content', dict['hero.description']);
+
+        // Twitter Cards
+        const twTitle = document.querySelector('meta[property="twitter:title"]');
+        if (twTitle) twTitle.setAttribute('content', dict['seo.title']);
+        
+        const twDesc = document.querySelector('meta[property="twitter:description"]');
+        if (twDesc) twDesc.setAttribute('content', dict['hero.description']);
+
+        // Update html lang
+        document.documentElement.setAttribute('lang', lang);
+      };
+
+      const updateButtons = (lang: string) => {
+        const esBtns = document.querySelectorAll('#lang-btn-es, #lang-btn-es-mob');
+        const enBtns = document.querySelectorAll('#lang-btn-en, #lang-btn-en-mob');
+
+        if (lang === 'es') {
+          esBtns.forEach(btn => {
+            btn.classList.add('text-purple-400', 'font-bold', 'bg-purple-500/10');
+            btn.classList.remove('text-slate-500', 'hover:text-slate-300');
+          });
+          enBtns.forEach(btn => {
+            btn.classList.remove('text-purple-400', 'font-bold', 'bg-purple-500/10');
+            btn.classList.add('text-slate-500', 'hover:text-slate-300');
+          });
+        } else {
+          enBtns.forEach(btn => {
+            btn.classList.add('text-purple-400', 'font-bold', 'bg-purple-500/10');
+            btn.classList.remove('text-slate-500', 'hover:text-slate-300');
+          });
+          esBtns.forEach(btn => {
+            btn.classList.remove('text-purple-400', 'font-bold', 'bg-purple-500/10');
+            btn.classList.add('text-slate-500', 'hover:text-slate-300');
+          });
+        }
+      };
+
+      const setLanguage = (lang: string, animate = true) => {
+        if (animate) {
+          // Fade transition
+          document.body.style.transition = 'opacity 200ms ease';
+          document.body.style.opacity = '0';
+          setTimeout(() => {
+            currentLang = lang;
+            translatePage(lang);
+            updateButtons(lang);
+            localStorage.setItem('language', lang);
+            document.body.style.opacity = '1';
+            ScrollTrigger.refresh();
+          }, 200);
+        } else {
+          currentLang = lang;
+          translatePage(lang);
+          updateButtons(lang);
+          localStorage.setItem('language', lang);
+        }
+      };
+
+      // Initialization
+      let savedLang = localStorage.getItem('language');
+      if (!savedLang) {
+        const browserLang = navigator.language || '';
+        savedLang = browserLang.startsWith('es') ? 'es' : 'en';
+      }
+      setLanguage(savedLang, false);
+
+      // Bind Switchers
+      const bindSwitch = (esId: string, enId: string) => {
+        const btnEs = document.getElementById(esId);
+        const btnEn = document.getElementById(enId);
+
+        btnEs?.addEventListener('click', () => {
+          if (currentLang !== 'es') setLanguage('es');
+        });
+        btnEn?.addEventListener('click', () => {
+          if (currentLang !== 'en') setLanguage('en');
+        });
+      };
+
+      bindSwitch('lang-btn-es', 'lang-btn-en');
+      bindSwitch('lang-btn-es-mob', 'lang-btn-en-mob');
+
+      // Initialize custom scrollbar for non-touch desktop devices
+      const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+      if (!isTouchDevice) {
+        OverlayScrollbars(document.body, {
+          scrollbars: {
+            visibility: 'auto',
+            autoHide: 'leave',
+            autoHideDelay: 800,
+            theme: 'os-theme-custom'
+          }
+        });
+      }
+
+      // Scroll Progress Bar & Back-to-Top Button Update
+      const progressBar = document.getElementById("scroll-progress");
+      const backToTopBtn = document.getElementById("back-to-top");
+      window.addEventListener("scroll", () => {
+        const scrollPosition = window.scrollY;
+        const documentHeight = document.documentElement.scrollHeight - window.innerHeight;
+        
+        if (documentHeight > 0) {
+          const scrollPercent = (scrollPosition / documentHeight) * 100;
+          if (progressBar) progressBar.style.width = `${scrollPercent}%`;
+          
+          if (scrollPosition / documentHeight > 0.3) {
+            backToTopBtn?.classList.remove("translate-y-20", "opacity-0");
+          } else {
+            backToTopBtn?.classList.add("translate-y-20", "opacity-0");
+          }
+        }
+      });
+
+      // Initial Loader Logic
+      const loader = document.getElementById("initial-loader");
+      const loaderContent = document.getElementById("loader-terminal-content");
+      
+      const loadingSteps = [
+        { text: "Initializing Portfolio...", delay: 80 },
+        { text: "Loading Components...", delay: 200 },
+        { text: "Loading Projects...", delay: 350 },
+        { text: "Loading Certifications...", delay: 500 },
+        { text: "Done.", delay: 650 }
+      ];
+
+      if (loader && loaderContent) {
+        document.documentElement.style.overflow = "hidden";
+        
+        loadingSteps.forEach(step => {
+          setTimeout(() => {
+            const p = document.createElement("p");
+            p.innerText = `> ${step.text}`;
+            p.className = step.text === "Done." ? "text-green-400 font-bold" : "text-purple-300";
+            loaderContent.appendChild(p);
+          }, step.delay);
+        });
+
+        // Hide loader & emit complete event
+        setTimeout(() => {
+          gsap.to(loader, {
+            opacity: 0,
+            duration: 0.4,
+            ease: "power2.out",
+            onComplete: () => {
+              loader.classList.add("hidden");
+              document.documentElement.style.overflow = "";
+              window.dispatchEvent(new Event("loaderComplete"));
+            }
+          });
+        }, 900);
+      } else {
+        window.dispatchEvent(new Event("loaderComplete"));
+      }
     </script>
   </body>
 </html>
@@ -62,6 +345,7 @@ import CustomCursor from "../components/CustomCursor.astro";
   html {
     font-family: "Inter", sans-serif;
     background: #0f172a;
+    scroll-behavior: smooth;
   }
   code {
     font-family:
@@ -73,5 +357,60 @@ import CustomCursor from "../components/CustomCursor.astro";
       Bitstream Vera Sans Mono,
       Courier New,
       monospace;
+  }
+
+  /* Custom scrollbar theme style for OverlayScrollbars */
+  .os-theme-custom {
+    --os-size: 8px;
+    --os-padding: 0px;
+    --os-track-bg: #020617;
+    --os-track-border: none;
+    --os-handle-bg: rgba(168, 85, 247, 0.4);
+    --os-handle-bg-hover: rgba(168, 85, 247, 0.7);
+    --os-handle-bg-active: rgba(168, 85, 247, 0.95);
+    --os-handle-border-radius: 12px;
+    --os-handle-border: none;
+    --os-handle-transition: background-color 250ms, height 250ms, width 250ms, box-shadow 250ms;
+  }
+
+  .os-theme-custom:hover {
+    --os-size: 10px;
+  }
+
+  .os-theme-custom .os-scrollbar-handle {
+    box-shadow: 0 0 0px rgba(168, 85, 247, 0);
+  }
+
+  .os-theme-custom:hover .os-scrollbar-handle {
+    box-shadow: 0 0 8px rgba(168, 85, 247, 0.6);
+  }
+
+  /* Pure CSS Tooltip Styling */
+  [data-tooltip] {
+    position: relative;
+  }
+  [data-tooltip]::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: 110%;
+    left: 50%;
+    transform: translate(-50%, 4px) scale(0.95);
+    background: #020617;
+    border: 1px solid rgba(168, 85, 247, 0.4);
+    color: #f1f5f9;
+    padding: 6px 10px;
+    font-size: 10px;
+    font-family: monospace;
+    white-space: nowrap;
+    border-radius: 4px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 150ms ease, transform 150ms ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+    z-index: 9999;
+  }
+  [data-tooltip]:hover::after {
+    opacity: 1;
+    transform: translate(-50%, 0) scale(1);
   }
 </style>

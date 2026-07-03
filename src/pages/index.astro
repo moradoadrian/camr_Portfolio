@@ -1,9 +1,14 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import Hero from "../components/Hero.astro";
+import AboutMe from "../components/AboutMe.astro";
 import Projects from "../components/Projects.astro";
 import Experience from "../components/Experience.astro";
 import Technologies from "../components/Technologies.astro";
+import Certifications from "../components/Certifications.astro";
+import Stats from "../components/Stats.astro";
+import GitHub from "../components/GitHub.astro";
+import Terminal from "../components/Terminal.astro";
 import Contact from "../components/Contact.astro";
 
 // Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
@@ -13,19 +18,39 @@ import Contact from "../components/Contact.astro";
 <Layout>
   <main class="relative z-10">
     <Hero />
+    <AboutMe />
     <Experience />
     <Technologies />
+    <Certifications />
+    <Stats />
     <Projects />
+    <GitHub />
+    <Terminal />
     <Contact />
   </main>
 
   <footer
-    class="py-8 text-center text-slate-500 text-sm relative z-10 border-t border-slate-800 mt-20 font-mono"
+    class="py-16 text-center text-slate-500 text-xs relative z-10 border-t border-slate-900 mt-32 font-mono bg-slate-950/40"
   >
-    <p>
-      // &copy; {new Date().getFullYear()} Cesar Adrian Morado Rodriguez. <span
-        class="text-purple-500">End_of_Line</span
-      >
-    </p>
+    <div class="max-w-4xl mx-auto px-4 space-y-4">
+      <p class="text-sm font-bold text-white tracking-wide" data-i18n="footer.thanks">
+        Thanks for visiting my portfolio. Always open to collaborate.
+      </p>
+      <p class="text-purple-400 text-xs" data-i18n="footer.status">
+        // STATUS: Currently available for exciting Frontend & Software Engineering opportunities.
+      </p>
+      <p class="text-slate-400 text-xs" data-i18n="footer.availability">
+        Available for new projects.
+      </p>
+      <p class="text-[10px] text-slate-500 font-bold" data-i18n="footer.update">
+        Last updated: July 2026
+      </p>
+      <p class="pt-2 border-t border-slate-900/60 max-w-xs mx-auto text-[11px]">
+        &copy; {new Date().getFullYear()} César Adrián Morado Rodríguez. <span data-i18n="footer.rights">All rights reserved.</span> <span class="text-purple-500">End_of_Line_</span>
+      </p>
+      <p class="text-[10px] text-slate-600" data-i18n="footer.tech">
+        // Built with Astro & Angular 20
+      </p>
+    </div>
   </footer>
 </Layout>

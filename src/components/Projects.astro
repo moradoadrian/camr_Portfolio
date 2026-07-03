@@ -1,113 +1,323 @@
 ---
-const techIcons = {
-  Angular: `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 512 512"><g clip-path="url(#prefix__clip0_9_19)"><mask id="prefix__a" width="484" height="512" x="14" y="0" maskUnits="userSpaceOnUse" style="mask-type:luminance"><path fill="#fff" d="M14 0h484v512H14z"/></mask><g mask="url(#prefix__a)"><mask id="prefix__b" width="484" height="512" x="14" y="0" maskUnits="userSpaceOnUse" style="mask-type:luminance"><path fill="#fff" d="M14 0h484v512H14z"/></mask><g mask="url(#prefix__b)"><path fill="url(#prefix__paint0_linear_9_19)" d="m496 86-18 272L312 0zM380 438l-124 72-126-72 24-62h202zM256 136l64 160H190zM32 358 14 86 198 0z"/><path fill="url(#prefix__paint1_linear_9_19)" d="m496 86-18 272L312 0zM380 438l-124 72-126-72 24-62h202zM256 136l64 160H190zM32 358 14 86 198 0z"/></g></g></g><defs><linearGradient id="prefix__paint0_linear_9_19" x1="120.4" x2="504" y1="463.8" y2="281.4" gradientUnits="userSpaceOnUse"><stop stop-color="#e40035"/><stop offset=".2" stop-color="#f60a48"/><stop offset=".4" stop-color="#f20755"/><stop offset=".5" stop-color="#dc087d"/><stop offset=".7" stop-color="#9717e7"/><stop offset="1" stop-color="#6c00f5"/></linearGradient><linearGradient id="prefix__paint1_linear_9_19" x1="103" x2="354" y1="61.4" y2="348" gradientUnits="userSpaceOnUse"><stop stop-color="#ff31d9"/><stop offset="1" stop-color="#ff5be1" stop-opacity="0"/></linearGradient><clipPath id="prefix__clip0_9_19"><path fill="#fff" d="M14 0h484v512H14z"/></clipPath></defs></svg>`,
-
-
+const techIcons: Record<string, string> = {
+  Angular: `<svg class="w-3.5 h-3.5 text-red-500" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M12 0L1.89 3.57l1.54 13.33L12 24l8.57-7.1 1.54-13.33L12 0zm0 3.73l6.5 2.27L17.2 16.3 12 20.6l-5.2-4.3L5.5 6l6.5-2.27z"/></svg>`,
+  Firebase: `<svg class="w-3.5 h-3.5 text-yellow-500" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M3.89 15.67L8.25 2.28a.56.56 0 0 1 1.07 0L11.6 9.47l.45-1.42a.56.56 0 0 1 1 0l7.06 13.12a.56.56 0 0 1-.82.74l-14.9-8.62a.56.56 0 0 1-.5-1.62z"/></svg>`,
+  TypeScript: `<svg class="w-3.5 h-3.5 text-blue-500" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M1.875 0h20.25C23.16 0 24 1.04 24 2.324v19.349C24 22.957 23.16 24 22.125 24h-20.25C.84 24 0 22.957 0 21.673V2.324C0 1.04.84 0 1.875 0zm17.618 19.387c1.332 0 2.235-.558 2.705-1.674.348-.823.364-1.854.364-3.15h-2.186c.002.664-.047 1.07-.197 1.393-.243.513-.762.774-1.432.774-.827 0-1.442-.482-1.625-1.464-.13-.703-.186-1.858-.186-3.003 0-1.258.056-2.316.208-3.031.218-1.042.846-1.543 1.698-1.543.766 0 1.256.326 1.488.983.178.508.196.963.208 1.954h2.184c0-1.424-.092-2.32-.424-3.155-.544-1.344-1.642-1.996-3.32-1.996-1.564 0-2.616.634-3.136 1.884-.336.81-.39 1.882-.39 3.32v1.896c0 1.348.054 2.455.378 3.256.512 1.282 1.584 1.886 3.196 1.886zm-11.238-.135h2.38v-9.524H13.28v-2.11H5.874v2.11h2.38v9.524z"/></svg>`,
+  Python: `<svg class="w-3.5 h-3.5 text-blue-400" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M14.25.18a.88.88 0 0 0-.43.12L7.38 4.24c-.6.35-.98.99-.98 1.69v2.54h3.76c.46 0 .84.38.84.84v2.82c0 .46-.38.84-.84.84H6.4v3.13c0 .87.71 1.58 1.58 1.58h1.22c.46 0 .84-.38.84-.84v-2.26c0-.46.38-.84.84-.84h3.38c.46 0 .84-.38.84-.84V8.46c0-.87-.71-1.58-1.58-1.58H10.3V4.06c0-.46.38-.84.84-.84h3.11c.87 0 1.58-.71 1.58-1.58V1.02a.88.88 0 0 0-.58-.84z"/></svg>`,
+  FastAPI: `<svg class="w-3.5 h-3.5 text-emerald-500" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm3.891 9.617l-5.318 6.467h3.816l-3.323 5.435v-6.902H7.25l5.318-6.467H8.752l3.323-5.435v6.902h3.816z"/></svg>`,
+  MySQL: `<svg class="w-3.5 h-3.5 text-blue-600" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm6.812 16.312c-.22.41-.53.77-.92 1.06-.59.44-1.32.7-2.12.72-.11.01-.21.01-.32 0-.66-.03-1.28-.24-1.83-.58v.01c-.48.33-.87.75-1.12 1.25-.16.32-.27.67-.32 1.03-.02.13-.09.21-.21.22H11.9c-.12 0-.21-.08-.23-.2-.07-.46-.22-.89-.45-1.28-.27-.47-.64-.85-1.09-1.13h.01c-.55.33-1.16.53-1.8.56-.11 0-.22 0-.33-.01-.79-.04-1.5-.32-2.07-.77-.4-.32-.71-.71-.91-1.17-.18-.4-.28-.86-.28-1.33 0-.67.2-1.3.56-1.83l.01-.01c.42-.6 1.02-1.06 1.73-1.3.14-.05.28-.09.43-.12.44-.09.89-.1 1.34-.03.56.09 1.1.28 1.58.58.12.08.24.16.35.25.1.09.2.18.29.28.1.1.2.21.29.32l.01-.01c.21.26.39.54.54.85h.01c.14.3.24.62.29.96v-.01h-.01c.05-.34.15-.66.29-.96.15-.31.33-.59.54-.85v.01c.09-.1.19-.2.29-.32.09-.1.19-.19.29-.28.11-.09.23-.17.35-.25.48-.3 1.02-.49 1.58-.58.45-.07.9-.06 1.34.03.15.03.29.07.43.12.71.24 1.31.7 1.73 1.3l.01.01c.36.53.56 1.16.56 1.83 0 .47-.1.93-.28 1.33z"/></svg>`,
+  ".NET": `<svg class="w-3.5 h-3.5 text-purple-500" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M12 0C5.372 0 0 5.372 0 12s5.372 12 12 12 12-5.372 12-12S18.628 0 12 0zm3.3 16.5H8.7V7.5h6.6v9z"/></svg>`,
+  Tailwind: `<svg class="w-3.5 h-3.5 text-sky-400" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M12.001 4.8c-3.2 0-5.2 1.6-6 4.8 1.2-1.6 2.6-2.2 4.2-1.8.913.228 1.565.89 2.288 1.624C13.666 10.618 15.027 12 18.001 12c3.2 0 5.2-1.6 6-4.8-1.2 1.6-2.6 2.2-4.2 1.8-.913-.229-1.565-.89-2.288-1.625C16.337 6.182 14.976 4.8 12.001 4.8zm-6 7.2c-3.2 0-5.2 1.6-6 4.8 1.2-1.6 2.6-2.2 4.2-1.8.913.228 1.565.89 2.288 1.624 1.177 1.194 2.538 2.576 5.512 2.576 3.2 0 5.2-1.6 6-4.8-1.2 1.6-2.6 2.2-4.2 1.8-.913-.229-1.565-.89-2.288-1.625C10.337 13.382 8.976 12 6.001 12z"/></svg>`,
+  Capacitor: `<svg class="w-3.5 h-3.5 text-blue-400" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M12 0C5.372 0 0 5.372 0 12s5.372 12 12 12 12-5.372 12-12S18.628 0 12 0zm5 15.5l-5 3.5-5-3.5v-7l5-3.5 5 3.5v7z"/></svg>`,
+  PostgreSQL: `<svg class="w-3.5 h-3.5 text-blue-400" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M12 0C5.372 0 0 5.372 0 12s5.372 12 12 12 12-5.372 12-12S18.628 0 12 0zm4 16.5H8.7V7.5h6.6v9z"/></svg>`,
+  "SHA-256": `<svg class="w-3.5 h-3.5 text-red-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" xmlns="http://www.w3.org/2000/svg"><path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>`,
+  "Material Design": `<svg class="w-3.5 h-3.5 text-blue-500" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M0 2s0-2 2-2h20s2 0 2 2v20s0 2-2 2H2s-2 0-2-2V2zm12 3L5 8v6l7 3 7-3V8l-7-3z"/></svg>`,
+  PostgreSQL_alt: `<svg class="w-3.5 h-3.5 text-blue-400" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M12 0C5.372 0 0 5.372 0 12s5.372 12 12 12 12-5.372 12-12S18.628 0 12 0zm4 16.5H8.7V7.5h6.6v9z"/></svg>`
 };
 
-const projects = [
+const getTechIcon = (tag: string) => {
+  return techIcons[tag] || `<svg class="w-3.5 h-3.5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path></svg>`;
+};
+
+// Main featured project (Full Width on desktop)
+const featuredProject = {
+  key: "constancias",
+  title: "Constancias de Inexistencia (Civil Registry)",
+  overview: "Emisión y gestión de actas de inexistencia para la Dirección General del Registro Civil. Digitaliza trámites administrativos gubernamentales clave, agilizando el servicio al ciudadano mediante validación criptográfica y firmas digitales.",
+  problem: "Los procesos de búsqueda y emisión de constancias tardaban entre 10 y 15 días hábiles debido al procesamiento manual y archivos heredados fragmentados.",
+  challenge: "Diseñar un portal seguro, rápido y resiliente para la consulta y emisión automatizada de constancias de inexistencia, conectando bases de datos heredadas y garantizando la validez de los documentos.",
+  solution: "Plataforma web con búsqueda indexada rápida, formularios inteligentes y un validador de integridad documental basado en hash SHA-256.",
+  architecture: "Arquitectura SPA desacoplada construida en Angular 17 para el frontend con componentes de material design, interactuando mediante APIs REST seguras creadas en Python (FastAPI).",
+  role: "Lead Full-Stack Developer — Responsable de la arquitectura frontend en Angular 17, diseño de la base de datos y flujos de carga segura de archivos.",
+  metricsCount: 3,
+  tags: ["Angular", "Python", "FastAPI", "Material Design", "Firebase", "SHA-256"],
+  image: "/constanciasI.png",
+  featuresCount: 5,
+  links: [
+    { nameKey: "liveDemo", url: "#" }
+  ]
+};
+
+// Other prominent projects (Grid cards)
+const generalProjects = [
   {
-    title: "LogPath (Hackathon midudev)",
-    description:
-      "Arquitectura de telemetría Edge-to-Cloud para POS. Audita transacciones en tiempo real con sistema de alertas proactivas vía Webhooks a Discord. Intercepta fallas críticas. Backend .NET 10, Frontend Angular 19 y PostgreSQL. Desplegado en CubePath usando Dokploy.",
-    tags: ["Angular", ".NET", "PostgreSQL", "CubePath"],
-    image: "/logpath.png", // Asegúrate de subir tu screenshot a la carpeta public con este nombre
+    key: "logpath",
+    title: "LogPath (midudev Hackathon)",
+    overview: "Arquitectura de telemetría Edge-to-Cloud para puntos de venta (POS). Audita transacciones en tiempo real con interceptor de fallas.",
+    problem: "Falta de visibilidad e imposibilidad de diagnosticar problemas en terminales de pago remotas antes de recibir quejas del cliente.",
+    solution: "Agente en .NET 10 y panel web Angular 19 para monitorear eventos críticos en tiempo real y enviar alertas automáticas vía Discord Webhooks.",
+    role: "Full-Stack Developer — Diseñé la interfaz del dashboard reactivo y conecté los flujos de telemetría en tiempo real.",
+    metrics: "Latencia de alerta de eventos < 150ms. Telemetría de red automatizada.",
+    tags: ["Angular", ".NET", "MySQL", "Tailwind"],
+    image: "/logpath.png",
     links: [
-      { name: "Ver Demo", url: "http://logpath-web-9vvsqy-78a8c8-108-165-47-114.traefik.me" },
-      { name: "Repo Angular", url: "https://github.com/moradoadrian/LogPath" },
-      { name: "Repo .NET", url: "https://github.com/moradoadrian/logpath-api" }
+      { nameKey: "demo", url: "http://logpath-web-9vvsqy-78a8c8-108-165-47-114.traefik.me" },
+      { nameKey: "repoFront", url: "https://github.com/moradoadrian/LogPath" },
+      { nameKey: "repoAPI", url: "https://github.com/moradoadrian/logpath-api" }
     ]
   },
   {
-    title: "Constancias de Inexistencia",
-    description:
-      "Sistema para la gestión y emisión de constancias de inexistencia. Optimización de procesos administrativos mediante una plataforma web robusta.",
-    tags: ["Angular", "Materialize"],
-    image: "/constanciasI.png",
-  },
-  {
+    key: "anotaciones",
     title: "Anotaciones Judiciales",
-    description:
-      "Plataforma para el registro y consulta de anotaciones judiciales, garantizando la integridad y disponibilidad de la información legal.",
+    overview: "Plataforma digital para la Dirección General del Registro Civil para asentar y auditar anotaciones marginales y rectificaciones legales.",
+    problem: "Anotaciones en actas manuales propensas a errores de transcripción, pérdida física y demoras de búsqueda en libros físicos.",
+    solution: "Base de datos transaccional con control de auditoría estricto, flujos de aprobación y paneles de búsqueda rápida.",
+    role: "Lead Frontend Developer — Implementé la interfaz web completa, control de accesos por roles y el sistema de impresión de sellos.",
+    metrics: "Más de 10,000 registros indexados y digitalizados. Control de errores al 0%.",
     tags: ["Angular", "Tailwind", "MySQL", "Firebase"],
     image: "/anotacionesJ.png",
+    links: [
+      { nameKey: "demo", url: "#" },
+      { nameKey: "repo", url: "https://github.com/moradoadrian/" }
+    ]
   },
   {
+    key: "posmiche",
     title: "POS Miche LTS",
-    description:
-      "Punto de venta especializado para Miche LTS. Gestión de inventarios, ventas y reportes en tiempo real.",
+    overview: "Punto de venta y control de inventarios multiplataforma de alta velocidad para dispositivos móviles y escritorio.",
+    problem: "Puntos de venta convencionales lentos, incompatibles con tabletas Android y dependientes de conectividad continua.",
+    solution: "Aplicación híbrida responsiva con sincronización en segundo plano de base de datos local y Firebase.",
+    role: "Mobile & Frontend Developer — Diseñé la UI móvil y la compilación híbrida utilizando Capacitor.",
+    metrics: "Más de 5,000 transacciones mensuales procesadas sin interrupciones.",
     tags: ["Angular", "Firebase", "Capacitor", "Tailwind"],
     image: "/posMiche.png",
+    links: [
+      { nameKey: "demo", url: "#" }
+    ]
   },
   {
+    key: "purplewings",
     title: "Purple Wings",
-    description:
-      "Aplicación innovadora desarrollada con tecnologías modernas para resolver necesidades específicas del cliente.",
+    overview: "Sistema de administración interna y rastreo de componentes y refacciones para control operacional.",
+    problem: "Dificultad para auditar y controlar el ciclo de vida y certificaciones de mantenimiento en inventarios críticos.",
+    solution: "Tablero dinámico con alertas inteligentes sobre expiración de componentes y trazabilidad por código QR.",
+    role: "Full-Stack Developer — Desarrollé la base de datos de control y las vistas dinámicas en Angular.",
+    metrics: "Monitoreo del 100% de componentes críticos. Cero fallas regulatorias.",
     tags: ["Angular", "Firebase", "Capacitor", "Tailwind"],
     image: "/purpleW.png",
-  },
+    links: [
+      { nameKey: "demo", url: "#" }
+    ]
+  }
 ];
 ---
 
-<section id="projects" class="py-20 px-4 relative">
+<section id="projects" class="py-24 px-4 relative bg-slate-900/10 border-t border-slate-900">
   <div class="max-w-6xl mx-auto">
-    <h2
-      class="section-title text-4xl md:text-5xl font-bold text-center mb-16 font-pixel text-purple-400"
-    >
-      &lt;Proyectos_Destacados /&gt;
-    </h2>
+    <div class="text-center mb-20">
+      <h2 class="text-4xl md:text-5xl font-bold font-pixel text-purple-400 mb-4 tracking-wider" data-i18n="proj.title">
+        &lt;Proyectos_Destacados /&gt;
+      </h2>
+      <p class="font-mono text-xs text-slate-500 max-w-md mx-auto" data-i18n="proj.subtitle">
+        // PORTAFOLIO DE PROYECTOS Y SISTEMAS DE PRODUCCIÓN
+      </p>
+    </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-      {
-        projects.map((project, index) => (
-          <div class="project-card group relative bg-slate-900 border-2 border-slate-700 hover:border-purple-500 transition-all duration-300 opacity-0 translate-y-10 hover:shadow-[0_0_15px_rgba(168,85,247,0.5)]">
-            <div class="aspect-video overflow-hidden border-b-2 border-slate-700 group-hover:border-purple-500 transition-colors">
-              <img
-                src={project.image}
-                alt={project.title}
-                class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500 grayscale group-hover:grayscale-0"
-              />
-              <div class="absolute inset-0 bg-slate-900/50 group-hover:bg-transparent transition-colors duration-300" />
+    <!-- Featured (Highlighted) Case Study Card - Full Width on desktop -->
+    <div class="project-featured-card group relative bg-slate-950 border-2 border-slate-800 hover:border-purple-500/80 transition-all duration-500 hover:shadow-[0_0_30px_rgba(168,85,247,0.12)] p-6 md:p-8 rounded-md mb-12 opacity-0 translate-y-10">
+      <div class="absolute top-0 left-0 bg-purple-600 text-[10px] text-white px-3 py-1 font-mono tracking-widest uppercase font-bold" data-i18n="proj.featuredLabel">
+        MAIN_FEATURED_SYSTEM
+      </div>
+
+      <div class="grid lg:grid-cols-12 gap-8 items-start mt-4">
+        <!-- Project Screenshot -->
+        <div class="lg:col-span-5 relative overflow-hidden border border-slate-800 rounded-md bg-slate-900">
+          <img
+            src={featuredProject.image}
+            alt={featuredProject.title}
+            class="w-full h-auto object-cover transform group-hover:scale-103 transition-transform duration-500"
+          />
+          <div class="absolute inset-0 bg-purple-950/5 group-hover:bg-transparent transition-colors duration-300"></div>
+        </div>
+
+        <!-- Project Details / Case Study layout -->
+        <div class="lg:col-span-7 font-mono flex flex-col justify-between h-full">
+          <div>
+            <h3 class="text-2xl font-bold text-white mb-2 font-pixel tracking-wide group-hover:text-purple-400 transition-colors">
+              {featuredProject.title}
+            </h3>
+
+            <p class="text-xs text-slate-400 leading-relaxed text-justify mb-6" data-i18n={`proj.${featuredProject.key}.overview`}>
+              {featuredProject.overview}
+            </p>
+
+            <div class="border-t border-slate-800/80 pt-4 space-y-4 text-xs text-slate-300">
+              <div class="grid sm:grid-cols-12 gap-2">
+                <span class="sm:col-span-3 text-purple-400 font-bold uppercase tracking-wider" data-i18n="proj.problemLabel">Problema:</span>
+                <span class="sm:col-span-9 text-slate-400 text-justify" data-i18n={`proj.${featuredProject.key}.problem`}>{featuredProject.problem}</span>
+              </div>
+
+              <div class="grid sm:grid-cols-12 gap-2">
+                <span class="sm:col-span-3 text-purple-400 font-bold uppercase tracking-wider" data-i18n="proj.challengeLabel">Desafío:</span>
+                <span class="sm:col-span-9 text-slate-400 text-justify" data-i18n={`proj.${featuredProject.key}.challenge`}>{featuredProject.challenge}</span>
+              </div>
+
+              <div class="grid sm:grid-cols-12 gap-2">
+                <span class="sm:col-span-3 text-purple-400 font-bold uppercase tracking-wider" data-i18n="proj.solutionLabel">Solución:</span>
+                <span class="sm:col-span-9 text-slate-400 text-justify" data-i18n={`proj.${featuredProject.key}.solution`}>{featuredProject.solution}</span>
+              </div>
+
+              <div class="grid sm:grid-cols-12 gap-2">
+                <span class="sm:col-span-3 text-purple-400 font-bold uppercase tracking-wider" data-i18n="proj.architectureLabel">Arquitectura:</span>
+                <span class="sm:col-span-9 text-slate-400 text-justify" data-i18n={`proj.${featuredProject.key}.architecture`}>{featuredProject.architecture}</span>
+              </div>
+
+              <div class="grid sm:grid-cols-12 gap-2">
+                <span class="sm:col-span-3 text-purple-400 font-bold uppercase tracking-wider" data-i18n="proj.roleLabel">Rol:</span>
+                <span class="sm:col-span-9 text-slate-400 text-justify" data-i18n={`proj.${featuredProject.key}.role`}>{featuredProject.role}</span>
+              </div>
+
+              <div class="grid sm:grid-cols-12 gap-2">
+                <span class="sm:col-span-3 text-purple-400 font-bold uppercase tracking-wider" data-i18n="proj.lessonsLabel">Lecciones:</span>
+                <span class="sm:col-span-9 text-slate-400 text-justify" data-i18n={`proj.${featuredProject.key}.lessons`}>{featuredProject.lessons}</span>
+              </div>
+
+              <div class="grid sm:grid-cols-12 gap-2 border-t border-slate-900/60 pt-3">
+                <span class="sm:col-span-3 text-purple-400 font-bold uppercase tracking-wider flex items-center gap-1">
+                  <span>🛡️</span>
+                  <span data-i18n="proj.constancias.problemsSolvedLabel">Problemas Resueltos:</span>
+                </span>
+                <span class="sm:col-span-9 text-slate-400 text-justify" data-i18n={`proj.${featuredProject.key}.problemsSolved`}>Sistemas manuales ineficientes, propensión a errores de captura y pérdida de libros de actas físicos.</span>
+              </div>
+
+              <div class="grid sm:grid-cols-12 gap-2">
+                <span class="sm:col-span-3 text-purple-400 font-bold uppercase tracking-wider flex items-center gap-1">
+                  <span>⚡</span>
+                  <span data-i18n="proj.constancias.technicalChallengesLabel">Retos Técnicos:</span>
+                </span>
+                <span class="sm:col-span-9 text-slate-400 text-justify" data-i18n={`proj.${featuredProject.key}.technicalChallenges`}>Optimización de consultas indexadas en bases de datos masivas y generación segura de firmas SHA-256.</span>
+              </div>
+
+              <!-- Resultados obtenidos section list -->
+              <div class="border-t border-slate-900/60 pt-4 mt-2">
+                <h4 class="text-purple-400 font-bold uppercase tracking-wider mb-2 flex items-center gap-1" data-i18n="proj.constancias.resultsTitle">
+                  <span>📈</span> Resultados obtenidos
+                </h4>
+                <ul class="list-none pl-4 space-y-1.5 text-slate-400">
+                  <li class="flex items-center gap-2">
+                    <span class="text-purple-500 font-bold">&gt;</span>
+                    <span data-i18n="proj.constancias.result1">Formularios dinámicos integrados</span>
+                  </li>
+                  <li class="flex items-center gap-2">
+                    <span class="text-purple-500 font-bold">&gt;</span>
+                    <span data-i18n="proj.constancias.result2">Integración con APIs REST de alto rendimiento</span>
+                  </li>
+                  <li class="flex items-center gap-2">
+                    <span class="text-purple-500 font-bold">&gt;</span>
+                    <span data-i18n="proj.constancias.result3">Validación de documentos SHA-256</span>
+                  </li>
+                  <li class="flex items-center gap-2">
+                    <span class="text-purple-500 font-bold">&gt;</span>
+                    <span data-i18n="proj.constancias.result4">Gestión documental optimizada</span>
+                  </li>
+                  <li class="flex items-center gap-2">
+                    <span class="text-purple-500 font-bold">&gt;</span>
+                    <span data-i18n="proj.constancias.result5">Optimización del flujo administrativo civil</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bottom: Metrics & Tech Stack -->
+          <div class="mt-8 pt-4 border-t border-slate-800 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6">
+            <!-- Dynamic tech icons -->
+            <div class="flex flex-wrap gap-2">
+              {featuredProject.tags.map((tag) => (
+                <span class="inline-flex items-center gap-1.5 px-2.5 py-1 bg-slate-900 border border-slate-800 text-[10px] text-slate-300 rounded font-semibold hover:border-purple-500/30 transition-colors cursor-default" title={tag}>
+                  <Fragment set:html={getTechIcon(tag)} />
+                  {tag}
+                </span>
+              ))}
             </div>
 
-            <div class="p-6 relative">
-              <div class="absolute top-0 right-0 p-2">
-                <div class="w-2 h-2 bg-slate-700 group-hover:bg-purple-500 transition-colors"></div>
+            <!-- View Case link -->
+            <div class="flex gap-4">
+              {featuredProject.links.map((link) => (
+                <a
+                  href={link.url}
+                  class="px-4 py-2 border border-purple-500 text-purple-400 hover:bg-purple-500/10 text-xs font-bold transition-all transform hover:-translate-y-0.5"
+                >
+                  [ LIVE_DEMO ]
+                </a>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Corner Accents -->
+      <div class="absolute top-0 right-0 w-3 h-3 border-t-2 border-r-2 border-slate-800 group-hover:border-purple-500 transition-colors"></div>
+      <div class="absolute bottom-0 left-0 w-3 h-3 border-b-2 border-l-2 border-slate-800 group-hover:border-purple-500 transition-colors"></div>
+    </div>
+
+    <!-- Other Prominent Projects Grid -->
+    <div class="grid md:grid-cols-2 gap-8">
+      {
+        generalProjects.map((project) => (
+          <div class="project-card group relative bg-slate-950 border-2 border-slate-800 hover:border-purple-500/80 transition-all duration-300 hover:shadow-[0_0_20px_rgba(168,85,247,0.08)] p-6 rounded-md flex flex-col justify-between opacity-0 translate-y-10">
+            
+            <div>
+              <div class="aspect-video overflow-hidden border border-slate-800 rounded mb-5 relative bg-slate-900">
+                <img
+                  src={project.image}
+                  alt={project.title}
+                  class="w-full h-full object-cover transform group-hover:scale-103 transition-transform duration-500"
+                />
+                <div class="absolute inset-0 bg-purple-950/5 group-hover:bg-transparent transition-colors duration-300"></div>
               </div>
-              
-              <h3 class="text-2xl font-bold text-white mb-2 font-pixel">
-                > {project.title}
-              </h3>
-              <p class="text-slate-400 mb-4 font-mono text-sm leading-relaxed">
-                {project.description}
-              </p>
-              
-              <div class="flex gap-2 flex-wrap mb-4">
+
+              <div class="font-mono">
+                <h3 class="text-xl font-bold text-white mb-2 font-pixel tracking-wide group-hover:text-purple-400 transition-colors">
+                  {project.title}
+                </h3>
+                <p class="text-xs text-slate-400 leading-relaxed text-justify mb-5" data-i18n={`proj.${project.key}.overview`}>
+                  {project.overview}
+                </p>
+
+                <div class="space-y-3 text-[11px] text-slate-500 border-l border-slate-800 pl-3 mb-5 uppercase tracking-wider font-semibold">
+                  <p>
+                    <span class="text-purple-400 font-bold" data-i18n="proj.problemLabel">Problema:</span> <span class="text-slate-400 text-justify capitalize-none" data-i18n={`proj.${project.key}.problem`}>{project.problem}</span>
+                  </p>
+                  <p>
+                    <span class="text-purple-400 font-bold" data-i18n="proj.solutionLabel">Solución:</span> <span class="text-slate-400 text-justify capitalize-none" data-i18n={`proj.${project.key}.solution`}>{project.solution}</span>
+                  </p>
+                  <p>
+                    <span class="text-purple-400 font-bold" data-i18n="proj.roleLabel">Rol:</span> <span class="text-slate-400 text-justify capitalize-none" data-i18n={`proj.${project.key}.role`}>{project.role}</span>
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div class="font-mono mt-4 pt-4 border-t border-slate-800/80 flex flex-col gap-4">
+              <!-- Tech tags with icons -->
+              <div class="flex flex-wrap gap-1.5">
                 {project.tags.map((tag) => (
-                  <span class="px-3 py-1 text-xs font-mono bg-slate-800 text-purple-300 border border-purple-500/30 flex items-center gap-2 hover:bg-purple-900/30 transition-colors">
-                    <span set:html={techIcons[tag as keyof typeof techIcons] || ""} />
+                  <span class="inline-flex items-center gap-1 px-2 py-0.5 bg-slate-900 border border-slate-800 text-[9px] text-slate-400 rounded hover:border-purple-500/30 transition-colors cursor-default" title={tag}>
+                    <Fragment set:html={getTechIcon(tag)} />
                     {tag}
                   </span>
                 ))}
               </div>
 
-              {/* Condicional para renderizar los enlaces si existen (como en el proyecto de LogPath) */}
-              {project.links && (
-                <div class="flex flex-wrap gap-3 mt-4 pt-4 border-t border-slate-700/50">
-                  {project.links.map(link => (
-                    <a 
-                      href={link.url} 
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                      class="text-xs font-mono text-slate-300 hover:text-purple-400 flex items-center gap-1 transition-colors group/link"
-                    >
-                      <span class="text-purple-500 group-hover/link:text-purple-400">></span>
-                      [{link.name}]
-                    </a>
-                  ))}
-                </div>
-              )}
+              <!-- Action links -->
+              <div class="flex flex-wrap gap-3">
+                {project.links.map((link) => (
+                  <a
+                    href={link.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="text-[10px] text-purple-400 hover:text-purple-300 font-bold uppercase"
+                  >
+                    [{link.nameKey.toUpperCase()}]
+                  </a>
+                ))}
+              </div>
             </div>
+
+            <!-- Corner Accents -->
+            <div class="absolute top-0 right-0 w-2.5 h-2.5 border-t-2 border-r-2 border-slate-800 group-hover:border-purple-500 transition-colors"></div>
+            <div class="absolute bottom-0 left-0 w-2.5 h-2.5 border-b-2 border-l-2 border-slate-800 group-hover:border-purple-500 transition-colors"></div>
           </div>
         ))
       }
@@ -121,20 +331,31 @@ const projects = [
 
   gsap.registerPlugin(ScrollTrigger);
 
-  const cards = document.querySelectorAll(".project-card");
+  // Fade in & Slide Up scroll reveal
+  gsap.to(".project-featured-card", {
+    scrollTrigger: {
+      trigger: ".project-featured-card",
+      start: "top bottom-=80",
+      toggleActions: "play none none reverse",
+    },
+    opacity: 1,
+    y: 0,
+    duration: 0.8,
+    ease: "power3.out"
+  });
 
-  cards.forEach((card, index) => {
+  const cards = document.querySelectorAll(".project-card");
+  cards.forEach((card) => {
     gsap.to(card, {
       scrollTrigger: {
         trigger: card,
-        start: "top bottom-=100",
+        start: "top bottom-=80",
         toggleActions: "play none none reverse",
       },
       opacity: 1,
       y: 0,
       duration: 0.8,
-      delay: index * 0.2,
-      ease: "power3.out",
+      ease: "power3.out"
     });
   });
 </script>

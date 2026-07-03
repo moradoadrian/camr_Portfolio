@@ -1,0 +1,105 @@
+---
+const stats = [
+  {
+    key: "projects",
+    target: 10,
+    suffix: "+",
+    defaultLabel: "PROJECTS_COMPLETED",
+    defaultDesc: "Web apps, backends, and integrations"
+  },
+  {
+    key: "certs",
+    target: 5,
+    suffix: "",
+    defaultLabel: "CERTIFICATIONS",
+    defaultDesc: "Verified technical & management milestones"
+  },
+  {
+    key: "experience",
+    target: 4,
+    suffix: "+",
+    defaultLabel: "YEARS_EXPERIENCE",
+    defaultDesc: "Professional and public sector projects"
+  },
+  {
+    key: "hours",
+    target: 100,
+    suffix: "+",
+    defaultLabel: "CERTIFIED_HOURS",
+    defaultDesc: "Rigorous coursework and academic training"
+  },
+  {
+    key: "techs",
+    target: 15,
+    suffix: "+",
+    defaultLabel: "TECHNOLOGIES_MASTERED",
+    defaultDesc: "Core engineering stack & tools used"
+  }
+];
+---
+
+<section id="stats" class="py-20 px-4 bg-slate-950 relative overflow-hidden border-t border-slate-900">
+  <div class="max-w-6xl mx-auto z-10 relative">
+    <div class="text-center mb-16">
+      <h2 class="text-4xl md:text-5xl font-bold font-pixel text-purple-400 mb-4 tracking-wider" data-i18n="stats.title">
+        &lt;System_Metrics /&gt;
+      </h2>
+      <p class="font-mono text-xs text-slate-500 max-w-md mx-auto" data-i18n="stats.subtitle">
+        // TELEMETRY_AND_CORE_METRICS
+      </p>
+    </div>
+
+    <!-- Stats Grid -->
+    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 font-mono">
+      {stats.map((stat) => (
+        <div class="stat-card bg-slate-900/30 border border-slate-800 p-6 rounded-md hover:border-purple-500/30 transition-all hover:bg-slate-900/50 group relative">
+          <!-- Counter and Suffix -->
+          <div class="flex items-baseline gap-1 mb-2">
+            <span class="text-slate-600 font-pixel text-xl select-none">&gt;</span>
+            <span class="stat-number text-4xl md:text-5xl font-bold font-pixel text-purple-400 filter drop-shadow-[0_0_8px_rgba(168,85,247,0.2)]" data-target={stat.target}>0</span>
+            <span class="text-2xl md:text-3xl font-bold font-pixel text-purple-500">{stat.suffix}</span>
+          </div>
+
+          <!-- Label -->
+          <h3 class="text-[10px] uppercase font-bold tracking-widest text-slate-300 mb-2 border-b border-slate-800 pb-2" data-i18n={`stats.${stat.key}`}>
+            {stat.defaultLabel}
+          </h3>
+
+          <!-- Description -->
+          <p class="text-[9px] text-slate-500 leading-normal" data-i18n={`stats.${stat.key}Desc`}>
+            {stat.defaultDesc}
+          </p>
+
+          <!-- Corner decorators -->
+          <div class="absolute top-0 right-0 w-2 h-2 border-t border-r border-slate-700 opacity-40 group-hover:opacity-100 group-hover:border-purple-500 transition-all duration-300"></div>
+          <div class="absolute bottom-0 left-0 w-2 h-2 border-b border-l border-slate-700 opacity-40 group-hover:opacity-100 group-hover:border-purple-500 transition-all duration-300"></div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<script>
+  import { gsap } from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  const stats = document.querySelectorAll(".stat-number");
+
+  stats.forEach((stat) => {
+    const target = parseInt(stat.getAttribute("data-target") || "0");
+    
+    gsap.to(stat, {
+      scrollTrigger: {
+        trigger: stat,
+        start: "top bottom-=80",
+        toggleActions: "play none none none",
+      },
+      innerText: target,
+      duration: 1.8,
+      snap: { innerText: 1 },
+      ease: "power2.out"
+    });
+  });
+</script>
