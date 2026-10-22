@@ -66,7 +66,7 @@ import 'overlayscrollbars/overlayscrollbars.css';
     />
   </head>
   <body
-    class="bg-slate-950 text-slate-200 font-mono overflow-x-hidden"
+    class="bg-slate-950 text-slate-200 font-mono overflow-x-clip"
     id="top"
   >
     <!-- Scroll Progress Bar -->
@@ -104,9 +104,10 @@ import 'overlayscrollbars/overlayscrollbars.css';
     <CustomCursor />
     <Navbar />
 
-    <!-- Grid Background -->
+    <!-- Grid Background (z-0, not negative: a negative z-index paints under body's opaque bg) -->
     <div
-      class="fixed inset-0 z-[-2] bg-[linear-gradient(to_right,#4f4f4f2e_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f2e_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]"
+      aria-hidden="true"
+      class="fixed inset-0 z-0 pointer-events-none bg-[linear-gradient(to_right,#a855f71f_1px,transparent_1px),linear-gradient(to_bottom,#a855f71f_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]"
     >
     </div>
 
@@ -352,6 +353,36 @@ import 'overlayscrollbars/overlayscrollbars.css';
       Bitstream Vera Sans Mono,
       Courier New,
       monospace;
+  }
+
+  ::selection {
+    background: rgba(168, 85, 247, 0.35);
+    color: #fff;
+  }
+
+  /* Visible keyboard focus without affecting mouse clicks */
+  :where(a, button, [role="button"], input, textarea, select):focus-visible {
+    outline: 2px solid rgb(168, 85, 247);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  /* Neon glow on pixel-font section titles */
+  h2.font-pixel {
+    text-shadow: 0 0 28px rgba(168, 85, 247, 0.35);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
   }
 
   /* Custom scrollbar theme style for OverlayScrollbars */
