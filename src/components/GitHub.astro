@@ -1,9 +1,34 @@
 ---
+import { getGitHubData, GITHUB_USER } from "../lib/github";
 
+const gh = await getGitHubData();
+const builtAt = new Date().toISOString().slice(0, 10);
+
+// Purple ramp matching the site accent; index = GitHub's 0-4 intensity level
+const levelClass = [
+  "bg-slate-800/70",
+  "bg-purple-900",
+  "bg-purple-700",
+  "bg-purple-500",
+  "bg-purple-300",
+];
+
+const stats = gh
+  ? [
+      { key: "github.statContrib", label: "Contribuciones (12 meses)", value: gh.contributionsLastYear },
+      { key: "github.statRepos", label: "Repos públicos", value: gh.publicRepos },
+      { key: "github.statStars", label: "Estrellas", value: gh.totalStars },
+      { key: "github.statSince", label: "En GitHub desde", value: gh.memberSince },
+    ]
+  : [];
+
+const maxLang = gh?.topLanguages[0]?.count ?? 1;
+// On phones only the last ~half year fits; older weeks are hidden below md
+const mobileWeeks = 22;
 ---
 
 <section id="github" class="py-20 px-4 bg-slate-900/10 border-t border-slate-900 relative overflow-hidden">
-  <div class="max-w-4xl mx-auto relative z-10 font-mono">
+  <div class="max-w-5xl mx-auto relative z-10 font-mono">
     <div class="text-center mb-12">
       <h2 class="text-2xl sm:text-4xl md:text-5xl text-balance font-bold font-pixel text-purple-400 mb-4 tracking-wider" data-i18n="github.title">
         &lt;GitHub_Activity /&gt;
@@ -13,48 +38,97 @@
       </p>
     </div>
 
-    <!-- GitHub Panel -->
     <div class="bg-slate-900/40 border-2 border-slate-800 rounded-md overflow-hidden hover:border-purple-500/40 transition-colors shadow-2xl">
-      <!-- Title bar -->
       <div class="bg-slate-950 px-4 py-2 flex items-center justify-between border-b border-slate-800">
-        <span class="text-xs text-slate-500 font-bold font-mono">API.GITHUB.COM/USERS/MORADOADRIAN</span>
+        <span class="text-xs text-slate-500 font-bold truncate">API.GITHUB.COM/USERS/{GITHUB_USER.toUpperCase()}</span>
         <span class="text-xs text-purple-400 font-bold select-none">&gt;_</span>
       </div>
 
-      <!-- Terminal Body -->
-      <div class="p-6 md:p-8 space-y-6 text-sm text-slate-300 font-mono">
-        <div class="flex items-center gap-2 pb-3 border-b border-slate-800/60">
+      <div class="p-5 md:p-8 space-y-8 text-sm text-slate-300">
+        <div class="flex items-start gap-2 pb-3 border-b border-slate-800/60">
           <span class="text-purple-500 font-bold">$</span>
-          <span class="text-white font-bold break-all">curl https://api.github.com/users/moradoadrian/stats</span>
+          <span class="text-white font-bold break-all">gh api users/{GITHUB_USER} --stats</span>
         </div>
 
-        <div class="grid md:grid-cols-2 gap-6 leading-relaxed">
-          <div class="space-y-3">
-            <div>
-              <span class="text-purple-400 font-bold" data-i18n="github.repo">Primary Repository:</span>
-              <p class="text-slate-300 text-xs">moradoadrian/camr_Portfolio</p>
+        {gh ? (
+          <>
+            <!-- Key numbers -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+              {stats.map((s) => (
+                <div class="bg-slate-950/60 border border-slate-800 rounded p-4 hover:border-purple-500/40 transition-colors">
+                  <div class="text-2xl md:text-3xl font-bold text-white font-pixel">{s.value}</div>
+                  <div class="text-[10px] uppercase tracking-widest text-slate-500 mt-1" data-i18n={s.key}>{s.label}</div>
+                </div>
+              ))}
             </div>
-            <div>
-              <span class="text-purple-400 font-bold" data-i18n="github.status">Operational Status:</span>
-              <p class="text-green-400 text-xs font-semibold" data-i18n="github.statusVal">Active Development</p>
-            </div>
-          </div>
 
-          <div class="space-y-3">
+            <!-- Contribution calendar -->
             <div>
-              <span class="text-purple-400 font-bold" data-i18n="github.commits">Logged Commits:</span>
-              <p class="text-slate-300 text-xs">320+ commits</p>
+              <div class="flex items-center justify-between mb-3">
+                <span class="text-purple-400 font-bold text-xs uppercase tracking-wider" data-i18n="github.calendar">Mapa de contribuciones</span>
+                <span class="text-[10px] text-slate-500">{gh.weeks[0]?.[0]?.date} → {gh.weeks.at(-1)?.at(-1)?.date}</span>
+              </div>
+              <div class="flex gap-[3px] justify-center md:justify-between" role="img" aria-label={`${gh.contributionsLastYear} contribuciones en el último año`}>
+                {gh.weeks.map((week, w) => (
+                  <div class:list={["flex flex-col gap-[3px]", w < gh.weeks.length - mobileWeeks && "hidden md:flex"]}>
+                    {week.map((day) => (
+                      <span
+                        class:list={["block w-[11px] h-[11px] md:w-[12px] md:h-[12px] rounded-[2px] hover:ring-1 hover:ring-white/70", levelClass[day.level]]}
+                        title={`${day.date}: ${day.count}`}
+                      ></span>
+                    ))}
+                  </div>
+                ))}
+              </div>
+              <div class="flex items-center justify-end gap-1.5 mt-3 text-[10px] text-slate-500">
+                <span data-i18n="github.less">Menos</span>
+                {levelClass.map((c) => <span class:list={["w-[10px] h-[10px] rounded-[2px]", c]}></span>)}
+                <span data-i18n="github.more">Más</span>
+              </div>
             </div>
-            <div>
-              <span class="text-purple-400 font-bold" data-i18n="github.contrib">Annual Contributions:</span>
-              <p class="text-slate-300 text-xs">450+ in the last year</p>
-            </div>
-          </div>
-        </div>
 
-        <div class="pt-6 border-t border-slate-800/60 flex justify-center md:justify-start">
+            <div class="grid md:grid-cols-2 gap-8">
+              <!-- Languages -->
+              <div>
+                <span class="text-purple-400 font-bold text-xs uppercase tracking-wider" data-i18n="github.languages">Lenguajes más usados</span>
+                <ul class="mt-3 space-y-2.5">
+                  {gh.topLanguages.map((l) => (
+                    <li class="text-xs">
+                      <div class="flex justify-between mb-1">
+                        <span class="text-slate-300">&gt; {l.name}</span>
+                        <span class="text-slate-500">{l.count} repos</span>
+                      </div>
+                      <div class="h-1.5 bg-slate-800 rounded-full overflow-hidden">
+                        <div class="h-full bg-gradient-to-r from-purple-600 to-purple-400 rounded-full" style={`width: ${(l.count / maxLang) * 100}%`}></div>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <!-- Recently pushed repos -->
+              <div>
+                <span class="text-purple-400 font-bold text-xs uppercase tracking-wider" data-i18n="github.recent">Actividad reciente</span>
+                <ul class="mt-3 space-y-2">
+                  {gh.recentRepos.map((r) => (
+                    <li>
+                      <a href={r.url} target="_blank" rel="noopener noreferrer" class="group/repo flex items-center justify-between gap-3 bg-slate-950/60 border border-slate-800 hover:border-purple-500/50 rounded px-3 py-2 transition-colors">
+                        <span class="text-xs text-slate-200 group-hover/repo:text-purple-300 truncate">{r.name}</span>
+                        <span class="text-[10px] text-slate-500 shrink-0">{r.language ?? "—"} · {r.pushedAt.slice(0, 10)}</span>
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          </>
+        ) : (
+          <p class="text-xs text-slate-500" data-i18n="github.unavailable">// No fue posible cargar los datos de GitHub en esta compilación.</p>
+        )}
+
+        <div class="pt-6 border-t border-slate-800/60 flex flex-col sm:flex-row items-center justify-between gap-4">
           <a
-            href="https://github.com/moradoadrian"
+            href={`https://github.com/${GITHUB_USER}`}
             target="_blank"
             rel="noopener noreferrer"
             class="px-6 py-2.5 border-2 border-purple-500 text-purple-400 hover:bg-purple-500/10 transition-all font-pixel text-xs"
@@ -62,6 +136,11 @@
           >
             [ GO_TO_GITHUB ]
           </a>
+          {gh && (
+            <span class="text-[10px] text-slate-600">
+              <span data-i18n="github.updated">// datos al</span> {builtAt}
+            </span>
+          )}
         </div>
       </div>
     </div>

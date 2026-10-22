@@ -1,5 +1,46 @@
 ---
+import { getGitHubData, GITHUB_USER } from "../lib/github";
+
+const gh = await getGitHubData();
+
+// Everything the terminal prints comes from here; the client script only formats it.
+const termData = {
+  github: gh
+    ? { user: GITHUB_USER, contributions: gh.contributionsLastYear, repos: gh.publicRepos, since: gh.memberSince, languages: gh.topLanguages.map((l) => l.name) }
+    : { user: GITHUB_USER },
+  cv: "/Ing-Cesar-Adrian-Morado-Rodriguez-2026.pdf",
+  contact: {
+    email: "moradoadrian@gmail.com",
+    linkedin: "https://www.linkedin.com/in/moradoadrian/",
+    whatsapp: "https://wa.me/524614210058",
+    github: `https://github.com/${GITHUB_USER}`,
+  },
+  experience: [
+    { period: { es: "Feb 2026 - Presente", en: "Feb 2026 - Present" }, company: "IEEG", role: { es: "Ingeniero de Software", en: "Software Engineer" }, note: "Flutter · Angular · C# · Scrum" },
+    { period: { es: "Abr 2024 - Feb 2026", en: "Apr 2024 - Feb 2026" }, company: "Registro Civil", role: { es: "Desarrollador de Sistemas", en: "Systems Developer" }, note: "Angular · Python · FastAPI" },
+    { period: { es: "Nov 2020 - Ene 2024", en: "Nov 2020 - Jan 2024" }, company: "Hospitales MAC", role: { es: "Soporte y Desarrollo", en: "Support & Development" }, note: "Oracle · Tasy EMR" },
+    { period: { es: "May 2018 - Nov 2020", en: "May 2018 - Nov 2020" }, company: "Infoexpo", role: { es: "Desarrollador FrontEnd", en: "Frontend Developer" }, note: "PHP · Symfony · PostgreSQL" },
+  ],
+  projects: [
+    { name: "surticel", desc: { es: "Plataforma de pedidos B2B (PWA)", en: "B2B ordering platform (PWA)" }, url: "https://surticel.com" },
+    { name: "celebra-ya", desc: { es: "Estudio de invitaciones digitales", en: "Digital invitation studio" }, url: "https://celebra-ya.com" },
+    { name: "purple-wings", desc: { es: "App de pedidos por WhatsApp", en: "WhatsApp ordering app" }, url: "https://purple-wings.netlify.app/#/inicio" },
+    { name: "logpath", desc: { es: "Telemetría POS (hackathon midudev)", en: "POS telemetry (midudev hackathon)" }, url: "https://github.com/moradoadrian/LogPath" },
+    { name: "constancias", desc: { es: "Constancias de inexistencia · Registro Civil", en: "Non-existence certificates · Civil Registry" } },
+    { name: "anotaciones", desc: { es: "Anotaciones judiciales · Registro Civil", en: "Court annotations · Civil Registry" } },
+    { name: "pos-miche", desc: { es: "Punto de venta híbrido", en: "Hybrid point of sale" } },
+  ],
+  skills: {
+    frontend: ["Angular", "TypeScript", "Flutter", "Tailwind", "Astro"],
+    backend: ["C#/.NET", "Python/FastAPI", "Node.js", "PHP"],
+    data: ["PostgreSQL", "MySQL", "Oracle", "Firebase", "Supabase"],
+    tools: ["Git", "Scrum", "Confluence", "Claude Code"],
+  },
+};
+
+const quickCommands = ["help", "projects", "experience", "github", "contact", "sudo hire-me"];
 ---
+
 <section id="terminal" class="py-20 px-4 bg-slate-950/40 border-t border-slate-900 relative overflow-hidden">
   <div class="max-w-4xl mx-auto relative z-10 font-mono">
     <div class="text-center mb-12">
@@ -7,74 +48,331 @@
         &lt;Terminal /&gt;
       </h2>
       <p class="text-xs text-slate-500 max-w-md mx-auto" data-i18n="terminal.subtitle">
-        // Interactive status console
+        // Consola interactiva: escribe un comando
       </p>
     </div>
 
     <!-- Terminal Window -->
-    <div class="bg-slate-900/40 border-2 border-slate-800 rounded-md overflow-hidden hover:border-purple-500/40 transition-colors shadow-2xl">
-      <!-- Title bar -->
+    <div id="term" class="bg-slate-950/80 border-2 border-slate-800 rounded-md overflow-hidden focus-within:border-purple-500/60 hover:border-purple-500/40 transition-colors shadow-2xl">
       <div class="bg-slate-950 px-4 py-2 flex items-center justify-between border-b border-slate-800">
         <div class="flex items-center gap-2">
           <span class="w-3 h-3 rounded-full bg-red-500/80"></span>
           <span class="w-3 h-3 rounded-full bg-yellow-500/80"></span>
           <span class="w-3 h-3 rounded-full bg-green-500/80"></span>
         </div>
-        <span class="text-xs text-slate-500 font-bold font-mono">SYS_STATUS@CAMR_PORTFOLIO:~</span>
+        <span class="text-xs text-slate-500 font-bold">guest@camr_portfolio:~</span>
         <span class="text-xs text-purple-400 font-bold select-none">&gt;_</span>
       </div>
 
-      <!-- Terminal Body -->
-      <div class="p-6 md:p-8 space-y-6 text-sm text-slate-300 font-mono">
-        <!-- whoami command -->
-        <div class="space-y-1">
-          <div class="flex items-center gap-2">
-            <span class="text-purple-500 font-bold">$</span>
-            <span class="text-white font-bold" data-i18n="terminal.whoamiLabel">whoami</span>
-          </div>
-          <p class="pl-5 text-slate-400 leading-relaxed" data-i18n="terminal.whoamiVal">
-            Desarrollador Frontend especializado en Angular
-          </p>
-        </div>
+      <div id="term-body" class="p-5 md:p-6 h-[380px] overflow-y-auto text-[13px] leading-relaxed text-slate-300 cursor-text">
+        <div id="term-log" class="space-y-1" aria-live="polite"></div>
+        <form id="term-form" class="flex items-center gap-2 mt-1" autocomplete="off">
+          <label for="term-input" class="text-purple-500 font-bold shrink-0">guest@camr:~$</label>
+          <input
+            id="term-input"
+            type="text"
+            spellcheck="false"
+            autocapitalize="off"
+            class="flex-1 min-w-0 bg-transparent outline-none border-none text-white caret-purple-400 p-0 focus:ring-0"
+            aria-label="Comando de terminal"
+          />
+        </form>
+      </div>
 
-        <!-- current_focus command -->
-        <div class="space-y-1">
-          <div class="flex items-center gap-2">
-            <span class="text-purple-500 font-bold">$</span>
-            <span class="text-white font-bold" data-i18n="terminal.focusLabel">current_focus</span>
-          </div>
-          <p class="pl-5 text-slate-400 leading-relaxed" data-i18n="terminal.focusVal">
-            Angular, Firebase, IA, Cloud
-          </p>
-        </div>
-
-        <!-- looking_for command -->
-        <div class="space-y-1">
-          <div class="flex items-center gap-2">
-            <span class="text-purple-500 font-bold">$</span>
-            <span class="text-white font-bold" data-i18n="terminal.lookingLabel">looking_for</span>
-          </div>
-          <p class="pl-5 text-slate-400 leading-relaxed" data-i18n="terminal.lookingVal">
-            Remote, Hybrid, Full-time
-          </p>
-        </div>
-
-        <!-- Prompt line with blinking cursor -->
-        <div class="flex items-center gap-2 pt-2 border-t border-slate-800/60">
-          <span class="text-purple-500 font-bold">$</span>
-          <span class="w-2.5 h-4 bg-purple-500 animate-pulse blink-cursor"></span>
-        </div>
+      <!-- Tap-friendly shortcuts (mobile keyboards make typing commands tedious) -->
+      <div class="flex flex-wrap gap-2 px-5 py-3 border-t border-slate-800 bg-slate-950">
+        {quickCommands.map((cmd) => (
+          <button type="button" data-cmd={cmd} class="term-quick px-2.5 py-1 text-[11px] text-slate-400 bg-slate-900 border border-slate-800 rounded hover:border-purple-500/60 hover:text-purple-300 transition-colors">
+            {cmd}
+          </button>
+        ))}
       </div>
     </div>
   </div>
 </section>
 
-<style>
-  @keyframes blink {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0; }
+<script type="application/json" id="term-data" set:html={JSON.stringify(termData)} />
+
+<script>
+  type Lang = "es" | "en";
+  type Bi = { es: string; en: string };
+  interface TermData {
+    github: { user: string; contributions?: number; repos?: number; since?: number; languages?: string[] };
+    cv: string;
+    contact: { email: string; linkedin: string; whatsapp: string; github: string };
+    experience: { period: Bi; company: string; role: Bi; note: string }[];
+    projects: { name: string; desc: Bi; url?: string }[];
+    skills: Record<string, string[]>;
   }
-  .blink-cursor {
-    animation: blink 1s step-end infinite;
+
+  const data: TermData = JSON.parse(document.getElementById("term-data")!.textContent!);
+  const body = document.getElementById("term-body")!;
+  const log = document.getElementById("term-log")!;
+  const form = document.getElementById("term-form") as HTMLFormElement;
+  const input = document.getElementById("term-input") as HTMLInputElement;
+
+  const lang = (): Lang => (document.documentElement.lang === "en" ? "en" : "es");
+  const t = (b: Bi) => b[lang()];
+
+  // Output is built from DOM nodes so user input is never interpreted as HTML.
+  type Part = string | { text: string; href?: string; cls?: string };
+  function renderParts(el: HTMLElement, parts: Part | Part[]) {
+    for (const p of Array.isArray(parts) ? parts : [parts]) {
+      if (typeof p === "string") {
+        el.append(p);
+      } else if (p.href) {
+        const a = document.createElement("a");
+        a.href = p.href;
+        a.textContent = p.text;
+        a.className = `underline underline-offset-2 hover:text-purple-200 ${p.cls ?? "text-purple-400"}`;
+        if (/^https?:/.test(p.href)) { a.target = "_blank"; a.rel = "noopener noreferrer"; }
+        el.append(a);
+      } else {
+        const s = document.createElement("span");
+        s.textContent = p.text;
+        s.className = p.cls ?? "";
+        el.append(s);
+      }
+    }
   }
-</style>
+  function print(parts: Part | Part[], cls = "text-slate-300") {
+    const line = document.createElement("div");
+    line.className = `whitespace-pre-wrap break-words ${cls}`;
+    renderParts(line, parts);
+    log.append(line);
+    body.scrollTop = body.scrollHeight;
+  }
+  // Two real columns so wrapped values stay aligned on narrow screens (padEnd breaks when text wraps)
+  function row(label: string, value: Part | Part[], labelCls = "text-white") {
+    const line = document.createElement("div");
+    line.className = "grid grid-cols-[7.5rem_1fr] sm:grid-cols-[11rem_1fr] gap-x-3 pl-2 break-words";
+    const l = document.createElement("span");
+    l.textContent = label;
+    l.className = labelCls;
+    const v = document.createElement("span");
+    v.className = "text-slate-400 min-w-0";
+    renderParts(v, value);
+    line.append(l, v);
+    log.append(line);
+    body.scrollTop = body.scrollHeight;
+  }
+  const blank = () => print(" ");
+  const head = (text: string) => print({ text, cls: "text-purple-400 font-bold" });
+
+  const commands: Record<string, { desc: Bi; run: (args: string[]) => void | Promise<void> }> = {
+    help: {
+      desc: { es: "muestra esta ayuda", en: "show this help" },
+      run: () => {
+        head(lang() === "es" ? "Comandos disponibles:" : "Available commands:");
+        for (const [name, c] of Object.entries(commands)) {
+          if (hidden.has(name)) continue;
+          row(name, t(c.desc));
+        }
+        print({ text: lang() === "es" ? "  Tip: Tab autocompleta, ↑/↓ recorren el historial. Hay comandos ocultos 👀" : "  Tip: Tab autocompletes, ↑/↓ browse history. There are hidden commands 👀", cls: "text-slate-500" });
+      },
+    },
+    whoami: {
+      desc: { es: "quién soy", en: "who I am" },
+      run: () => {
+        print({ text: "César Adrián Morado Rodríguez", cls: "text-white font-bold" });
+        print(lang() === "es" ? "Ingeniero de Software · Frontend (Angular, Flutter) · Guanajuato, MX" : "Software Engineer · Frontend (Angular, Flutter) · Guanajuato, MX");
+      },
+    },
+    about: {
+      desc: { es: "resumen profesional", en: "professional summary" },
+      run: () => print(lang() === "es"
+        ? "+4 años construyendo aplicaciones web y móviles para gobierno, salud y empresas privadas. Me enfoco en arquitectura frontend limpia, rendimiento y experiencia de usuario. Actualmente curso una Maestría en Diseño y Desarrollo de Interfaces Web."
+        : "4+ years building web and mobile apps for government, healthcare and private companies. I focus on clean frontend architecture, performance and user experience. Currently pursuing a Master's in Web UI Design & Development."),
+    },
+    experience: {
+      desc: { es: "historial laboral", en: "work history" },
+      run: () => {
+        for (const e of data.experience) {
+          print([{ text: `[${t(e.period)}] `, cls: "text-slate-500" }, { text: `${t(e.role)} @ ${e.company}`, cls: "text-white" }]);
+          print({ text: `   ${e.note}`, cls: "text-slate-400" });
+        }
+      },
+    },
+    projects: {
+      desc: { es: "proyectos destacados", en: "featured projects" },
+      run: () => {
+        for (const p of data.projects) {
+          row(p.name, [t(p.desc), ...(p.url ? [" ", { text: "↗", href: p.url }] : [])]);
+        }
+        print({ text: lang() === "es" ? "  Detalles en la sección de Proyectos ↑" : "  Details in the Projects section ↑", cls: "text-slate-500" });
+      },
+    },
+    skills: {
+      desc: { es: "stack técnico", en: "tech stack" },
+      run: () => {
+        for (const [area, list] of Object.entries(data.skills)) {
+          row(area, list.join(" · "), "text-purple-300");
+        }
+      },
+    },
+    github: {
+      desc: { es: "estadísticas reales de GitHub", en: "live GitHub stats" },
+      run: () => {
+        const g = data.github;
+        if (g.contributions === undefined) {
+          print([lang() === "es" ? "Sin datos en esta compilación. Perfil: " : "No data in this build. Profile: ", { text: data.contact.github, href: data.contact.github }]);
+          return;
+        }
+        const es = lang() === "es";
+        row(es ? "contribuciones" : "contributions", { text: `${g.contributions} (12m)`, cls: "text-white" });
+        row(es ? "repos públicos" : "public repos", { text: String(g.repos), cls: "text-white" });
+        row(es ? "desde" : "since", { text: String(g.since), cls: "text-white" });
+        row(es ? "lenguajes" : "languages", (g.languages ?? []).join(", "));
+        row("→", { text: data.contact.github, href: data.contact.github }, "text-slate-500");
+      },
+    },
+    contact: {
+      desc: { es: "cómo contactarme", en: "how to reach me" },
+      run: () => {
+        const c = data.contact;
+        row("email", { text: c.email, href: `mailto:${c.email}` });
+        row("linkedin", { text: "in/moradoadrian", href: c.linkedin });
+        row("whatsapp", { text: lang() === "es" ? "escríbeme" : "message me", href: c.whatsapp });
+        row("github", { text: "moradoadrian", href: c.github });
+      },
+    },
+    cv: {
+      desc: { es: "descargar mi CV (PDF)", en: "download my CV (PDF)" },
+      run: () => print([lang() === "es" ? "CV listo → " : "CV ready → ", { text: data.cv.slice(1), href: data.cv }]),
+    },
+    lang: {
+      desc: { es: "cambia idioma: lang es | lang en", en: "switch language: lang es | lang en" },
+      run: ([target]) => {
+        if (target !== "es" && target !== "en") { print("usage: lang es | lang en", "text-yellow-400"); return; }
+        // Reuse the navbar switch so the whole page (not just the terminal) changes
+        document.getElementById(`lang-btn-${target}`)?.click();
+        print(target === "es" ? "Idioma cambiado a español ✓" : "Language switched to English ✓", "text-emerald-400");
+      },
+    },
+    history: {
+      desc: { es: "comandos usados", en: "command history" },
+      run: () => history.forEach((h, i) => print({ text: `  ${String(i + 1).padStart(3)}  ${h}`, cls: "text-slate-400" })),
+    },
+    clear: {
+      desc: { es: "limpia la pantalla (Ctrl+L)", en: "clear the screen (Ctrl+L)" },
+      run: () => { log.replaceChildren(); },
+    },
+    // Easter eggs (hidden from help)
+    sudo: {
+      desc: { es: "", en: "" },
+      run: (args) => {
+        if (args.join(" ") === "hire-me") {
+          print({ text: "[sudo] password for recruiter: ********", cls: "text-slate-500" });
+          print({ text: lang() === "es" ? "✓ Acceso concedido. Excelente decisión 🚀" : "✓ Access granted. Excellent decision 🚀", cls: "text-emerald-400 font-bold" });
+          commands.contact.run([]);
+          return;
+        }
+        print(lang() === "es" ? "Buen intento 😏 Prueba: sudo hire-me" : "Nice try 😏 Try: sudo hire-me", "text-yellow-400");
+      },
+    },
+    rm: {
+      desc: { es: "", en: "" },
+      run: () => print(lang() === "es" ? "rm: permiso denegado. Este portafolio está protegido 🛡️" : "rm: permission denied. This portfolio is protected 🛡️", "text-red-400"),
+    },
+    coffee: {
+      desc: { es: "", en: "" },
+      run: () => print(lang() === "es" ? "☕ Recargando energía... 100%. Listo para programar." : "☕ Recharging... 100%. Ready to code.", "text-amber-300"),
+    },
+    exit: {
+      desc: { es: "", en: "" },
+      run: () => print(lang() === "es" ? "No hay salida... salvo un buen proyecto juntos. Escribe: contact" : "There's no exit... except a great project together. Type: contact", "text-slate-400"),
+    },
+    matrix: {
+      desc: { es: "", en: "" },
+      run: async () => {
+        const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+        const glyphs = "アイウエオカキクケコサシスセソ01<>/{}";
+        const width = Math.max(16, Math.floor(body.clientWidth / 9) - 4);
+        for (let i = 0; i < 8; i++) {
+          print({ text: Array.from({ length: width }, () => glyphs[Math.floor(Math.random() * glyphs.length)]).join(""), cls: "text-emerald-400/80" });
+          if (!reduce) await new Promise((r) => setTimeout(r, 90));
+        }
+        print({ text: lang() === "es" ? "Despierta, Neo... el frontend te necesita." : "Wake up, Neo... the frontend needs you.", cls: "text-emerald-300" });
+      },
+    },
+  };
+  const hidden = new Set(["sudo", "rm", "coffee", "exit", "matrix"]);
+  const aliases: Record<string, string> = { ls: "projects", exp: "experience", stack: "skills", cls: "clear", "?": "help", idioma: "lang" };
+
+  const history: string[] = [];
+  let historyIndex = 0;
+
+  async function run(raw: string) {
+    const line = raw.trim();
+    // Echo the command exactly as typed (textContent, never HTML)
+    print([{ text: "guest@camr:~$ ", cls: "text-purple-500 font-bold" }, { text: line, cls: "text-white" }]);
+    if (!line) return;
+    history.push(line);
+    historyIndex = history.length;
+
+    const [name, ...args] = line.split(/\s+/);
+    const key = aliases[name.toLowerCase()] ?? name.toLowerCase();
+    const cmd = commands[key];
+    if (cmd) {
+      await cmd.run(args);
+    } else {
+      const guess = Object.keys(commands).find((c) => !hidden.has(c) && (c.startsWith(key.slice(0, 2)) || key.startsWith(c)));
+      print(
+        `${lang() === "es" ? "comando no encontrado" : "command not found"}: ${name}` +
+          (guess ? (lang() === "es" ? ` · ¿quisiste decir '${guess}'?` : ` · did you mean '${guess}'?`) : (lang() === "es" ? " · escribe 'help'" : " · type 'help'")),
+        "text-red-400"
+      );
+    }
+    if (key !== "clear") blank();
+  }
+
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const value = input.value;
+    input.value = "";
+    run(value);
+  });
+
+  input.addEventListener("keydown", (e) => {
+    if (e.key === "ArrowUp" && history.length) {
+      e.preventDefault();
+      historyIndex = Math.max(0, historyIndex - 1);
+      input.value = history[historyIndex];
+    } else if (e.key === "ArrowDown" && history.length) {
+      e.preventDefault();
+      historyIndex = Math.min(history.length, historyIndex + 1);
+      input.value = history[historyIndex] ?? "";
+    } else if (e.key === "Tab") {
+      const v = input.value.trim().toLowerCase();
+      if (!v || v.includes(" ")) return; // let Tab move focus normally
+      const matches = Object.keys(commands).filter((c) => !hidden.has(c) && c.startsWith(v));
+      if (matches.length === 1) { e.preventDefault(); input.value = matches[0] + " "; }
+      else if (matches.length > 1) { e.preventDefault(); print(matches.join("   "), "text-slate-400"); }
+    } else if (e.key === "l" && e.ctrlKey) {
+      e.preventDefault();
+      log.replaceChildren();
+    }
+  });
+
+  // Clicking anywhere in the terminal focuses the prompt, unless the user is selecting text or clicking a link
+  body.addEventListener("click", (e) => {
+    if ((e.target as HTMLElement).closest("a") || getSelection()?.toString()) return;
+    input.focus({ preventScroll: true });
+  });
+
+  document.querySelectorAll<HTMLButtonElement>(".term-quick").forEach((btn) =>
+    btn.addEventListener("click", () => run(btn.dataset.cmd!))
+  );
+
+  // Boot after DOMContentLoaded so the layout has already applied the saved language
+  function boot() {
+    print({ text: "camr-os v2.0 · tty1", cls: "text-slate-500" });
+    print(lang() === "es"
+      ? [ "Bienvenido. Escribe ", { text: "help", cls: "text-purple-300 font-bold" }, " para ver los comandos o usa los atajos de abajo." ]
+      : [ "Welcome. Type ", { text: "help", cls: "text-purple-300 font-bold" }, " to see the commands or use the shortcuts below." ]);
+    blank();
+    run("whoami");
+  }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot);
+  else boot();
+</script>
