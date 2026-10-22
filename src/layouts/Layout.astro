@@ -138,13 +138,8 @@ import 'overlayscrollbars/overlayscrollbars.css';
           const key = el.getAttribute('data-i18n');
           if (!key) return;
           const value = dict[key as keyof typeof dict];
-          if (value) {
-            if (el.tagName === 'SPAN' || el.tagName === 'H1' || el.tagName === 'H2' || el.tagName === 'H3' || el.tagName === 'H4' || el.tagName === 'P' || el.tagName === 'A' || el.tagName === 'LI') {
-              el.innerHTML = value;
-            } else {
-              el.textContent = value;
-            }
-          }
+          // textContent, not innerHTML: titles like "<Sobre_Mí />" would otherwise be parsed as tags and vanish
+          if (value) el.textContent = value;
         });
 
         // Translate Tooltips dynamically

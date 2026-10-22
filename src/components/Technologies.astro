@@ -13,6 +13,7 @@ import {
   siPostgresql,
   siGit,
   siCapacitor,
+  siDocker,
 } from "simple-icons";
 
 // Renders the official Simple Icons brand mark. `fillOverride` is only used for
@@ -23,6 +24,34 @@ function brandIcon(icon: { title: string; path: string; hex: string }, fillOverr
   const fill = fillOverride ?? `#${icon.hex}`;
   return `<svg viewBox="0 0 24 24" class="w-full h-full object-contain" xmlns="http://www.w3.org/2000/svg"><title>${icon.title}</title><path d="${icon.path}" fill="${fill}"/></svg>`;
 }
+
+// Microsoft's official four-square mark. Azure itself isn't in Simple Icons
+// (Microsoft had it pulled), so the parent brand logo stands in for it here.
+const microsoftIcon = `<svg viewBox="0 0 21 21" class="w-full h-full object-contain" xmlns="http://www.w3.org/2000/svg"><title>Microsoft</title><rect x="1" y="1" width="9" height="9" fill="#F25022"/><rect x="11" y="1" width="9" height="9" fill="#7FBA00"/><rect x="1" y="11" width="9" height="9" fill="#00A4EF"/><rect x="11" y="11" width="9" height="9" fill="#FFB900"/></svg>`;
+
+// Non-brand concepts (IA, Cloud, DevOps) get a plain currentColor glyph so they
+// inherit the chip's slate → purple hover tint instead of a fixed brand hex.
+function conceptIcon(inner: string) {
+  return `<svg viewBox="0 0 24 24" class="w-full h-full object-contain" fill="currentColor" xmlns="http://www.w3.org/2000/svg">${inner}</svg>`;
+}
+
+// Hand-plotted 4-point sparkle (outer radius 10, inner radius 3, centered at 12,12) — the
+// motif most AI product UIs (Copilot, Gemini) use as shorthand for "AI".
+const aiIcon = conceptIcon(`<path d="M12 2L14.12 9.88L22 12L14.12 14.12L12 22L9.88 14.12L2 12L9.88 9.88Z"/>`);
+
+// Cloud built from three overlapping circles (top bumps) over a rounded base rect.
+const cloudIcon = conceptIcon(`<circle cx="8" cy="13" r="4.5"/><circle cx="13.5" cy="10.5" r="5.5"/><circle cx="18" cy="13.5" r="3.8"/><rect x="5" y="13" width="15" height="6" rx="3"/>`);
+
+// The infinity loop is the industry-standard shorthand for DevOps/CI-CD cycles.
+const devopsIcon = conceptIcon(`<text x="12" y="16" text-anchor="middle" font-size="15" font-weight="700">∞</text>`);
+
+const learningItems = [
+  { label: "Docker", icon: brandIcon(siDocker) },
+  { label: "Azure", icon: microsoftIcon },
+  { label: "IA", i18n: "tech.learning.ai", icon: aiIcon },
+  { label: "Cloud", icon: cloudIcon },
+  { label: "DevOps", icon: devopsIcon },
+];
 
 const techCategories = [
   {
@@ -246,21 +275,13 @@ const techCategories = [
         // CURRENTLY LEARNING
       </h3>
       <div class="flex flex-wrap justify-center gap-3 max-w-xl mx-auto font-mono text-xs">
-        <span class="px-3 py-1.5 bg-slate-900/80 border border-slate-800 text-slate-400 hover:border-purple-500/50 hover:text-purple-300 rounded transition-all cursor-default transform hover:-translate-y-0.5 shadow-sm hover:shadow-[0_0_10px_rgba(168,85,247,0.1)]">
-          &gt; Docker
-        </span>
-        <span class="px-3 py-1.5 bg-slate-900/80 border border-slate-800 text-slate-400 hover:border-purple-500/50 hover:text-purple-300 rounded transition-all cursor-default transform hover:-translate-y-0.5 shadow-sm hover:shadow-[0_0_10px_rgba(168,85,247,0.1)]">
-          &gt; Azure
-        </span>
-        <span class="px-3 py-1.5 bg-slate-900/80 border border-slate-800 text-slate-400 hover:border-purple-500/50 hover:text-purple-300 rounded transition-all cursor-default transform hover:-translate-y-0.5 shadow-sm hover:shadow-[0_0_10px_rgba(168,85,247,0.1)]">
-          &gt; IA
-        </span>
-        <span class="px-3 py-1.5 bg-slate-900/80 border border-slate-800 text-slate-400 hover:border-purple-500/50 hover:text-purple-300 rounded transition-all cursor-default transform hover:-translate-y-0.5 shadow-sm hover:shadow-[0_0_10px_rgba(168,85,247,0.1)]">
-          &gt; Cloud
-        </span>
-        <span class="px-3 py-1.5 bg-slate-900/80 border border-slate-800 text-slate-400 hover:border-purple-500/50 hover:text-purple-300 rounded transition-all cursor-default transform hover:-translate-y-0.5 shadow-sm hover:shadow-[0_0_10px_rgba(168,85,247,0.1)]">
-          &gt; DevOps
-        </span>
+        {learningItems.map((item) => (
+          <span class="flex items-center gap-1.5 px-3 py-1.5 bg-slate-900/80 border border-slate-800 text-slate-400 hover:border-purple-500/50 hover:text-purple-300 rounded transition-all cursor-default transform hover:-translate-y-0.5 shadow-sm hover:shadow-[0_0_10px_rgba(168,85,247,0.1)]">
+            &gt;
+            {item.icon && <span class="w-3 h-3 flex-shrink-0 opacity-90" set:html={item.icon} />}
+            <span data-i18n={item.i18n}>{item.label}</span>
+          </span>
+        ))}
       </div>
     </div>
   </div>
