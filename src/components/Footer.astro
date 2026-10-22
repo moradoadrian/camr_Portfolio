@@ -1,0 +1,209 @@
+---
+import { siGithub, siWhatsapp, siAstro, siTailwindcss, siGreensock } from "simple-icons";
+
+const email = "moradoadrian@gmail.com";
+const cv = "/Ing-Cesar-Adrian-Morado-Rodriguez-2026.pdf";
+const builtAt = new Date().toISOString().slice(0, 10);
+
+const nav = [
+  { key: "home", name: "Inicio", href: "#top" },
+  { key: "about", name: "Sobre Mí", href: "#about" },
+  { key: "experience", name: "Experiencia", href: "#experience" },
+  { key: "certifications", name: "Certificaciones", href: "#certifications" },
+  { key: "projects", name: "Proyectos", href: "#projects" },
+  { key: "contact", name: "Contacto", href: "#contact" },
+];
+
+const icon = (path: string) =>
+  `<svg viewBox="0 0 24 24" class="w-4 h-4" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="${path}"/></svg>`;
+// LinkedIn was removed from Simple Icons at the brand's request; this is its standard glyph
+const linkedinPath = "M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 1 1 0-4.125 2.062 2.062 0 0 1 0 4.125zM7.119 20.452H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z";
+const mailPath = "M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4-8 5-8-5V6l8 5 8-5v2z";
+
+const socials = [
+  { label: "GitHub", href: "https://github.com/moradoadrian", svg: icon(siGithub.path) },
+  { label: "LinkedIn", href: "https://www.linkedin.com/in/moradoadrian/", svg: icon(linkedinPath) },
+  { label: "WhatsApp", href: "https://wa.me/524614210058", svg: icon(siWhatsapp.path) },
+  { label: "Email", href: `mailto:${email}`, svg: icon(mailPath) },
+];
+
+const builtWith = [
+  { name: "Astro", svg: icon(siAstro.path), color: `#${siAstro.hex}` },
+  { name: "Tailwind", svg: icon(siTailwindcss.path), color: `#${siTailwindcss.hex}` },
+  { name: "GSAP", svg: icon(siGreensock.path), color: `#${siGreensock.hex}` },
+];
+---
+
+<footer id="site-footer" class="relative z-10 mt-24 font-mono border-t border-slate-800 bg-slate-950 overflow-hidden">
+  <!-- Top glow line -->
+  <div class="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-purple-500 to-transparent"></div>
+  <div class="pointer-events-none absolute -top-40 left-1/2 -translate-x-1/2 w-[900px] h-[400px] bg-purple-600/15 blur-[120px] rounded-full"></div>
+
+  <div class="relative max-w-6xl mx-auto px-4 sm:px-6">
+    <!-- CTA -->
+    <div class="pt-20 pb-16 text-center">
+      <div class="inline-flex items-center gap-2 px-3 py-1 mb-6 rounded-full border border-emerald-500/30 bg-emerald-500/10 text-emerald-300 text-[11px] tracking-wider">
+        <span class="relative flex h-2 w-2">
+          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+          <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-400"></span>
+        </span>
+        <span data-i18n="footer.available">Disponible para nuevos proyectos</span>
+      </div>
+
+      <h2 class="font-pixel text-3xl sm:text-5xl md:text-6xl text-white tracking-wide leading-tight text-balance">
+        <span data-i18n="footer.ctaTitle1">¿Construimos algo</span>
+        <span class="bg-gradient-to-r from-purple-400 via-fuchsia-400 to-emerald-300 bg-clip-text text-transparent" data-i18n="footer.ctaTitle2">juntos?</span>
+      </h2>
+      <p class="mt-5 text-sm md:text-base text-slate-400 max-w-xl mx-auto text-pretty" data-i18n="footer.ctaText">
+        Busco retos en desarrollo frontend y aplicaciones móviles. Si tienes un proyecto o una vacante, hablemos.
+      </p>
+
+      <div class="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3">
+        <button
+          type="button"
+          id="footer-copy-email"
+          data-email={email}
+          class="group inline-flex items-center gap-3 pl-5 pr-2 py-2 bg-purple-600 hover:bg-purple-500 text-white text-sm font-bold transition-all hover:-translate-y-0.5 hover:shadow-[0_0_30px_rgba(168,85,247,0.5)]"
+        >
+          <span>{email}</span>
+          <span class="text-[10px] uppercase tracking-widest bg-purple-900/60 px-2 py-1">
+            <span id="footer-copy-label" data-i18n="footer.copy">Copiar</span>
+            <span id="footer-copied-label" class="hidden" data-i18n="footer.copied">¡Copiado!</span>
+          </span>
+        </button>
+        <a
+          href={cv}
+          download
+          class="inline-flex items-center gap-2 px-5 py-2.5 border border-slate-700 hover:border-purple-500 text-slate-300 hover:text-purple-300 text-sm font-bold transition-all hover:-translate-y-0.5"
+        >
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 10v6m0 0l-3-3m3 3l3-3M6 20h12a2 2 0 002-2V8l-6-6H6a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
+          <span data-i18n="footer.cv">Descargar CV</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Columns -->
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-10 py-12 border-t border-slate-800/80 text-sm">
+      <div class="col-span-2 lg:col-span-1 space-y-4">
+        <a href="#top" class="text-purple-400 font-bold text-base hover:text-purple-300 transition-colors">~/camr_portfolio</a>
+        <p class="text-slate-400 text-xs leading-relaxed text-pretty" data-i18n="footer.bio">
+          Ingeniero de Software enfocado en frontend web y móvil: Angular, Flutter y arquitectura limpia.
+        </p>
+        <div class="flex items-center gap-2 text-xs text-slate-400">
+          <svg class="w-4 h-4 text-purple-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          <span>Guanajuato, MX ·</span>
+          <time id="footer-clock" class="text-white tabular-nums">--:--</time>
+          <span class="text-slate-500">(GMT-6)</span>
+        </div>
+      </div>
+
+      <div>
+        <h3 class="text-white font-bold text-xs uppercase tracking-widest mb-4" data-i18n="footer.navTitle">Navegación</h3>
+        <ul class="space-y-2.5">
+          {nav.map((l) => (
+            <li>
+              <a href={l.href} class="group inline-flex items-center gap-2 text-slate-400 hover:text-purple-300 transition-colors text-xs">
+                <span class="text-purple-500 opacity-0 -ml-3 group-hover:opacity-100 group-hover:ml-0 transition-all">&gt;</span>
+                <span data-i18n={`navbar.${l.key}`}>{l.name}</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <div>
+        <h3 class="text-white font-bold text-xs uppercase tracking-widest mb-4" data-i18n="footer.connectTitle">Conectemos</h3>
+        <ul class="space-y-2.5">
+          {socials.map((s) => (
+            <li>
+              <a
+                href={s.href}
+                target={s.href.startsWith("http") ? "_blank" : undefined}
+                rel={s.href.startsWith("http") ? "noopener noreferrer" : undefined}
+                class="group inline-flex items-center gap-3 text-slate-400 hover:text-white transition-colors text-xs"
+              >
+                <span class="w-8 h-8 inline-flex items-center justify-center rounded border border-slate-800 bg-slate-900 group-hover:border-purple-500 group-hover:text-purple-300 group-hover:shadow-[0_0_14px_rgba(168,85,247,0.35)] transition-all">
+                  <Fragment set:html={s.svg} />
+                </span>
+                {s.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <div class="col-span-2 lg:col-span-1">
+        <h3 class="text-white font-bold text-xs uppercase tracking-widest mb-4" data-i18n="footer.builtTitle">Hecho con</h3>
+        <ul class="flex flex-wrap gap-x-5 gap-y-2.5 lg:block lg:space-y-2.5">
+          {builtWith.map((b) => (
+            <li class="flex items-center gap-3 text-slate-400 text-xs">
+              <span class="w-8 h-8 inline-flex items-center justify-center rounded border border-slate-800 bg-slate-900" style={`color: ${b.color}`}>
+                <Fragment set:html={b.svg} />
+              </span>
+              {b.name}
+            </li>
+          ))}
+        </ul>
+        <p class="mt-5 text-[11px] text-slate-500 leading-relaxed">
+          <span data-i18n="footer.terminalHint">Psst... prueba</span>
+          <a href="#terminal" class="text-purple-400 hover:text-purple-300 underline underline-offset-2">sudo hire-me</a>
+        </p>
+      </div>
+    </div>
+
+    <!-- Bottom bar -->
+    <div class="flex flex-col md:flex-row items-center justify-between gap-4 py-6 border-t border-slate-800/80 text-[11px] text-slate-500">
+      <p class="text-center md:text-left">
+        &copy; {new Date().getFullYear()} César Adrián Morado Rodríguez. <span data-i18n="footer.rights">Todos los derechos reservados.</span>
+      </p>
+      <p class="flex items-center gap-2">
+        <span data-i18n="footer.updated">Actualizado</span>
+        <time datetime={builtAt} class="text-slate-400">{builtAt}</time>
+        <span class="text-purple-500">· End_of_Line<span class="footer-caret">_</span></span>
+      </p>
+      <a href="#top" class="group inline-flex items-center gap-2 text-slate-400 hover:text-purple-300 transition-colors">
+        <span data-i18n="footer.backTop">Volver arriba</span>
+        <span class="w-7 h-7 inline-flex items-center justify-center border border-slate-700 group-hover:border-purple-500 group-hover:-translate-y-0.5 transition-all">↑</span>
+      </a>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .footer-caret {
+    animation: footer-blink 1s step-end infinite;
+  }
+  @keyframes footer-blink {
+    50% { opacity: 0; }
+  }
+</style>
+
+<script>
+  // Live local time in Guanajuato (America/Mexico_City)
+  const clock = document.getElementById("footer-clock");
+  if (clock) {
+    const fmt = new Intl.DateTimeFormat("es-MX", { timeZone: "America/Mexico_City", hour: "2-digit", minute: "2-digit", hour12: false });
+    const tick = () => { clock.textContent = fmt.format(new Date()); };
+    tick();
+    setInterval(tick, 30_000);
+  }
+
+  // Copy email with feedback; fall back to opening the mail client
+  const copyBtn = document.getElementById("footer-copy-email") as HTMLButtonElement | null;
+  const copyLabel = document.getElementById("footer-copy-label");
+  const copiedLabel = document.getElementById("footer-copied-label");
+  copyBtn?.addEventListener("click", async () => {
+    const mail = copyBtn.dataset.email!;
+    try {
+      await navigator.clipboard.writeText(mail);
+      copyLabel?.classList.add("hidden");
+      copiedLabel?.classList.remove("hidden");
+      setTimeout(() => {
+        copyLabel?.classList.remove("hidden");
+        copiedLabel?.classList.add("hidden");
+      }, 2000);
+    } catch {
+      location.href = `mailto:${mail}`;
+    }
+  });
+</script>
