@@ -6,12 +6,12 @@ const cv = "/Ing-Cesar-Adrian-Morado-Rodriguez-2026.pdf";
 const builtAt = new Date().toISOString().slice(0, 10);
 
 const nav = [
-  { key: "home", name: "Inicio", href: "#top" },
-  { key: "about", name: "Sobre Mí", href: "#about" },
-  { key: "experience", name: "Experiencia", href: "#experience" },
-  { key: "certifications", name: "Certificaciones", href: "#certifications" },
-  { key: "projects", name: "Proyectos", href: "#projects" },
-  { key: "contact", name: "Contacto", href: "#contact" },
+  { key: "home", name: "Inicio", href: "/#top" },
+  { key: "about", name: "Sobre Mí", href: "/#about" },
+  { key: "experience", name: "Experiencia", href: "/#experience" },
+  { key: "certifications", name: "Certificaciones", href: "/#certifications" },
+  { key: "projects", name: "Proyectos", href: "/#projects" },
+  { key: "contact", name: "Contacto", href: "/#contact" },
 ];
 
 const icon = (path: string) =>
@@ -85,7 +85,7 @@ const builtWith = [
     <!-- Columns -->
     <div class="grid grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-10 py-12 border-t border-slate-800/80 text-sm">
       <div class="col-span-2 lg:col-span-1 space-y-4">
-        <a href="#top" class="text-purple-400 font-bold text-base hover:text-purple-300 transition-colors">~/camr_portfolio</a>
+        <a href="/#top" class="text-purple-400 font-bold text-base hover:text-purple-300 transition-colors">~/camr_portfolio</a>
         <p class="text-slate-400 text-xs leading-relaxed text-pretty" data-i18n="footer.bio">
           Ingeniero de Software enfocado en frontend web y móvil: Angular, Flutter y arquitectura limpia.
         </p>
@@ -146,7 +146,7 @@ const builtWith = [
         </ul>
         <p class="mt-5 text-[11px] text-slate-500 leading-relaxed">
           <span data-i18n="footer.terminalHint">Psst... prueba</span>
-          <a href="#terminal" class="text-purple-400 hover:text-purple-300 underline underline-offset-2">sudo hire-me</a>
+          <a href="/#terminal" class="text-purple-400 hover:text-purple-300 underline underline-offset-2">sudo hire-me</a>
         </p>
       </div>
     </div>

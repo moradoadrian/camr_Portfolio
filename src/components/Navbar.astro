@@ -1,11 +1,11 @@
 ---
 const links = [
-  { key: "home", name: "Inicio", href: "#top" },
-  { key: "about", name: "Sobre Mí", href: "#about" },
-  { key: "experience", name: "Experiencia", href: "#experience" },
-  { key: "certifications", name: "Certificaciones", href: "#certifications" },
-  { key: "projects", name: "Proyectos", href: "#projects" },
-  { key: "contact", name: "Contacto", href: "#contact" },
+  { key: "home", name: "Inicio", href: "/#top" },
+  { key: "about", name: "Sobre Mí", href: "/#about" },
+  { key: "experience", name: "Experiencia", href: "/#experience" },
+  { key: "certifications", name: "Certificaciones", href: "/#certifications" },
+  { key: "projects", name: "Proyectos", href: "/#projects" },
+  { key: "contact", name: "Contacto", href: "/#contact" },
 ];
 ---
 
@@ -17,7 +17,7 @@ const links = [
     class="max-w-7xl mx-auto flex justify-between items-center px-6 py-4"
   >
     <a
-      href="#"
+      href="/#top"
       class="text-lg font-bold text-purple-400 hover:text-purple-300 transition-colors"
       data-i18n="navbar.logo"
     >
@@ -39,8 +39,20 @@ const links = [
           </li>
         ))
       }
+      <!-- Command palette trigger -->
+      <li class="ml-2">
+        <button
+          type="button"
+          data-cmdk-open
+          class="flex items-center gap-2 text-xs text-slate-500 hover:text-purple-300 border border-slate-800 hover:border-purple-500/60 bg-slate-900/60 rounded px-2.5 py-1.5 transition-colors"
+          aria-label="Abrir paleta de comandos"
+        >
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="m21 21-4.35-4.35M17 10.5a6.5 6.5 0 1 1-13 0 6.5 6.5 0 0 1 13 0z"/></svg>
+          <kbd class="font-mono text-[10px]"><span class="cmdk-mod">Ctrl</span> K</kbd>
+        </button>
+      </li>
       <!-- Language Selector Desktop -->
-      <li class="ml-4">
+      <li class="ml-1">
         <div class="lang-selector font-mono text-xs flex items-center border border-slate-800 bg-slate-900/60 p-0.5 rounded">
           <button 
             id="lang-btn-es" 
@@ -62,7 +74,15 @@ const links = [
     </ul>
 
     <!-- Mobile Lang Selector and Menu Button -->
-    <div class="flex items-center gap-4 md:hidden">
+    <div class="flex items-center gap-3 md:hidden">
+      <button
+        type="button"
+        data-cmdk-open
+        class="text-purple-400 hover:text-purple-300 border border-slate-700 p-1.5"
+        aria-label="Abrir paleta de comandos"
+      >
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="m21 21-4.35-4.35M17 10.5a6.5 6.5 0 1 1-13 0 6.5 6.5 0 0 1 13 0z"/></svg>
+      </button>
       <div class="lang-selector font-mono text-[10px] flex items-center border border-slate-800 bg-slate-900/60 p-0.5 rounded">
         <button 
           id="lang-btn-es-mob" 
@@ -204,29 +224,35 @@ const links = [
     threshold: 0
   };
 
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach((entry) => {
-      if (entry.isIntersecting) {
-        const id = entry.target.getAttribute("id");
-        navLinks.forEach((link) => {
-          const href = link.getAttribute("href");
-          if (href === `#${id}` || (id === "top" && href === "#top")) {
-            link.classList.add("text-purple-400", "font-bold");
-            link.classList.remove("text-slate-400", "text-slate-300");
-          } else {
-            link.classList.remove("text-purple-400", "font-bold");
-            if (link.classList.contains("mobile-link")) {
-              link.classList.add("text-slate-300");
-            } else {
-              link.classList.add("text-slate-400");
-            }
-          }
-        });
+  const setActive = (id: string) => {
+    navLinks.forEach((link) => {
+      const href = link.getAttribute("href");
+      if (href?.endsWith(`#${id}`)) {
+        link.classList.add("text-purple-400", "font-bold");
+        link.classList.remove("text-slate-400", "text-slate-300");
+      } else {
+        link.classList.remove("text-purple-400", "font-bold");
+        if (link.classList.contains("mobile-link")) {
+          link.classList.add("text-slate-300");
+        } else {
+          link.classList.add("text-slate-400");
+        }
       }
     });
-  }, observerOptions);
+  };
 
-  sections.forEach((section) => observer.observe(section));
-  const bodyTop = document.getElementById("top");
-  if (bodyTop) observer.observe(bodyTop);
+  if (location.pathname.startsWith("/projects/")) {
+    // Case-study pages have no home sections to track: they belong under "Proyectos"
+    setActive("projects");
+  } else {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) setActive(entry.target.getAttribute("id") ?? "");
+      });
+    }, observerOptions);
+
+    sections.forEach((section) => observer.observe(section));
+    const bodyTop = document.getElementById("top");
+    if (bodyTop) observer.observe(bodyTop);
+  }
 </script>

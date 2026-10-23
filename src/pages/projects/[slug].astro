@@ -1,0 +1,285 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import Footer from "../../components/Footer.astro";
+import { projects, resultKey, type Project } from "../../data/projects";
+import { getTechIcon } from "../../lib/tech-icons";
+import { responsive, socialCard } from "../../lib/images";
+
+export function getStaticPaths() {
+  return projects.map((project, i) => ({
+    params: { slug: project.key },
+    props: {
+      project,
+      prev: projects[(i - 1 + projects.length) % projects.length],
+      next: projects[(i + 1) % projects.length],
+    },
+  }));
+}
+
+interface Props {
+  project: Project;
+  prev: Project;
+  next: Project;
+}
+
+const { project: p, prev, next } = Astro.props;
+
+const shot = await responsive(p.image, [640, 1000, 1400]);
+const ogImage = await socialCard(p.image);
+
+// Case-study sections in reading order; only the ones this project has are rendered and numbered
+const sections = [
+  { field: "problem", labelKey: "proj.section.problem", label: "Problema" },
+  { field: "challenge", labelKey: "proj.section.challenge", label: "Desafío" },
+  { field: "solution", labelKey: "proj.section.solution", label: "Solución" },
+  { field: "architecture", labelKey: "proj.section.architecture", label: "Arquitectura" },
+  { field: "technicalChallenges", labelKey: "proj.section.techChallenges", label: "Retos técnicos" },
+] as const;
+const textSections = sections.filter((s) => p[s.field]);
+const hasResults = (p.results?.length ?? 0) > 0;
+let n = textSections.length;
+const resultsNumber = hasResults ? ++n : 0;
+const lessonsNumber = p.lessons ? ++n : 0;
+const pad = (x: number) => String(x).padStart(2, "0");
+// Tall full-page captures get a scrollable viewport; landscape ones are shown whole
+const scrollable = shot.height / shot.width > 0.9;
+---
+
+<Layout
+  title={`${p.title} · Caso de estudio | César Adrián Morado`}
+  description={p.overview}
+  image={ogImage}
+  bootLoader={false}
+>
+  <main class="relative z-10 pt-28 pb-16 px-4 font-mono">
+    <article class="max-w-6xl mx-auto">
+      <!-- Breadcrumb -->
+      <nav class="flex flex-wrap items-center gap-x-3 gap-y-2 text-xs mb-10" aria-label="Breadcrumb">
+        <a href="/#projects" class="group inline-flex items-center gap-2 text-slate-400 hover:text-purple-300 transition-colors">
+          <span class="transition-transform group-hover:-translate-x-1" aria-hidden="true">←</span>
+          <span data-i18n="proj.detail.back">Volver a proyectos</span>
+        </a>
+        <span class="text-slate-700" aria-hidden="true">/</span>
+        <span class="text-slate-500">~/projects/<span class="text-purple-400">{p.key}</span></span>
+      </nav>
+
+      <!-- Header -->
+      <header class="mb-10">
+        <p class="text-[11px] tracking-[0.25em] text-emerald-400 uppercase mb-3">
+          <span data-i18n="proj.detail.kicker">// Caso de estudio</span>
+          {p.subtitle && <span class="text-slate-500"> · <span data-i18n={`proj.${p.key}.subtitle`}>{p.subtitle}</span></span>}
+        </p>
+        <h1 class="font-pixel text-4xl sm:text-5xl md:text-6xl text-white tracking-wide text-balance mb-5">{p.title}</h1>
+        <p class="text-sm md:text-base text-slate-300 leading-relaxed max-w-3xl text-pretty" data-i18n={`proj.${p.key}.overview`}>{p.overview}</p>
+
+        <div class="mt-6 flex flex-wrap items-center gap-3">
+          {p.url && (
+            <a
+              href={p.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="inline-flex items-center gap-2 px-5 py-2.5 bg-purple-600 hover:bg-purple-500 text-white text-xs font-bold tracking-wider transition-all hover:-translate-y-0.5 hover:shadow-[0_0_20px_rgba(168,85,247,0.45)]"
+            >
+              <span data-i18n="proj.visitSite">[ VISITAR_SITIO ]</span>
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+            </a>
+          )}
+          {p.url && (
+            <span class="inline-flex items-center gap-2 text-[10px] uppercase tracking-widest text-emerald-400 font-bold">
+              <span class="relative flex h-2 w-2">
+                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-400"></span>
+              </span>
+              <span data-i18n="proj.liveLabel">EN_PRODUCCIÓN</span>
+            </span>
+          )}
+        </div>
+      </header>
+
+      <!-- Screenshot -->
+      <figure class="mb-14">
+        <div class="rounded-lg overflow-hidden border border-slate-700 bg-slate-900 shadow-2xl shadow-black/60">
+          <div class="flex items-center gap-3 px-3 py-2 bg-slate-900 border-b border-slate-800">
+            <div class="flex gap-1.5" aria-hidden="true">
+              <span class="w-2.5 h-2.5 rounded-full bg-red-500/80"></span>
+              <span class="w-2.5 h-2.5 rounded-full bg-yellow-500/80"></span>
+              <span class="w-2.5 h-2.5 rounded-full bg-green-500/80"></span>
+            </div>
+            <div class="flex-1 bg-slate-950 border border-slate-800 rounded px-2.5 py-1 text-[10px] text-slate-400 truncate">
+              {p.domain ? <>https://<span class="text-slate-200">{p.domain}</span></> : <>~/{p.key}</>}
+            </div>
+          </div>
+          <div
+            class:list={["relative bg-slate-950", scrollable && "max-h-[60vh] md:max-h-[70vh] overflow-y-auto overscroll-contain shot-scroll"]}
+            tabindex={scrollable ? 0 : undefined}
+            aria-label={scrollable ? `Captura completa de ${p.title}` : undefined}
+          >
+            <img
+              src={shot.src}
+              srcset={shot.srcset}
+              sizes="(min-width: 1152px) 1150px, 100vw"
+              width={shot.width}
+              height={shot.height}
+              alt={`Captura de ${p.title}`}
+              fetchpriority="high"
+              decoding="async"
+              class="block w-full h-auto"
+            />
+          </div>
+        </div>
+        {scrollable && (
+          <figcaption class="mt-2 text-[10px] uppercase tracking-widest text-slate-500 text-right" data-i18n="proj.detail.scrollHint">
+            ↓ Desplázate dentro de la captura para verla completa
+          </figcaption>
+        )}
+      </figure>
+
+      <div class="grid lg:grid-cols-12 gap-10 lg:gap-12 items-start">
+        <!-- Case study -->
+        <div class="lg:col-span-8 space-y-10">
+          {textSections.map((s, i) => (
+            <section>
+              <h2 class="flex items-baseline gap-3 mb-3">
+                <span class="text-xs text-purple-500/70 tabular-nums">{pad(i + 1)}</span>
+                <span class="text-sm font-bold uppercase tracking-widest text-purple-400" data-i18n={s.labelKey}>{s.label}</span>
+              </h2>
+              <p class="text-sm text-slate-300 leading-relaxed border-l-2 border-slate-800 pl-5 text-pretty" data-i18n={`proj.${p.key}.${s.field}`}>{p[s.field]}</p>
+            </section>
+          ))}
+
+          {hasResults && (
+            <section>
+              <h2 class="flex items-baseline gap-3 mb-4">
+                <span class="text-xs text-purple-500/70 tabular-nums">{pad(resultsNumber)}</span>
+                <span class="text-sm font-bold uppercase tracking-widest text-purple-400" data-i18n="proj.section.results">Resultados</span>
+              </h2>
+              <ul class="grid sm:grid-cols-2 gap-3">
+                {p.results!.map((r, i) => (
+                  <li class="flex items-start gap-3 bg-slate-900/50 border border-slate-800 rounded px-4 py-3 text-xs text-slate-300">
+                    <span class="text-emerald-400 font-bold" aria-hidden="true">✓</span>
+                    <span data-i18n={resultKey(p, i)}>{r}</span>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )}
+
+          {p.lessons && (
+            <section>
+              <h2 class="flex items-baseline gap-3 mb-3">
+                <span class="text-xs text-purple-500/70 tabular-nums">{pad(lessonsNumber)}</span>
+                <span class="text-sm font-bold uppercase tracking-widest text-purple-400" data-i18n="proj.section.lessons">Lecciones aprendidas</span>
+              </h2>
+              <blockquote class="text-sm text-slate-300 leading-relaxed bg-purple-500/5 border border-purple-500/20 rounded px-5 py-4 text-pretty" data-i18n={`proj.${p.key}.lessons`}>{p.lessons}</blockquote>
+            </section>
+          )}
+        </div>
+
+        <!-- Project sheet -->
+        <aside class="lg:col-span-4 lg:sticky lg:top-24 space-y-5">
+          <div class="bg-slate-950 border-2 border-slate-800 rounded-md overflow-hidden">
+            <div class="bg-slate-900 px-4 py-2 border-b border-slate-800 text-[10px] uppercase tracking-widest text-slate-400" data-i18n="proj.detail.sheet">Ficha del proyecto</div>
+            <dl class="p-5 space-y-5 text-xs">
+              <div>
+                <dt class="text-purple-400 font-bold uppercase tracking-wider mb-1.5" data-i18n="proj.section.role">Rol</dt>
+                <dd class="text-slate-300 leading-relaxed" data-i18n={`proj.${p.key}.role`}>{p.role}</dd>
+              </div>
+
+              {p.impact.length > 0 && (
+                <div>
+                  <dt class="text-purple-400 font-bold uppercase tracking-wider mb-2" data-i18n="proj.section.impact">Impacto</dt>
+                  <dd>
+                    <ul class="space-y-2">
+                      {p.impact.map((m) => (
+                        <li class="flex items-start gap-2 bg-emerald-500/5 border border-emerald-500/20 rounded px-3 py-2 text-emerald-300/90">
+                          <span aria-hidden="true">⚡</span>
+                          <span data-i18n={`proj.${p.key}.${m.key}`}>{m.text}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </dd>
+                </div>
+              )}
+
+              {p.highlights && (
+                <div>
+                  <dt class="text-purple-400 font-bold uppercase tracking-wider mb-2" data-i18n="proj.section.features">Características</dt>
+                  <dd class="grid grid-cols-2 gap-2">
+                    {p.highlights.map((h) => (
+                      <span class="flex items-center gap-2 bg-slate-900/70 border border-slate-800 rounded px-2.5 py-2 text-[10px] text-slate-300">
+                        <span class="text-sm leading-none" aria-hidden="true">{h.icon}</span>
+                        <span data-i18n={`proj.${p.key}.hl.${h.key}`}>{h.label}</span>
+                      </span>
+                    ))}
+                  </dd>
+                </div>
+              )}
+
+              <div>
+                <dt class="text-purple-400 font-bold uppercase tracking-wider mb-2" data-i18n="proj.section.stack">Stack</dt>
+                <dd class="flex flex-wrap gap-1.5">
+                  {p.tags.map((tag) => (
+                    <span class="inline-flex items-center gap-1.5 px-2.5 py-1 bg-slate-900 border border-slate-800 text-[10px] text-slate-300 rounded">
+                      <Fragment set:html={getTechIcon(tag)} />
+                      {tag}
+                    </span>
+                  ))}
+                </dd>
+              </div>
+
+              <div>
+                <dt class="text-purple-400 font-bold uppercase tracking-wider mb-2" data-i18n="proj.detail.links">Enlaces</dt>
+                <dd>
+                  {p.links.length > 0 ? (
+                    <ul class="space-y-1.5">
+                      {p.links.map((link) => (
+                        <li>
+                          <a href={link.url} target="_blank" rel="noopener noreferrer" class="text-[11px] text-purple-300 hover:text-white font-bold uppercase hover:underline underline-offset-4 break-all">
+                            [{link.nameKey.toUpperCase()}] ↗
+                          </a>
+                        </li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <p class="text-slate-500" data-i18n="proj.detail.noLinks">Sin enlace público</p>
+                  )}
+                </dd>
+              </div>
+            </dl>
+          </div>
+
+          <!-- Contact CTA -->
+          <div class="border border-purple-500/30 bg-purple-500/5 rounded-md p-5">
+            <p class="font-pixel text-2xl text-white mb-1" data-i18n="proj.detail.ctaTitle">¿Necesitas algo así?</p>
+            <p class="text-xs text-slate-400 leading-relaxed mb-4" data-i18n="proj.detail.ctaText">Cuéntame tu proyecto o vacante y te respondo por correo.</p>
+            <a href="/#contact" class="inline-flex items-center gap-2 px-4 py-2 bg-purple-600 hover:bg-purple-500 text-white text-xs font-bold tracking-wider transition-colors">
+              <span data-i18n="proj.detail.ctaBtn">[ CONTACTARME ]</span>
+              <span aria-hidden="true">→</span>
+            </a>
+          </div>
+        </aside>
+      </div>
+
+      <!-- Prev / next -->
+      <nav class="mt-16 pt-8 border-t border-slate-800 grid sm:grid-cols-2 gap-4" aria-label="Proyectos">
+        <a href={`/projects/${prev.key}`} class="group block border border-slate-800 hover:border-purple-500/60 rounded-md p-4 transition-colors">
+          <span class="block text-[10px] uppercase tracking-widest text-slate-500 mb-1">← <span data-i18n="proj.detail.prev">Anterior</span></span>
+          <span class="font-pixel text-xl text-slate-200 group-hover:text-purple-300 transition-colors">{prev.title}</span>
+        </a>
+        <a href={`/projects/${next.key}`} class="group block border border-slate-800 hover:border-purple-500/60 rounded-md p-4 text-right transition-colors">
+          <span class="block text-[10px] uppercase tracking-widest text-slate-500 mb-1"><span data-i18n="proj.detail.next">Siguiente</span> →</span>
+          <span class="font-pixel text-xl text-slate-200 group-hover:text-purple-300 transition-colors">{next.title}</span>
+        </a>
+      </nav>
+    </article>
+  </main>
+
+  <Footer />
+</Layout>
+
+<style>
+  .shot-scroll {
+    scrollbar-width: thin;
+    scrollbar-color: #7c3aed #0f172a;
+  }
+</style>

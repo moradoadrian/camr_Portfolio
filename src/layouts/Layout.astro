@@ -1,19 +1,33 @@
 ---
 import Navbar from "../components/Navbar.astro";
 import CustomCursor from "../components/CustomCursor.astro";
+import CommandPalette from "../components/CommandPalette.astro";
 import 'overlayscrollbars/overlayscrollbars.css';
 import es from "../../public/assets/i18n/es.json";
+
+interface Props {
+  // Per-page SEO (project pages). Omitted on the home page, which uses the i18n seo.* copy.
+  title?: string;
+  description?: string;
+  image?: string;
+  // The boot animation only makes sense on the landing page
+  bootLoader?: boolean;
+}
+
+const { title, description, image, bootLoader = true } = Astro.props;
 
 // Crawlers and link previews never run the i18n script, so the static head uses the default (es) copy.
 // Social networks require absolute URLs for og:image / og:url.
 const siteUrl = new URL(Astro.url.pathname, Astro.site);
-const ogImage = new URL("/og-image.png", Astro.site);
-const seoTitle = es["seo.title"];
-const seoDescription = es["seo.description"];
+const ogImage = new URL(image ?? "/og-image.png", Astro.site);
+const seoTitle = title ?? es["seo.title"];
+const seoDescription = description ?? es["seo.description"];
+// Pages with their own SEO keep it when the language changes
+const customSeo = Boolean(title);
 ---
 
 <!doctype html>
-<html lang="es" class="scroll-smooth">
+<html lang="es" class="scroll-smooth" data-seo={customSeo ? "page" : undefined}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
@@ -105,21 +119,23 @@ const seoDescription = es["seo.description"];
     <div id="scroll-progress" class="fixed top-0 left-0 h-[3px] bg-purple-500 z-[100] w-0 transition-all duration-100 shadow-[0_0_8px_rgba(168,85,247,0.8)]"></div>
 
     <!-- Initial System Loader -->
-    <div id="initial-loader" class="fixed inset-0 bg-slate-950 z-[99999] flex items-center justify-center font-mono text-xs md:text-sm text-purple-400 p-6">
-      <div class="max-w-md w-full border border-purple-500/20 bg-slate-900/50 p-6 rounded shadow-2xl relative">
-        <div class="flex items-center justify-between border-b border-purple-500/20 pb-2 mb-4 text-[10px] text-slate-500">
-          <span>&gt; INITIALIZING_SYSTEM.EXE</span>
-          <span>VER 3.0.0</span>
-        </div>
-        <div id="loader-terminal-content" class="space-y-1.5 h-32 overflow-y-auto">
-          <!-- Lines will type in here -->
-        </div>
-        <div class="flex items-center gap-1 mt-4 pt-2 border-t border-purple-500/20 text-[10px] text-slate-500">
-          <span>$</span>
-          <span class="w-1.5 h-3 bg-purple-400 animate-pulse"></span>
+    {bootLoader && (
+      <div id="initial-loader" class="fixed inset-0 bg-slate-950 z-[99999] flex items-center justify-center font-mono text-xs md:text-sm text-purple-400 p-6">
+        <div class="max-w-md w-full border border-purple-500/20 bg-slate-900/50 p-6 rounded shadow-2xl relative">
+          <div class="flex items-center justify-between border-b border-purple-500/20 pb-2 mb-4 text-[10px] text-slate-500">
+            <span>&gt; INITIALIZING_SYSTEM.EXE</span>
+            <span>VER 3.0.0</span>
+          </div>
+          <div id="loader-terminal-content" class="space-y-1.5 h-32 overflow-y-auto">
+            <!-- Lines will type in here -->
+          </div>
+          <div class="flex items-center gap-1 mt-4 pt-2 border-t border-purple-500/20 text-[10px] text-slate-500">
+            <span>$</span>
+            <span class="w-1.5 h-3 bg-purple-400 animate-pulse"></span>
+          </div>
         </div>
       </div>
-    </div>
+    )}
 
     <!-- Back to Top Button -->
     <a
@@ -150,6 +166,7 @@ const seoDescription = es["seo.description"];
     </div>
 
     <slot />
+    <CommandPalette />
     <script>
       import { gsap } from "gsap";
       import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -192,28 +209,30 @@ const seoDescription = es["seo.description"];
           }
         });
 
-        // SEO and Meta Updates
-        document.title = dict['seo.title'] || document.title;
-        
-        const metaDesc = document.querySelector('meta[name="description"]');
-        if (metaDesc) metaDesc.setAttribute('content', dict['seo.description']);
-        
-        const titleMeta = document.querySelector('meta[name="title"]');
-        if (titleMeta) titleMeta.setAttribute('content', dict['seo.title']);
+        // SEO and Meta Updates (pages that set their own title keep it)
+        if (document.documentElement.dataset.seo !== 'page') {
+          document.title = dict['seo.title'] || document.title;
 
-        // Open Graph
-        const ogTitle = document.querySelector('meta[property="og:title"]');
-        if (ogTitle) ogTitle.setAttribute('content', dict['seo.title']);
-        
-        const ogDesc = document.querySelector('meta[property="og:description"]');
-        if (ogDesc) ogDesc.setAttribute('content', dict['seo.description']);
+          const metaDesc = document.querySelector('meta[name="description"]');
+          if (metaDesc) metaDesc.setAttribute('content', dict['seo.description']);
 
-        // Twitter Cards
-        const twTitle = document.querySelector('meta[name="twitter:title"]');
-        if (twTitle) twTitle.setAttribute('content', dict['seo.title']);
-        
-        const twDesc = document.querySelector('meta[name="twitter:description"]');
-        if (twDesc) twDesc.setAttribute('content', dict['seo.description']);
+          const titleMeta = document.querySelector('meta[name="title"]');
+          if (titleMeta) titleMeta.setAttribute('content', dict['seo.title']);
+
+          // Open Graph
+          const ogTitle = document.querySelector('meta[property="og:title"]');
+          if (ogTitle) ogTitle.setAttribute('content', dict['seo.title']);
+
+          const ogDesc = document.querySelector('meta[property="og:description"]');
+          if (ogDesc) ogDesc.setAttribute('content', dict['seo.description']);
+
+          // Twitter Cards
+          const twTitle = document.querySelector('meta[name="twitter:title"]');
+          if (twTitle) twTitle.setAttribute('content', dict['seo.title']);
+
+          const twDesc = document.querySelector('meta[name="twitter:description"]');
+          if (twDesc) twDesc.setAttribute('content', dict['seo.description']);
+        }
 
         // Update html lang
         document.documentElement.setAttribute('lang', lang);

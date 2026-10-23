@@ -35,6 +35,13 @@ export async function responsive(path: string, widths: number[]): Promise<Respon
   };
 }
 
+// 1200x630 crop from the top of a screenshot for og:image. JPEG because not every
+// social network renders WebP link previews.
+export async function socialCard(path: string): Promise<string> {
+  const img = await getImage({ src: load(path), width: 1200, height: 630, fit: "cover", position: "top", format: "jpg", quality: 82 });
+  return img.src;
+}
+
 // Original file (hashed and served from /_astro), for downloads that should keep the source format
 export function original(path: string): string {
   return load(path).src;
