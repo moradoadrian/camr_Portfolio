@@ -102,42 +102,62 @@ const links = [
       </button>
     </div>
   </div>
+</nav>
 
-  <!-- Mobile Menu Overlay -->
-  <div
-    class="fixed inset-0 bg-slate-950 z-40 transform translate-x-full transition-transform duration-300 md:hidden flex flex-col justify-center items-center gap-8 border-l border-slate-800"
-    id="mobile-menu"
-  >
-    <button class="absolute top-6 right-6 text-purple-400 hover:text-purple-300 border border-slate-700 p-1" id="close-menu-btn">
-      <svg
-        class="w-8 h-8"
-        fill="none"
-        stroke="currentColor"
-        viewBox="0 0 24 24"
-      >
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="2"
-          d="M6 18L18 6M6 6l12 12"
-        ></path>
+<!-- Mobile Menu Overlay: kept outside <nav> because the nav's backdrop-filter
+     would otherwise become the containing block and clip this fixed layer to the bar's height -->
+<div
+  class="fixed inset-0 h-[100dvh] z-[95] bg-slate-950 transform translate-x-full invisible transition-[transform,visibility] duration-300 md:hidden flex flex-col font-mono"
+  id="mobile-menu"
+  aria-hidden="true"
+>
+  <div class="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,#a855f714_1px,transparent_1px),linear-gradient(to_bottom,#a855f714_1px,transparent_1px)] bg-[size:32px_32px]"></div>
+  <div class="pointer-events-none absolute -top-24 -right-24 w-72 h-72 bg-purple-600/20 blur-[100px] rounded-full"></div>
+
+  <div class="relative flex justify-between items-center px-6 py-4 border-b border-slate-800">
+    <span class="text-lg font-bold text-purple-400">~/menu</span>
+    <button class="text-purple-400 hover:text-purple-300 border border-slate-700 p-1" id="close-menu-btn" aria-label="Close menu">
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
       </svg>
     </button>
-    <div class="flex flex-col gap-6 items-start">
-      {
-        links.map((link) => (
-          <a
-            href={link.href}
-            class="nav-link text-2xl font-bold text-slate-300 hover:text-purple-400 transition-colors mobile-link flex items-center gap-2"
-          >
-            <span class="text-purple-600">></span> 
-            <span data-i18n={`navbar.${link.key}`}>{link.name}</span>
-          </a>
-        ))
-      }
-    </div>
   </div>
-</nav>
+
+  <div class="relative flex-1 flex flex-col justify-center px-8 gap-2 overflow-y-auto">
+    {
+      links.map((link, i) => (
+        <a
+          href={link.href}
+          class="nav-link mobile-link group flex items-baseline gap-4 py-3 border-b border-slate-800/70 text-2xl font-bold text-slate-300 hover:text-purple-400 transition-colors"
+          style={`--i: ${i}`}
+        >
+          <span class="text-xs text-purple-500/70 tabular-nums">0{i + 1}</span>
+          <span class="text-purple-600 group-hover:translate-x-1 transition-transform">&gt;</span>
+          <span data-i18n={`navbar.${link.key}`}>{link.name}</span>
+        </a>
+      ))
+    }
+  </div>
+
+  <div class="relative px-8 py-6 border-t border-slate-800 text-xs text-slate-500 flex items-center justify-between">
+    <a href="mailto:moradoadrian@gmail.com" class="hover:text-purple-300 transition-colors">moradoadrian@gmail.com</a>
+    <span class="text-purple-500">End_of_Line_</span>
+  </div>
+</div>
+
+<style>
+  /* Links slide in one after another when the menu opens */
+  #mobile-menu .mobile-link {
+    opacity: 0;
+    transform: translateX(24px);
+    transition: opacity 0.35s ease, transform 0.35s ease, color 0.15s;
+  }
+  #mobile-menu.is-open .mobile-link {
+    opacity: 1;
+    transform: none;
+    transition-delay: calc(var(--i) * 50ms + 120ms), calc(var(--i) * 50ms + 120ms), 0s;
+  }
+</style>
 
 <script>
   const navbar = document.getElementById("navbar");
@@ -159,8 +179,12 @@ const links = [
 
   // Mobile menu toggle
   const toggleMenu = () => {
-    mobileMenu?.classList.toggle("translate-x-full");
-    document.body.classList.toggle("overflow-hidden");
+    const open = mobileMenu?.classList.toggle("is-open") ?? false;
+    mobileMenu?.classList.toggle("translate-x-full", !open);
+    mobileMenu?.classList.toggle("invisible", !open);
+    mobileMenu?.setAttribute("aria-hidden", String(!open));
+    mobileBtn?.setAttribute("aria-expanded", String(open));
+    document.body.classList.toggle("overflow-hidden", open);
   };
 
   mobileBtn?.addEventListener("click", toggleMenu);

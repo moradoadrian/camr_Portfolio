@@ -2,6 +2,14 @@
 import Navbar from "../components/Navbar.astro";
 import CustomCursor from "../components/CustomCursor.astro";
 import 'overlayscrollbars/overlayscrollbars.css';
+import es from "../../public/assets/i18n/es.json";
+
+// Crawlers and link previews never run the i18n script, so the static head uses the default (es) copy.
+// Social networks require absolute URLs for og:image / og:url.
+const siteUrl = new URL(Astro.url.pathname, Astro.site);
+const ogImage = new URL("/og-image.png", Astro.site);
+const seoTitle = es["seo.title"];
+const seoDescription = es["seo.description"];
 ---
 
 <!doctype html>
@@ -13,47 +21,66 @@ import 'overlayscrollbars/overlayscrollbars.css';
     <meta name="generator" content={Astro.generator} />
     
     <!-- Primary Meta Tags -->
-    <title>Cesar Adrian Morado Rodriguez | Senior Frontend Engineer & Angular Specialist</title>
-    <meta name="title" content="Cesar Adrian Morado Rodriguez | Senior Frontend Engineer & Angular Specialist" />
-    <meta name="description" content="Senior Frontend Developer & Software Engineer specializing in Angular, TypeScript, and Firebase. 4+ years experience building scalable government portals & enterprise software." />
-    <meta name="keywords" content="Angular, Angular 17, TypeScript, Firebase, .NET, FastAPI, Frontend Developer, Software Engineer, Guanajuato, Mexico" />
-    <meta name="author" content="Cesar Adrian Morado Rodriguez" />
-    <link rel="canonical" href="https://github.com/moradoadrian" />
+    <title>{seoTitle}</title>
+    <meta name="title" content={seoTitle} />
+    <meta name="description" content={seoDescription} />
+    <meta name="keywords" content="Software Engineer, Frontend Developer, Mobile Developer, Angular, Flutter, Dart, TypeScript, React Native, C#, FastAPI, Scrum, Guanajuato, México" />
+    <meta name="author" content="César Adrián Morado Rodríguez" />
+    <meta name="theme-color" content="#020617" />
+    <link rel="canonical" href={siteUrl} />
 
-    <!-- Open Graph / Facebook -->
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://github.com/moradoadrian" />
-    <meta property="og:title" content="Cesar Adrian Morado Rodriguez | Senior Frontend Engineer" />
-    <meta property="og:description" content="Specialist in Angular, TypeScript, and Firebase. View projects, experience logs, and download CV." />
-    <meta property="og:image" content="/constanciasI.png" />
+    <!-- Open Graph / Facebook / LinkedIn / WhatsApp -->
+    <meta property="og:type" content="profile" />
+    <meta property="og:site_name" content="César Adrián Morado · Portfolio" />
+    <meta property="og:locale" content="es_MX" />
+    <meta property="og:locale:alternate" content="en_US" />
+    <meta property="og:url" content={siteUrl} />
+    <meta property="og:title" content={seoTitle} />
+    <meta property="og:description" content={seoDescription} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="César Adrián Morado — Software Engineer · Angular · Flutter · TypeScript" />
+    <meta property="profile:first_name" content="César Adrián" />
+    <meta property="profile:last_name" content="Morado Rodríguez" />
 
-    <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image" />
-    <meta property="twitter:url" content="https://github.com/moradoadrian" />
-    <meta property="twitter:title" content="Cesar Adrian Morado Rodriguez | Senior Frontend Engineer" />
-    <meta property="twitter:description" content="Specialist in Angular, TypeScript, and Firebase. View projects, experience logs, and download CV." />
-    <meta property="twitter:image" content="/constanciasI.png" />
+    <!-- Twitter / X -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content={siteUrl} />
+    <meta name="twitter:title" content={seoTitle} />
+    <meta name="twitter:description" content={seoDescription} />
+    <meta name="twitter:image" content={ogImage} />
 
     <!-- JSON-LD Structured Data for Person/Portfolio -->
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
         "@type": "Person",
-        "name": "Cesar Adrian Morado Rodriguez",
+        "name": "César Adrián Morado Rodríguez",
         "jobTitle": "Software Engineer",
-        "url": "https://github.com/moradoadrian",
+        "url": "https://camr-portfolio.vercel.app/",
+        "image": "https://camr-portfolio.vercel.app/og-image.png",
+        "address": { "@type": "PostalAddress", "addressRegion": "Guanajuato", "addressCountry": "MX" },
+        "worksFor": { "@type": "Organization", "name": "Instituto Electoral del Estado de Guanajuato (IEEG)" },
+        "alumniOf": [
+          { "@type": "CollegeOrUniversity", "name": "Instituto Tecnológico de Roque" },
+          { "@type": "CollegeOrUniversity", "name": "UNIR México" }
+        ],
         "sameAs": [
           "https://www.linkedin.com/in/moradoadrian/",
-          "https://github.com/moradoadrian/"
+          "https://github.com/moradoadrian"
         ],
         "knowsAbout": [
-          "Software Development",
-          "Web Applications",
+          "Frontend Development",
+          "Mobile Development",
           "Angular",
+          "Flutter",
+          "Dart",
           "TypeScript",
-          "Firebase",
+          "React Native",
+          "C#",
           "FastAPI",
-          "C#"
+          "Scrum"
         ]
       }
     </script>
@@ -167,14 +194,14 @@ import 'overlayscrollbars/overlayscrollbars.css';
         if (ogTitle) ogTitle.setAttribute('content', dict['seo.title']);
         
         const ogDesc = document.querySelector('meta[property="og:description"]');
-        if (ogDesc) ogDesc.setAttribute('content', dict['hero.description']);
+        if (ogDesc) ogDesc.setAttribute('content', dict['seo.description']);
 
         // Twitter Cards
-        const twTitle = document.querySelector('meta[property="twitter:title"]');
+        const twTitle = document.querySelector('meta[name="twitter:title"]');
         if (twTitle) twTitle.setAttribute('content', dict['seo.title']);
         
-        const twDesc = document.querySelector('meta[property="twitter:description"]');
-        if (twDesc) twDesc.setAttribute('content', dict['hero.description']);
+        const twDesc = document.querySelector('meta[name="twitter:description"]');
+        if (twDesc) twDesc.setAttribute('content', dict['seo.description']);
 
         // Update html lang
         document.documentElement.setAttribute('lang', lang);
