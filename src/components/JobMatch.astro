@@ -1,0 +1,345 @@
+---
+import { skills, gaps, sources } from "../data/skills";
+
+// Dynamic strings live here (the static ones use data-i18n); the script picks the page language
+const ui = {
+  es: {
+    high: "Coincidencia alta",
+    good: "Buena coincidencia",
+    partial: "Coincidencia parcial",
+    summary: "{n} de {m} requisitos detectados aparecen en mi portafolio.",
+    none: "No detecté tecnologías ni requisitos conocidos. Prueba pegando la descripción completa de la vacante.",
+    more: "+{n} más",
+  },
+  en: {
+    high: "Strong match",
+    good: "Good match",
+    partial: "Partial match",
+    summary: "{n} of {m} detected requirements appear in my portfolio.",
+    none: "I couldn't detect known technologies or requirements. Try pasting the full job description.",
+    more: "+{n} more",
+  },
+};
+
+// Fictional sample postings, one per common profile, so visitors can try it without a real one
+const samples = {
+  es: [
+    "Buscamos Desarrollador Frontend Sr. con experiencia en Angular y TypeScript. Deseable: Tailwind, consumo de APIs REST, Git y metodologías ágiles (Scrum). Experiencia en proyectos de gobierno es un plus. Conocimientos de pruebas unitarias con Jest y Docker.",
+    "Vacante: Desarrollador Mobile. Requisitos: Flutter y Dart, experiencia migrando apps desde React Native, publicación en Android e integración con APIs REST y Firebase. Trabajo con Scrum y documentación en Confluence. Deseable Kotlin o Swift.",
+    "Desarrollador Full Stack con React, Next.js y Node.js. Base de datos PostgreSQL, despliegue en AWS con Docker y CI/CD. Indispensable TypeScript y APIs REST. Deseable GraphQL.",
+  ],
+  en: [
+    "We are looking for a Senior Frontend Developer with Angular and TypeScript experience. Nice to have: Tailwind, REST APIs, Git and agile methodologies (Scrum). Government project experience is a plus. Unit testing with Jest and Docker.",
+    "Mobile Developer role. Requirements: Flutter and Dart, experience migrating apps from React Native, Android publishing and integration with REST APIs and Firebase. We work with Scrum and document in Confluence. Kotlin or Swift is a plus.",
+    "Full-Stack Engineer with React, Next.js and Node.js. PostgreSQL database, deployment on AWS with Docker and CI/CD. TypeScript and REST APIs required. GraphQL is a plus.",
+  ],
+};
+
+const sampleLabels = [
+  { key: "match.sampleFrontend", label: "Frontend Angular" },
+  { key: "match.sampleMobile", label: "Mobile Flutter" },
+  { key: "match.sampleFullstack", label: "Full Stack React" },
+];
+
+const payload = { skills, gaps, sources, ui, samples };
+const MAX_CHARS = 8000;
+---
+
+<section id="match" class="py-24 px-4 relative border-t border-slate-900 bg-slate-950/30 overflow-hidden">
+  <div class="pointer-events-none absolute -top-20 right-0 w-[500px] h-[400px] bg-emerald-500/5 blur-[120px] rounded-full"></div>
+
+  <div class="max-w-6xl mx-auto relative font-mono">
+    <div class="text-center mb-14">
+      <h2 class="text-2xl sm:text-4xl md:text-5xl text-balance font-bold font-pixel text-purple-400 mb-4 tracking-wider" data-i18n="match.title">
+        &lt;Job_Match /&gt;
+      </h2>
+      <p class="text-xs text-slate-500 max-w-lg mx-auto text-pretty" data-i18n="match.subtitle">
+        // ¿Tienes una vacante? Pégala y mira qué tanto encaja con mi experiencia.
+      </p>
+    </div>
+
+    <div class="grid lg:grid-cols-2 gap-8 items-start">
+      <!-- Input -->
+      <div class="bg-slate-950 border-2 border-slate-800 focus-within:border-purple-500/60 transition-colors rounded-md overflow-hidden shadow-2xl">
+        <div class="bg-slate-900 px-4 py-2.5 flex items-center gap-2 border-b border-slate-800">
+          <span class="w-2.5 h-2.5 rounded-full bg-red-500/80"></span>
+          <span class="w-2.5 h-2.5 rounded-full bg-yellow-500/80"></span>
+          <span class="w-2.5 h-2.5 rounded-full bg-green-500/80"></span>
+          <span class="ml-2 text-xs text-slate-500">match --job vacante.txt</span>
+        </div>
+
+        <div class="p-5 md:p-6 space-y-4">
+          <div class="flex items-baseline justify-between">
+            <label for="match-input" class="text-[11px] uppercase tracking-widest text-purple-400">
+              &gt; <span data-i18n="match.label">Descripción de la vacante</span>
+            </label>
+            <span id="match-count" class="text-[10px] text-slate-600 tabular-nums" aria-hidden="true">0/{MAX_CHARS}</span>
+          </div>
+          <textarea
+            id="match-input"
+            rows="10"
+            maxlength={MAX_CHARS}
+            spellcheck="false"
+            data-i18n-placeholder="match.placeholder"
+            placeholder="Pega aquí los requisitos del puesto..."
+            class="w-full bg-slate-900/60 border border-slate-700 rounded px-3 py-2.5 text-sm text-slate-100 placeholder:text-slate-600 outline-none transition-colors focus:border-purple-500 focus:bg-slate-900 focus:ring-1 focus:ring-purple-500/40 resize-y min-h-[200px]"
+          ></textarea>
+
+          <div>
+            <p class="text-[10px] uppercase tracking-widest text-slate-500 mb-2" data-i18n="match.samplesLabel">¿Sin vacante a la mano? Prueba un ejemplo:</p>
+            <div class="flex flex-wrap gap-2">
+              {sampleLabels.map((s, i) => (
+                <button
+                  type="button"
+                  data-sample={i}
+                  class="px-3 py-1.5 text-xs border border-slate-700 text-slate-400 rounded hover:border-purple-500/60 hover:text-purple-200 transition-colors"
+                  data-i18n={s.key}
+                >{s.label}</button>
+              ))}
+            </div>
+          </div>
+
+          <div class="flex flex-wrap items-center gap-3 pt-1">
+            <button
+              id="match-run"
+              type="button"
+              class="px-6 py-3 bg-purple-600 hover:bg-purple-500 text-white font-pixel text-lg transition-all hover:-translate-y-0.5 hover:shadow-[0_0_30px_rgba(168,85,247,0.45)]"
+              data-i18n="match.run"
+            >[ ANALIZAR ]</button>
+            <button id="match-clear" type="button" class="px-4 py-3 text-xs text-slate-500 hover:text-slate-300 transition-colors" data-i18n="match.clear">Limpiar</button>
+          </div>
+
+          <p class="flex items-start gap-2 text-[11px] text-slate-500">
+            <svg class="w-3.5 h-3.5 mt-0.5 shrink-0 text-emerald-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+            <span data-i18n="match.privacy">Se analiza en tu navegador: el texto no se envía ni se guarda en ningún lado.</span>
+          </p>
+        </div>
+      </div>
+
+      <!-- Results -->
+      <div class="bg-slate-950 border-2 border-slate-800 rounded-md overflow-hidden lg:sticky lg:top-24" aria-live="polite">
+        <div class="bg-slate-900 px-4 py-2.5 border-b border-slate-800 text-[10px] uppercase tracking-widest text-slate-400" data-i18n="match.resultTitle">Resultado</div>
+
+        <!-- Waiting -->
+        <div id="match-idle" class="p-8 text-center">
+          <p class="font-pixel text-3xl text-slate-600 mb-3" aria-hidden="true">0%_</p>
+          <p class="text-sm text-slate-400 mb-1" data-i18n="match.idleTitle">Esperando una vacante...</p>
+          <p class="text-xs text-slate-500 text-pretty" data-i18n="match.idleText">Detecto tecnologías, metodologías y experiencia en la descripción y te muestro dónde lo demuestro en este portafolio.</p>
+        </div>
+
+        <!-- Nothing recognised -->
+        <p id="match-none" class="hidden p-8 text-center text-sm text-slate-400"></p>
+
+        <!-- Result -->
+        <div id="match-result" class="hidden p-5 md:p-6 space-y-6">
+          <div class="flex items-center gap-5">
+            <div class="relative w-28 h-28 shrink-0">
+              <svg viewBox="0 0 120 120" class="w-full h-full -rotate-90" aria-hidden="true">
+                <circle cx="60" cy="60" r="52" fill="none" stroke="#1e293b" stroke-width="10"></circle>
+                <circle id="match-arc" cx="60" cy="60" r="52" fill="none" stroke-width="10" stroke-linecap="round" stroke-dasharray="326.73" stroke-dashoffset="326.73" class="transition-[stroke-dashoffset] duration-700 ease-out"></circle>
+              </svg>
+              <span id="match-score" class="absolute inset-0 flex items-center justify-center font-pixel text-3xl text-white">0%</span>
+            </div>
+            <div class="min-w-0">
+              <p id="match-verdict" class="font-pixel text-2xl"></p>
+              <p id="match-summary" class="text-xs text-slate-400 mt-1 text-pretty"></p>
+            </div>
+          </div>
+
+          <div id="match-hits-wrap">
+            <h3 class="text-[11px] uppercase tracking-widest text-emerald-400 font-bold mb-3">
+              ✓ <span data-i18n="match.hitsTitle">Lo que sí tengo</span> (<span id="match-hits-count">0</span>)
+            </h3>
+            <ul id="match-hits" class="space-y-2"></ul>
+          </div>
+
+          <div id="match-gaps-wrap">
+            <h3 class="text-[11px] uppercase tracking-widest text-amber-400 font-bold mb-2">
+              ○ <span data-i18n="match.gapsTitle">No aparece en mi portafolio</span> (<span id="match-gaps-count">0</span>)
+            </h3>
+            <ul id="match-gaps" class="flex flex-wrap gap-1.5"></ul>
+            <p class="text-[11px] text-slate-500 mt-2" data-i18n="match.gapsNote">Si alguno es clave para el puesto, hablemos: con gusto te cuento cómo lo abordaría.</p>
+          </div>
+
+          <div class="pt-4 border-t border-slate-800 flex flex-col sm:flex-row sm:items-center gap-3">
+            <button id="match-contact" type="button" class="shrink-0 whitespace-nowrap inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold tracking-wider transition-colors">
+              <span data-i18n="match.cta">Hablemos de esta vacante</span>
+              <span aria-hidden="true">→</span>
+            </button>
+            <p class="text-[10px] text-slate-600" data-i18n="match.disclaimer">Análisis por palabras clave: no reemplaza una conversación.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="application/json" id="match-data" set:html={JSON.stringify(payload)}></script>
+</section>
+
+<script>
+  type Source = { id: string; es: string; en: string; href: string };
+  type Skill = { id: string; label: string; en?: string; aliases: string[]; sources: string[] };
+  type Gap = { label: string; en?: string; aliases: string[] };
+  type Lang = "es" | "en";
+  type Data = {
+    skills: Skill[];
+    gaps: Gap[];
+    sources: Source[];
+    ui: Record<Lang, Record<string, string>>;
+    samples: Record<Lang, string[]>;
+  };
+
+  const dataEl = document.getElementById("match-data");
+  const input = document.getElementById("match-input") as HTMLTextAreaElement | null;
+
+  if (dataEl && input) {
+    const data = JSON.parse(dataEl.textContent ?? "{}") as Data;
+    const sourceById = new Map(data.sources.map((s) => [s.id, s]));
+    const $ = (id: string) => document.getElementById(id)!;
+
+    // Lowercase + strip accents so "Diseño móvil" matches the alias "diseno movil"
+    const normalize = (s: string) => s.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
+    const escapeRe = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
+    // Longest aliases first, and each match is blanked out, so "react native" is not also read as "react"
+    const entries = [
+      ...data.skills.flatMap((s, i) => s.aliases.map((a) => ({ alias: a, kind: "skill" as const, index: i }))),
+      ...data.gaps.flatMap((g, i) => g.aliases.map((a) => ({ alias: a, kind: "gap" as const, index: i }))),
+    ]
+      .sort((a, b) => b.alias.length - a.alias.length)
+      .map((e) => ({ ...e, re: new RegExp(`(?<![a-z0-9])${escapeRe(e.alias)}(?![a-z0-9])`, "g") }));
+
+    const analyze = (text: string) => {
+      let haystack = ` ${normalize(text)} `;
+      const hits = new Set<number>();
+      const misses = new Set<number>();
+      for (const e of entries) {
+        e.re.lastIndex = 0;
+        if (!e.re.test(haystack)) continue;
+        (e.kind === "skill" ? hits : misses).add(e.index);
+        haystack = haystack.replace(e.re, (m) => " ".repeat(m.length));
+      }
+      return {
+        hits: [...hits].sort((a, b) => a - b).map((i) => data.skills[i]),
+        misses: [...misses].sort((a, b) => a - b).map((i) => data.gaps[i]),
+      };
+    };
+
+    const lang = (): Lang => (document.documentElement.lang === "en" ? "en" : "es");
+    const t = (key: string, vars: Record<string, string | number> = {}) =>
+      data.ui[lang()][key].replace(/\{(\w+)\}/g, (_, k) => String(vars[k] ?? ""));
+
+    const el = <K extends keyof HTMLElementTagNameMap>(tag: K, className: string, text?: string) => {
+      const node = document.createElement(tag);
+      node.className = className;
+      if (text !== undefined) node.textContent = text;
+      return node;
+    };
+
+    let last: ReturnType<typeof analyze> | null = null;
+
+    const render = () => {
+      const idle = $("match-idle"), none = $("match-none"), result = $("match-result");
+      if (!last) {
+        idle.classList.remove("hidden"); none.classList.add("hidden"); result.classList.add("hidden");
+        return;
+      }
+      idle.classList.add("hidden");
+      const { hits, misses } = last;
+      const total = hits.length + misses.length;
+      if (!total) {
+        none.textContent = t("none");
+        none.classList.remove("hidden"); result.classList.add("hidden");
+        return;
+      }
+      none.classList.add("hidden"); result.classList.remove("hidden");
+
+      const score = Math.round((hits.length / total) * 100);
+      const tone = score >= 75 ? { color: "#34d399", cls: "text-emerald-400", key: "high" } : score >= 50 ? { color: "#a855f7", cls: "text-purple-400", key: "good" } : { color: "#fbbf24", cls: "text-amber-400", key: "partial" };
+      const arc = $("match-arc");
+      arc.setAttribute("stroke", tone.color);
+      requestAnimationFrame(() => arc.setAttribute("stroke-dashoffset", String(326.73 * (1 - score / 100))));
+      $("match-score").textContent = `${score}%`;
+      const verdict = $("match-verdict");
+      verdict.textContent = t(tone.key);
+      verdict.className = `font-pixel text-2xl ${tone.cls}`;
+      $("match-summary").textContent = t("summary", { n: hits.length, m: total });
+
+      const L = lang();
+      const hitsList = $("match-hits");
+      hitsList.replaceChildren(
+        ...hits.map((s) => {
+          const li = el("li", "bg-slate-900/50 border border-slate-800 rounded px-3 py-2.5");
+          const head = el("div", "flex items-center gap-2 text-xs text-slate-200 font-bold");
+          head.append(el("span", "text-emerald-400", "✓"), el("span", "", (L === "en" && s.en) || s.label));
+          const ev = el("div", "flex flex-wrap gap-x-3 gap-y-1 mt-1.5 pl-5");
+          const shown = s.sources.slice(0, 3);
+          for (const id of shown) {
+            const src = sourceById.get(id);
+            if (!src) continue;
+            const a = el("a", "text-[11px] text-purple-300 hover:text-white hover:underline underline-offset-2", src[L]) as HTMLAnchorElement;
+            a.href = src.href;
+            ev.append(a);
+          }
+          if (s.sources.length > shown.length) ev.append(el("span", "text-[11px] text-slate-500", t("more", { n: s.sources.length - shown.length })));
+          li.append(head, ev);
+          return li;
+        })
+      );
+      $("match-hits-count").textContent = String(hits.length);
+      $("match-hits-wrap").classList.toggle("hidden", !hits.length);
+
+      $("match-gaps").replaceChildren(
+        ...misses.map((g) => el("li", "px-2.5 py-1 text-[11px] border border-amber-500/30 bg-amber-500/5 text-amber-200/90 rounded", (L === "en" && g.en) || g.label))
+      );
+      $("match-gaps-count").textContent = String(misses.length);
+      $("match-gaps-wrap").classList.toggle("hidden", !misses.length);
+    };
+
+    const run = () => {
+      const text = input.value.trim();
+      last = text ? analyze(text) : null;
+      render();
+    };
+
+    const updateCount = () => { $("match-count").textContent = `${input.value.length}/${input.maxLength}`; };
+
+    // Live analysis while typing/pasting, debounced
+    let timer: number | undefined;
+    input.addEventListener("input", () => {
+      updateCount();
+      clearTimeout(timer);
+      timer = window.setTimeout(run, 350);
+    });
+    input.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) { e.preventDefault(); run(); }
+    });
+
+    $("match-run").addEventListener("click", run);
+    $("match-clear").addEventListener("click", () => {
+      input.value = "";
+      updateCount();
+      run();
+      input.focus();
+    });
+
+    document.querySelectorAll<HTMLButtonElement>("[data-sample]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        input.value = data.samples[lang()][Number(btn.dataset.sample)];
+        updateCount();
+        run();
+      });
+    });
+
+    // Recruiter is interested: pre-select "job opportunity" in the contact form and take them there
+    $("match-contact").addEventListener("click", () => {
+      const job = document.querySelector<HTMLInputElement>('#contact-form input[name="reason"][value="job"]');
+      if (job) job.checked = true;
+      document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" });
+      setTimeout(() => document.getElementById("cf-name")?.focus({ preventScroll: true }), 700);
+    });
+
+    // Results are built in JS, so re-render them when the page language changes
+    new MutationObserver(() => { if (last) render(); }).observe(document.documentElement, { attributes: true, attributeFilter: ["lang"] });
+  }
+</script>
