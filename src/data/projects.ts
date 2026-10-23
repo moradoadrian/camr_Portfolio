@@ -131,7 +131,6 @@ export const projects: Project[] = [
     tags: ["Angular", ".NET", "MySQL", "Tailwind"],
     image: "projects/logpath.png",
     links: [
-      { nameKey: "demo", url: "http://logpath-web-9vvsqy-78a8c8-108-165-47-114.traefik.me" },
       { nameKey: "repoFront", url: "https://github.com/moradoadrian/LogPath" },
       { nameKey: "repoAPI", url: "https://github.com/moradoadrian/logpath-api" },
     ],
@@ -146,7 +145,7 @@ export const projects: Project[] = [
     impact: [{ key: "metrics", text: "Más de 10,000 registros indexados y digitalizados. Control de errores al 0%." }],
     tags: ["Angular", "Tailwind", "MySQL", "Firebase"],
     image: "projects/anotacionesJ.png",
-    links: [{ nameKey: "repo", url: "https://github.com/moradoadrian/" }],
+    links: [],
   },
   {
     key: "posmiche",

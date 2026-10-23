@@ -110,6 +110,11 @@ const customSeo = Boolean(title);
       href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=VT323&family=Fira+Code:wght@300;400;500;600&display=swap"
       rel="stylesheet"
     />
+
+    <!-- The boot animation plays once per browser session. Decided before first paint so later visits never flash it. -->
+    <script is:inline>
+      try { if (sessionStorage.getItem("booted")) document.documentElement.dataset.booted = ""; } catch {}
+    </script>
   </head>
   <body
     class="bg-slate-950 text-slate-200 font-mono overflow-x-clip"
@@ -352,9 +357,17 @@ const customSeo = Boolean(title);
         { text: "Done.", delay: 650 }
       ];
 
-      if (loader && loaderContent) {
+      // Listeners that register after this runs (e.g. the hero) check the flag instead of waiting for the event
+      const bootDone = () => {
+        (window as any).__bootDone = true;
+        window.dispatchEvent(new Event("loaderComplete"));
+      };
+      const alreadyBooted = "booted" in document.documentElement.dataset;
+
+      if (loader && loaderContent && !alreadyBooted) {
+        try { sessionStorage.setItem("booted", "1"); } catch {}
         document.documentElement.style.overflow = "hidden";
-        
+
         loadingSteps.forEach(step => {
           setTimeout(() => {
             const p = document.createElement("p");
@@ -373,18 +386,24 @@ const customSeo = Boolean(title);
             onComplete: () => {
               loader.classList.add("hidden");
               document.documentElement.style.overflow = "";
-              window.dispatchEvent(new Event("loaderComplete"));
+              bootDone();
             }
           });
         }, 900);
       } else {
-        window.dispatchEvent(new Event("loaderComplete"));
+        loader?.remove();
+        bootDone();
       }
     </script>
   </body>
 </html>
 
 <style is:global>
+  /* Boot animation already shown this session (flag set by the inline head script) */
+  html[data-booted] #initial-loader {
+    display: none;
+  }
+
   :root {
     --accent: 136, 58, 234;
     --accent-light: 224, 204, 250;
