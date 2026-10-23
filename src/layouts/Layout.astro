@@ -175,6 +175,13 @@ const seoDescription = es["seo.description"];
           if (value) el.textContent = value;
         });
 
+        // Form placeholders live in an attribute, not in text content
+        document.querySelectorAll('[data-i18n-placeholder]').forEach((el) => {
+          const key = el.getAttribute('data-i18n-placeholder');
+          const value = key && dict[key as keyof typeof dict];
+          if (value) el.setAttribute('placeholder', value);
+        });
+
         // Translate Tooltips dynamically
         document.querySelectorAll('[data-i18n-tooltip]').forEach((el) => {
           const key = el.getAttribute('data-i18n-tooltip');
