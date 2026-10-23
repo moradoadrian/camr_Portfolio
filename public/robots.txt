@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://camr-portfolio.vercel.app/sitemap-index.xml

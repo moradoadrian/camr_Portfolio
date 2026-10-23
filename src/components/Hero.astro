@@ -1,5 +1,8 @@
 ---
+import { responsive } from "../lib/images";
 
+// LCP element: 256px on phones, 350px from md up (x2 for retina)
+const photo = await responsive("profile.jpg", [320, 512, 700]);
 ---
 
 <section
@@ -17,8 +20,14 @@
       >
       </div>
       <img
-        src="/1757554006561.jpg"
-        alt="Cesar Adrian Morado Rodriguez"
+        src={photo.src}
+        srcset={photo.srcset}
+        sizes="(min-width: 768px) 350px, 256px"
+        width={photo.width}
+        height={photo.height}
+        fetchpriority="high"
+        decoding="async"
+        alt="César Adrián Morado Rodríguez"
         class="relative w-full h-full object-cover border-2 border-purple-500 hover:scale-105 transition-transform duration-500"
       />
       <!-- Corner Accents -->

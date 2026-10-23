@@ -1,4 +1,6 @@
 ---
+import { responsive, original } from "../lib/images";
+
 interface Certification {
   key: string;
   title: string;
@@ -7,7 +9,7 @@ interface Certification {
   duration: string;
   description: string;
   skills: string[];
-  preview: string;
+  preview: string; // path inside src/assets
   images: string[];
   group: "big" | "unir";
 }
@@ -21,8 +23,8 @@ const certifications: Certification[] = [
     duration: "6",
     description: "Certificado de asistencia a las jornadas formativas \"Desarrollo con IA\", enfocado en los fundamentos del desarrollo de aplicaciones utilizando Inteligencia Artificial.",
     skills: ["AI", "Prompt Engineering"],
-    preview: "/1.- Certificadi Iniciacion con IA.jpeg",
-    images: ["/1.- Certificadi Iniciacion con IA.jpeg"],
+    preview: "certs/bigschool-ia-iniciacion.jpeg",
+    images: ["certs/bigschool-ia-iniciacion.jpeg"],
     group: "big"
   },
   {
@@ -33,8 +35,8 @@ const certifications: Certification[] = [
     duration: "6",
     description: "Certificado de asistencia al curso \"Desarrollo con IA: de 0 a Producción\", centrado en el uso práctico de herramientas de IA para crear aplicaciones listas para producción.",
     skills: ["AI", "LLMs", "DevOps"],
-    preview: "/2.- Certificado desarrollo con IA.jpeg",
-    images: ["/2.- Certificado desarrollo con IA.jpeg"],
+    preview: "certs/bigschool-ia-desarrollo.jpeg",
+    images: ["certs/bigschool-ia-desarrollo.jpeg"],
     group: "big"
   },
   {
@@ -45,8 +47,8 @@ const certifications: Certification[] = [
     duration: "6",
     description: "Certificado de asistencia a las jornadas de Ciberseguridad y Hacking Ético, enfocadas en vulnerabilidades, defensa digital y buenas prácticas de seguridad informática.",
     skills: ["Security", "Hacking", "Linux"],
-    preview: "/3.-Certificado ciberseguridad.jpeg",
-    images: ["/3.-Certificado ciberseguridad.jpeg"],
+    preview: "certs/bigschool-ciberseguridad.jpeg",
+    images: ["certs/bigschool-ciberseguridad.jpeg"],
     group: "big"
   },
   {
@@ -57,8 +59,8 @@ const certifications: Certification[] = [
     duration: "32",
     description: "Certificación enfocada en metodologías ágiles para la gestión de proyectos, incluyendo Scrum, Design Thinking, trabajo colaborativo y transformación organizacional.",
     skills: ["Scrum", "Agile", "Design Thinking", "Project Management"],
-    preview: "/1 Proyectos Agiles.png",
-    images: ["/1 Proyectos Agiles.png", "/2 Proyectos Agiles.png"],
+    preview: "certs/unir-proyectos-agiles-1.png",
+    images: ["certs/unir-proyectos-agiles-1.png", "certs/unir-proyectos-agiles-2.png"],
     group: "unir"
   },
   {
@@ -69,14 +71,24 @@ const certifications: Certification[] = [
     duration: "100",
     description: "Diplomado orientado al desarrollo de habilidades directivas, liderazgo, comunicación efectiva, negociación, inteligencia emocional, toma de decisiones y gestión del cambio.",
     skills: ["Liderazgo", "Comunicación", "Negociación", "Inteligencia Emocional", "Gestión Cambio"],
-    preview: "/1 Soft Skills.png",
-    images: ["/1 Soft Skills.png", "/2 Soft Skills.png"],
+    preview: "certs/unir-soft-skills-1.png",
+    images: ["certs/unir-soft-skills-1.png", "certs/unir-soft-skills-2.png"],
     group: "unir"
   }
 ];
 
-const bigSchoolCerts = certifications.filter(c => c.group === "big");
-const unirCerts = certifications.filter(c => c.group === "unir");
+// Cards show a small WebP thumbnail, the modal a large WebP, and downloads keep the original file
+const resolved = await Promise.all(
+  certifications.map(async (c) => ({
+    ...c,
+    thumb: await responsive(c.preview, [400, 640]),
+    views: await Promise.all(c.images.map(async (p) => (await responsive(p, [1600])).src)),
+    downloads: c.images.map(original),
+  }))
+);
+
+const bigSchoolCerts = resolved.filter(c => c.group === "big");
+const unirCerts = resolved.filter(c => c.group === "unir");
 ---
 
 <section id="certifications" class="py-24 px-4 relative border-t border-slate-900 bg-slate-950/30 overflow-hidden">
@@ -111,12 +123,19 @@ const unirCerts = certifications.filter(c => c.group === "unir");
                 {/* Real Certificate Image Preview */}
                 <div 
                   class="view-cert-btn aspect-[4/3] overflow-hidden border border-slate-800 rounded mb-5 relative group-hover:border-purple-500/40 transition-colors cursor-pointer group/preview outline-none"
-                  data-images={JSON.stringify(cert.images)}
+                  data-images={JSON.stringify(cert.views)}
+                  data-downloads={JSON.stringify(cert.downloads)}
                   data-title={cert.title}
                   aria-label={`Visualizar certificado de ${cert.title}`}
                 >
                   <img
-                    src={cert.preview}
+                    src={cert.thumb.src}
+                    srcset={cert.thumb.srcset}
+                    sizes="(min-width: 1024px) 320px, (min-width: 640px) 45vw, 90vw"
+                    width={cert.thumb.width}
+                    height={cert.thumb.height}
+                    loading="lazy"
+                    decoding="async"
                     alt={cert.title}
                     class="w-full h-full object-cover transform group-hover/preview:scale-103 transition-transform duration-500"
                   />
@@ -164,7 +183,8 @@ const unirCerts = certifications.filter(c => c.group === "unir");
                 <div class="flex justify-between items-center gap-2">
                   <button
                     class="view-cert-btn text-[10px] text-purple-400 hover:text-purple-300 font-bold flex items-center gap-1 transition-colors group/link uppercase cursor-pointer bg-transparent border-none p-0 outline-none"
-                    data-images={JSON.stringify(cert.images)}
+                    data-images={JSON.stringify(cert.views)}
+                    data-downloads={JSON.stringify(cert.downloads)}
                     data-title={cert.title}
                     data-i18n="cert.view"
                     aria-label={`Ver certificado de ${cert.title}`}
@@ -174,7 +194,7 @@ const unirCerts = certifications.filter(c => c.group === "unir");
 
                   <button
                     class="download-cert-btn text-[10px] text-slate-400 hover:text-purple-400 font-bold flex items-center gap-1 transition-colors group/link uppercase cursor-pointer bg-transparent border-none p-0 outline-none"
-                    data-images={JSON.stringify(cert.images)}
+                    data-images={JSON.stringify(cert.downloads)}
                     data-title={cert.title}
                     data-i18n="cert.download"
                     aria-label={`Descargar de ${cert.title}`}
@@ -212,12 +232,19 @@ const unirCerts = certifications.filter(c => c.group === "unir");
                 {/* Real Certificate Image Preview */}
                 <div 
                   class="view-cert-btn aspect-[4/3] overflow-hidden border border-slate-800 rounded mb-5 relative group-hover:border-purple-500/40 transition-colors cursor-pointer group/preview outline-none"
-                  data-images={JSON.stringify(cert.images)}
+                  data-images={JSON.stringify(cert.views)}
+                  data-downloads={JSON.stringify(cert.downloads)}
                   data-title={cert.title}
                   aria-label={`Visualizar certificado de ${cert.title}`}
                 >
                   <img
-                    src={cert.preview}
+                    src={cert.thumb.src}
+                    srcset={cert.thumb.srcset}
+                    sizes="(min-width: 1024px) 320px, (min-width: 640px) 45vw, 90vw"
+                    width={cert.thumb.width}
+                    height={cert.thumb.height}
+                    loading="lazy"
+                    decoding="async"
                     alt={cert.title}
                     class="w-full h-full object-cover transform group-hover/preview:scale-103 transition-transform duration-500"
                   />
@@ -270,7 +297,8 @@ const unirCerts = certifications.filter(c => c.group === "unir");
                 <div class="flex justify-between items-center gap-2">
                   <button
                     class="view-cert-btn text-[10px] text-purple-400 hover:text-purple-300 font-bold flex items-center gap-1 transition-colors group/link uppercase cursor-pointer bg-transparent border-none p-0 outline-none"
-                    data-images={JSON.stringify(cert.images)}
+                    data-images={JSON.stringify(cert.views)}
+                    data-downloads={JSON.stringify(cert.downloads)}
                     data-title={cert.title}
                     data-i18n="cert.view"
                     aria-label={`Ver certificado de ${cert.title}`}
@@ -280,7 +308,7 @@ const unirCerts = certifications.filter(c => c.group === "unir");
 
                   <button
                     class="download-cert-btn text-[10px] text-slate-400 hover:text-purple-400 font-bold flex items-center gap-1 transition-colors group/link uppercase cursor-pointer bg-transparent border-none p-0 outline-none"
-                    data-images={JSON.stringify(cert.images)}
+                    data-images={JSON.stringify(cert.downloads)}
                     data-title={cert.title}
                     data-i18n="cert.download"
                     aria-label={`Descargar de ${cert.title}`}
@@ -362,6 +390,7 @@ const unirCerts = certifications.filter(c => c.group === "unir");
 
   // Lightbox Modal State
   let activeImages: string[] = [];
+  let activeDownloads: string[] = [];
   let activeIndex = 0;
   let activeZoom = 1.0;
   let activeTitle = "";
@@ -404,8 +433,9 @@ const unirCerts = certifications.filter(c => c.group === "unir");
     }
   };
 
-  const openModal = (images: string[], title: string) => {
+  const openModal = (images: string[], title: string, downloads: string[] = images) => {
     activeImages = images;
+    activeDownloads = downloads;
     activeIndex = 0;
     activeZoom = 1.0;
     activeTitle = title;
@@ -456,7 +486,7 @@ const unirCerts = certifications.filter(c => c.group === "unir");
 
   // Download action
   downloadBtn?.addEventListener("click", () => {
-    activeImages.forEach((src, idx) => {
+    activeDownloads.forEach((src, idx) => {
       const a = document.createElement("a");
       a.href = src;
       const ext = src.split('.').pop() || 'png';
@@ -474,7 +504,7 @@ const unirCerts = certifications.filter(c => c.group === "unir");
       const imagesAttr = btn.getAttribute("data-images");
       const titleAttr = btn.getAttribute("data-title");
       if (imagesAttr && titleAttr) {
-        openModal(JSON.parse(imagesAttr), titleAttr);
+        openModal(JSON.parse(imagesAttr), titleAttr, JSON.parse(btn.getAttribute("data-downloads") ?? imagesAttr));
       }
     });
   });

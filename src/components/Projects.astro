@@ -17,6 +17,7 @@ import {
   siVercel,
   siNetlify,
 } from "simple-icons";
+import { responsive } from "../lib/images";
 
 // Official Simple Icons marks, same approach as Technologies.astro. Brands whose
 // official hex is too dark for this site's slate cards get a light override.
@@ -75,7 +76,7 @@ const featuredProject = {
     { icon: "🔐", key: "auth", label: "Auth Supabase" },
   ],
   tags: ["Angular", "TypeScript", "Supabase", "PostgreSQL", "Tailwind", "PWA"],
-  image: "/surticel-full.png",
+  image: "projects/surticel-full.png",
 };
 
 // Other prominent projects (Grid cards)
@@ -90,7 +91,7 @@ const generalProjects = [
     role: "Fundador y desarrollador — Diseño, desarrollo y despliegue del sitio del estudio y de cada invitación.",
     metrics: "Entregas de 48 horas a 7 días. Pases QR para eventos de hasta 250 invitados.",
     tags: ["Astro", "Tailwind", "Vercel"],
-    image: "/celebraya-full.jpg",
+    image: "projects/celebraya-full.jpg",
     scroll: true,
     // Long landing page (7000px): slower pan so it stays readable
     scrollMs: 12000,
@@ -109,7 +110,7 @@ const generalProjects = [
     metrics: "Reducción del tiempo de trámite de 15 días a menos de 5 minutos.",
     metricsKey: "metric1",
     tags: ["Angular", "Python", "FastAPI", "Material Design", "SHA-256"],
-    image: "/constanciasI.png",
+    image: "projects/constanciasI.png",
     links: []
   },
   {
@@ -121,7 +122,7 @@ const generalProjects = [
     role: "Full-Stack Developer — Diseñé la interfaz del dashboard reactivo y conecté los flujos de telemetría en tiempo real.",
     metrics: "Latencia de alerta de eventos < 150ms. Telemetría de red automatizada.",
     tags: ["Angular", ".NET", "MySQL", "Tailwind"],
-    image: "/logpath.png",
+    image: "projects/logpath.png",
     links: [
       { nameKey: "demo", url: "http://logpath-web-9vvsqy-78a8c8-108-165-47-114.traefik.me" },
       { nameKey: "repoFront", url: "https://github.com/moradoadrian/LogPath" },
@@ -137,7 +138,7 @@ const generalProjects = [
     role: "Lead Frontend Developer — Implementé la interfaz web completa, control de accesos por roles y el sistema de impresión de sellos.",
     metrics: "Más de 10,000 registros indexados y digitalizados. Control de errores al 0%.",
     tags: ["Angular", "Tailwind", "MySQL", "Firebase"],
-    image: "/anotacionesJ.png",
+    image: "projects/anotacionesJ.png",
     links: [
       { nameKey: "repo", url: "https://github.com/moradoadrian/" }
     ]
@@ -151,7 +152,7 @@ const generalProjects = [
     role: "Mobile & Frontend Developer — Diseñé la UI móvil y la compilación híbrida utilizando Capacitor.",
     metrics: "Más de 5,000 transacciones mensuales procesadas sin interrupciones.",
     tags: ["Angular", "Firebase", "Capacitor", "Tailwind"],
-    image: "/posMiche.png",
+    image: "projects/posMiche.png",
     links: []
   },
   {
@@ -164,7 +165,7 @@ const generalProjects = [
     role: "Frontend Developer — Diseñé la identidad visual de la app y desarrollé el flujo de pedido en Angular.",
     metrics: "Pedido completo en un solo mensaje de WhatsApp, listo en ~15–20 minutos.",
     tags: ["Angular", "TypeScript", "Netlify"],
-    image: "/purpleW-full.png",
+    image: "projects/purpleW-full.png",
     scroll: true,
     links: [
       { nameKey: "live", url: "https://purple-wings.netlify.app/#/inicio" }
@@ -179,6 +180,12 @@ const caseStudyRows = [
   { label: "architectureLabel", fallback: "Arquitectura:", field: "architecture" },
   { label: "roleLabel", fallback: "Rol:", field: "role" },
 ] as const;
+
+// Featured fills half the 6xl container on desktop; grid cards half of it minus padding
+const featuredImg = await responsive(featuredProject.image, [480, 800, 1100]);
+const featuredSizes = "(min-width: 1024px) 540px, (min-width: 640px) 90vw, 100vw";
+const projectImgs = await Promise.all(generalProjects.map((p) => responsive(p.image, [480, 720, 960])));
+const cardSizes = "(min-width: 768px) 470px, 100vw";
 ---
 
 <section id="projects" class="py-24 px-4 relative bg-slate-900/10 border-t border-slate-900 overflow-hidden">
@@ -233,9 +240,14 @@ const caseStudyRows = [
               </div>
               <div class="relative aspect-[16/10] overflow-hidden bg-slate-950">
                 <img
-                  src={featuredProject.image}
+                  src={featuredImg.src}
+                  srcset={featuredImg.srcset}
+                  sizes={featuredSizes}
+                  width={featuredImg.width}
+                  height={featuredImg.height}
                   alt={`Captura de ${featuredProject.domain}`}
                   loading="lazy"
+                  decoding="async"
                   class="absolute inset-0 w-full h-full object-cover object-top group-hover:object-bottom transition-[object-position] duration-[5000ms] ease-in-out"
                 />
                 <div class="absolute bottom-2 right-2 font-mono text-[9px] uppercase tracking-widest bg-slate-950/80 text-slate-400 px-2 py-1 rounded border border-slate-800 opacity-100 group-hover:opacity-0 transition-opacity" data-i18n="proj.hoverHint">
@@ -321,7 +333,7 @@ const caseStudyRows = [
     <!-- Other Prominent Projects Grid -->
     <div class="grid md:grid-cols-2 gap-8">
       {
-        generalProjects.map((project) => (
+        generalProjects.map((project, i) => (
           <div class="project-card group relative bg-slate-950 border-2 border-slate-800 hover:border-purple-500/80 transition-all duration-300 hover:shadow-[0_0_25px_rgba(168,85,247,0.12)] p-6 rounded-md flex flex-col justify-between opacity-0 translate-y-10 md:[&:last-child:nth-child(odd)]:col-span-2 md:[&:last-child:nth-child(odd)]:w-full md:[&:last-child:nth-child(odd)]:max-w-[calc(50%-1rem)] md:[&:last-child:nth-child(odd)]:mx-auto">
 
             <div>
@@ -335,9 +347,14 @@ const caseStudyRows = [
                 </div>
                 <div class="aspect-video overflow-hidden relative">
                   <img
-                    src={project.image}
+                    src={projectImgs[i].src}
+                    srcset={projectImgs[i].srcset}
+                    sizes={cardSizes}
+                    width={projectImgs[i].width}
+                    height={projectImgs[i].height}
                     alt={project.title}
                     loading="lazy"
+                    decoding="async"
                     class={project.scroll
                       ? "absolute inset-0 w-full h-full object-cover object-top group-hover:object-bottom transition-[object-position] duration-[4000ms] ease-in-out"
                       : "w-full h-full object-cover object-top transform group-hover:scale-105 transition-transform duration-700"}
