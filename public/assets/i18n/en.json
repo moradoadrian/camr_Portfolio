@@ -141,7 +141,7 @@
   "proj.constancias.result4": "Optimized document management",
   "proj.constancias.result5": "Optimization of civil administrative workflow",
   "proj.botvideo.subtitle": "AI programming videos · YouTube & TikTok",
-  "proj.botvideo.overview": "My own bot that turns a programming topic into a vertical video ready to publish. I use it to produce the videos I upload to my YouTube (@moradoadrian) and TikTok (@devmorado) channels.",
+  "proj.botvideo.overview": "A bot I built to turn a programming topic into a vertical video ready to publish. I use it to produce the videos I upload to my YouTube (@moradoadrian) and TikTok (@devmorado) channels.",
   "proj.botvideo.problem": "A short programming video means writing the script, narrating it, animating the code and syncing subtitles; doing that by hand makes it hard to publish consistently.",
   "proj.botvideo.solution": "Command-line workflow: Claude writes the script, an AI voice narrates it and Remotion assembles the 9:16 video with an animated code editor, highlighted lines, console and subtitles.",
   "proj.botvideo.architecture": "TypeScript and Node.js CLI: script validated with Zod, voice from ElevenLabs or OpenAI, and templates rendered with Remotion to H.264 at 1080×1920 and 30 fps.",

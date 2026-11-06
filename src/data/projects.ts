@@ -78,7 +78,7 @@ export const projects: Project[] = [
     title: "Bot Video Creator",
     subtitle: "Videos de programación con IA · YouTube y TikTok",
     domain: "youtube.com/@moradoadrian",
-    overview: "Bot propio que convierte un tema de programación en un video vertical listo para publicar. Con él produzco los videos que subo a mi canal de YouTube (@moradoadrian) y TikTok (@devmorado).",
+    overview: "Bot que desarrollé para convertir un tema de programación en un video vertical listo para publicar. Lo uso para crear los videos que subo a mis canales de YouTube (@moradoadrian) y TikTok (@devmorado).",
     problem: "Un video corto de programación exige escribir el guion, narrarlo, animar el código y sincronizar subtítulos; hacerlo a mano dificulta publicar con constancia.",
     solution: "Flujo por comandos: Claude escribe el guion, una voz IA lo narra y Remotion arma el video 9:16 con editor de código animado, línea resaltada, consola y subtítulos.",
     architecture: "CLI en TypeScript y Node.js: guion validado con Zod, voz con ElevenLabs u OpenAI y plantillas renderizadas con Remotion a H.264, 1080×1920 y 30 fps.",
