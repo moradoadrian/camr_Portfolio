@@ -1,0 +1,591 @@
+---
+// Dynamic strings live here (the static ones use data-i18n); the script picks the page language
+const ui = {
+  es: {
+    idle: "Listo para ejecutar",
+    running: "Ejecutando...",
+    step: "Paso {n} de {m}",
+    line: "línea {n}",
+    now: "Ahora en {name}",
+    finished: "Programa terminado",
+    noVars: "// Sin variables todavía",
+    noOutput: "// Sin salida todavía",
+    program: "programa",
+    global: "global",
+    block: "bloque",
+    anonymous: "anónima",
+    remembered: "recordada",
+    prev: "Paso anterior",
+    next: "Paso siguiente",
+    play: "Reproducir",
+    pause: "Pausar",
+    restart: "Volver al inicio",
+    progress: "Avance de la ejecución",
+    syntax: "Error de sintaxis en la línea {n}: {msg}",
+    unsupported: "Este depurador sigue código síncrono: async, generadores, promesas y temporizadores no se pueden trazar aquí.",
+    timeout: "El código no terminó en 2 segundos, así que lo detuve. ¿Hay un ciclo infinito?",
+    truncated: "Lo detuve aquí: el código da demasiados pasos para seguirlo.",
+    workerFail: "No se pudo iniciar el depurador en este navegador.",
+  },
+  en: {
+    idle: "Ready to run",
+    running: "Running...",
+    step: "Step {n} of {m}",
+    line: "line {n}",
+    now: "Now in {name}",
+    finished: "Program finished",
+    noVars: "// No variables yet",
+    noOutput: "// No output yet",
+    program: "program",
+    global: "global",
+    block: "block",
+    anonymous: "anonymous",
+    remembered: "remembered",
+    prev: "Previous step",
+    next: "Next step",
+    play: "Play",
+    pause: "Pause",
+    restart: "Back to start",
+    progress: "Execution progress",
+    syntax: "Syntax error on line {n}: {msg}",
+    unsupported: "This debugger follows synchronous code: async, generators, promises and timers can't be traced here.",
+    timeout: "The code didn't finish in 2 seconds, so I stopped it. Is there an infinite loop?",
+    truncated: "I stopped it here: the code takes too many steps to follow.",
+    workerFail: "The debugger couldn't start in this browser.",
+  },
+};
+
+// Identifiers in English so the same code reads well in both languages
+const samples = [
+  {
+    key: "debugger.sampleLoop",
+    label: "Ciclo for",
+    code: `let total = 0;
+
+for (let i = 1; i <= 3; i++) {
+  total += i;
+  console.log(i, total);
+}
+
+console.log("total:", total);`,
+  },
+  {
+    key: "debugger.sampleClosure",
+    label: "Closure",
+    code: `function makeCounter() {
+  let count = 0;
+  return () => {
+    count++;
+    return count;
+  };
+}
+
+const next = makeCounter();
+console.log(next());
+console.log(next());`,
+  },
+  {
+    key: "debugger.sampleRecursion",
+    label: "Recursión",
+    code: `function factorial(n) {
+  if (n <= 1) return 1;
+  const rest = factorial(n - 1);
+  return n * rest;
+}
+
+console.log(factorial(4));`,
+  },
+  {
+    key: "debugger.sampleArrays",
+    label: "Arreglos",
+    code: `const scores = [7, 10, 4, 9];
+
+const passed = scores.filter((s) => s >= 7);
+const sum = passed.reduce((acc, s) => acc + s, 0);
+
+console.log(passed);
+console.log(sum / passed.length);`,
+  },
+];
+
+const controlClass = "w-9 h-9 inline-flex items-center justify-center border border-slate-700 rounded text-slate-300 hover:border-purple-500 hover:text-purple-300 disabled:opacity-30 disabled:pointer-events-none transition-colors";
+const payload = { ui, samples: samples.map((s) => s.code) };
+---
+
+<section id="debugger" class="py-24 px-4 relative border-t border-slate-900 bg-slate-900/10 overflow-hidden">
+  <div class="max-w-6xl mx-auto relative font-mono">
+    <div class="text-center mb-12">
+      <h2 class="text-2xl sm:text-4xl md:text-5xl text-balance font-bold font-pixel text-purple-400 mb-4 tracking-wider" data-i18n="debugger.title">
+        &lt;Depurador_Visual /&gt;
+      </h2>
+      <p class="text-xs text-slate-500 max-w-lg mx-auto text-pretty" data-i18n="debugger.subtitle">
+        // Mira tu JavaScript ejecutarse línea por línea, con sus variables y su consola.
+      </p>
+    </div>
+
+    <div class="flex flex-wrap items-center gap-2 mb-4">
+      <span class="text-[10px] uppercase tracking-widest text-slate-500 mr-1" data-i18n="debugger.samplesLabel">Ejemplos:</span>
+      {samples.map((s, i) => (
+        <button
+          type="button"
+          data-dbg-sample={i}
+          aria-pressed={i === 0 ? "true" : "false"}
+          class="px-3 py-1.5 text-xs border border-slate-700 text-slate-400 rounded hover:border-purple-500/60 hover:text-purple-200 aria-pressed:border-purple-500 aria-pressed:text-purple-200 transition-colors"
+          data-i18n={s.key}
+        >{s.label}</button>
+      ))}
+    </div>
+
+    <div class="grid lg:grid-cols-12 gap-4 items-stretch">
+      <!-- Code -->
+      <div class="lg:col-span-7 min-w-0 bg-slate-950 border-2 border-slate-800 focus-within:border-purple-500/60 transition-colors rounded-md overflow-hidden shadow-2xl flex flex-col">
+        <div class="bg-slate-900 px-4 py-2 flex items-center gap-2 border-b border-slate-800">
+          <span class="w-2.5 h-2.5 rounded-full bg-red-500/80"></span>
+          <span class="w-2.5 h-2.5 rounded-full bg-yellow-500/80"></span>
+          <span class="w-2.5 h-2.5 rounded-full bg-green-500/80"></span>
+          <span class="ml-2 text-xs text-slate-500">main.js</span>
+          <span id="dbg-status" class="ml-auto text-[10px] text-slate-400 tabular-nums truncate" aria-live="polite"></span>
+        </div>
+
+        <div class="relative h-[19rem] text-[13px] leading-6 [font-variant-ligatures:none]">
+          <!-- Editing -->
+          <div id="dbg-edit" class="absolute inset-0 flex">
+            <pre id="dbg-gutter" aria-hidden="true" class="w-10 shrink-0 overflow-hidden py-3 pr-3 text-right text-slate-600 select-none font-mono text-[13px] leading-6">1</pre>
+            <label for="dbg-input" class="sr-only" data-i18n="debugger.codeLabel">Código JavaScript</label>
+            <textarea
+              id="dbg-input"
+              wrap="off"
+              maxlength="4000"
+              spellcheck="false"
+              autocapitalize="off"
+              autocomplete="off"
+              class="flex-1 min-w-0 resize-none bg-transparent py-3 pr-3 overflow-auto whitespace-pre outline-none text-slate-100 font-mono text-[13px] leading-6"
+            >{samples[0].code}</textarea>
+          </div>
+
+          <!-- Running: built by the script -->
+          <div id="dbg-view" class="hidden absolute inset-0 overflow-auto py-3" tabindex="0">
+            <div class="relative inline-block min-w-full">
+              <div id="dbg-strip" class="hidden absolute inset-x-0 h-6 bg-purple-500/25 shadow-[inset_3px_0_0_#a855f7] transition-[top] duration-200 motion-reduce:transition-none"></div>
+              <div id="dbg-lines" class="relative"></div>
+            </div>
+          </div>
+        </div>
+
+        <p id="dbg-message" class="hidden px-4 py-2.5 border-t border-amber-500/30 bg-amber-500/5 text-[11px] text-amber-200 text-pretty" role="alert"></p>
+
+        <div class="border-t border-slate-800 bg-slate-900/40 p-3 space-y-3">
+          <input
+            id="dbg-slider"
+            type="range"
+            min="0"
+            max="0"
+            value="0"
+            disabled
+            class="block w-full accent-purple-500 disabled:opacity-30"
+          />
+          <div class="flex flex-wrap items-center gap-2">
+            <button id="dbg-run" type="button" class="px-4 h-9 bg-purple-600 hover:bg-purple-500 text-white text-xs font-bold tracking-wider transition-colors" data-i18n="debugger.run">[ EJECUTAR ]</button>
+            <button id="dbg-editbtn" type="button" class="hidden px-3 h-9 text-xs border border-slate-700 text-slate-300 hover:border-purple-500 hover:text-purple-300 transition-colors" data-i18n="debugger.edit">Editar código</button>
+
+            <div class="flex items-center gap-1.5 sm:ml-auto">
+              <button id="dbg-restart" type="button" disabled class={controlClass}>
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 5h2v14H6zM20 5v14L9 12z"/></svg>
+              </button>
+              <button id="dbg-prev" type="button" disabled class={controlClass}>
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M17 5v14L6 12z"/></svg>
+              </button>
+              <button id="dbg-play" type="button" disabled class={controlClass}>
+                <svg id="dbg-icon-play" class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5v14l12-7z"/></svg>
+                <svg id="dbg-icon-pause" class="hidden w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg>
+              </button>
+              <button id="dbg-next" type="button" disabled class={controlClass}>
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5v14l11-7z"/></svg>
+              </button>
+              <label class="ml-1">
+                <span class="sr-only" data-i18n="debugger.speed">Velocidad</span>
+                <select id="dbg-speed" class="h-9 bg-slate-950 border border-slate-700 rounded px-1.5 text-xs text-slate-300 outline-none focus:border-purple-500">
+                  <option value="1300">0.5x</option>
+                  <option value="750" selected>1x</option>
+                  <option value="350">2x</option>
+                </select>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Variables and console -->
+      <div class="lg:col-span-5 min-w-0 grid grid-rows-[minmax(0,3fr)_minmax(0,2fr)] gap-4 h-[30rem] lg:h-auto lg:min-h-0">
+        <div class="min-h-0 bg-slate-950 border-2 border-slate-800 rounded-md overflow-hidden flex flex-col">
+          <div class="bg-slate-900 px-4 py-2 border-b border-slate-800">
+            <p id="dbg-vars-title" class="text-[10px] uppercase tracking-widest text-slate-400 truncate" data-i18n="debugger.variables">Variables</p>
+            <p id="dbg-stack" class="hidden mt-0.5 text-[10px] text-purple-300/80 truncate"></p>
+          </div>
+          <div id="dbg-vars" class="flex-1 min-h-0 overflow-auto p-4 text-xs leading-relaxed [font-variant-ligatures:none]"></div>
+        </div>
+        <div class="min-h-0 bg-slate-950 border-2 border-dashed border-slate-800 rounded-md overflow-hidden flex flex-col">
+          <div class="bg-slate-900 px-4 py-2 border-b border-slate-800 text-[10px] uppercase tracking-widest text-slate-400" data-i18n="debugger.console">Consola</div>
+          <div id="dbg-console" class="flex-1 min-h-0 overflow-auto p-4 text-xs leading-relaxed [font-variant-ligatures:none]"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-5 flex flex-col sm:flex-row sm:items-start justify-between gap-3 text-[11px] text-slate-500">
+      <p class="flex items-start gap-2 text-pretty">
+        <svg class="w-3.5 h-3.5 mt-0.5 shrink-0 text-emerald-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+        <span data-i18n="debugger.privacy">Tu código corre solo en tu navegador, aislado en un Web Worker: no se envía ni se guarda.</span>
+      </p>
+      <p class="shrink-0 text-pretty">
+        <span data-i18n="debugger.technique">La misma técnica de los videos de mi bot.</span>
+        <a href="/projects/botvideo" class="text-purple-400 hover:text-purple-300 underline underline-offset-2" data-i18n="debugger.caseLink">Ver el caso</a>
+      </p>
+    </div>
+  </div>
+
+  <script type="application/json" id="dbg-data" set:html={JSON.stringify(payload)}></script>
+</section>
+
+<script>
+  import type { TraceResult, TraceStep } from "../lib/debugger";
+
+  type Lang = "es" | "en";
+  type Data = { ui: Record<Lang, Record<string, string>>; samples: string[] };
+
+  const dataEl = document.getElementById("dbg-data");
+  const input = document.getElementById("dbg-input") as HTMLTextAreaElement | null;
+
+  if (dataEl && input) {
+    const data = JSON.parse(dataEl.textContent ?? "{}") as Data;
+    const $ = (id: string) => document.getElementById(id)!;
+    const lang = (): Lang => (document.documentElement.lang === "en" ? "en" : "es");
+    const t = (key: string, vars: Record<string, string | number> = {}) =>
+      data.ui[lang()][key].replace(/\{(\w+)\}/g, (_, k) => String(vars[k] ?? ""));
+    const el = (tag: string, className: string, text?: string) => {
+      const node = document.createElement(tag);
+      node.className = className;
+      if (text !== undefined) node.textContent = text; // always text: the values come from the visitor's code
+      return node;
+    };
+
+    const RUN_TIMEOUT_MS = 2000;
+    const ROW_PX = 24; // h-6
+    const KIND_CLASS: Record<string, string> = {
+      plain: "text-slate-200",
+      keyword: "text-purple-400",
+      function: "text-sky-300",
+      number: "text-amber-300",
+      string: "text-emerald-300",
+      comment: "text-slate-500 italic",
+    };
+
+    const gutter = $("dbg-gutter");
+    const edit = $("dbg-edit");
+    const view = $("dbg-view");
+    const strip = $("dbg-strip");
+    const linesEl = $("dbg-lines");
+    const status = $("dbg-status");
+    const message = $("dbg-message");
+    const vars = $("dbg-vars");
+    const consoleEl = $("dbg-console");
+    const stackEl = $("dbg-stack");
+    const varsTitle = $("dbg-vars-title");
+    const runBtn = $("dbg-run") as HTMLButtonElement;
+    const editBtn = $("dbg-editbtn");
+    const restartBtn = $("dbg-restart") as HTMLButtonElement;
+    const prevBtn = $("dbg-prev") as HTMLButtonElement;
+    const playBtn = $("dbg-play") as HTMLButtonElement;
+    const nextBtn = $("dbg-next") as HTMLButtonElement;
+    const slider = $("dbg-slider") as HTMLInputElement;
+    const speed = $("dbg-speed") as HTMLSelectElement;
+
+    const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)");
+
+    let result: Extract<TraceResult, { ok: true }> | null = null;
+    let index = 0;
+    let playing = false;
+    let timer: number | undefined;
+    let worker: Worker | null = null;
+    let watchdog: number | undefined;
+    let pausedOffscreen = false;
+    let hasRun = false;
+    let messageState: { key: string; vars?: Record<string, string | number> } | null = null;
+
+    const steps = (): TraceStep[] => result?.steps ?? [];
+
+    const updateGutter = () => {
+      const count = input.value.split("\n").length;
+      gutter.textContent = Array.from({ length: count }, (_, i) => i + 1).join("\n");
+    };
+
+    const showMessage = (key: string | null, vars?: Record<string, string | number>) => {
+      messageState = key ? { key, vars } : null;
+      message.textContent = key ? t(key, vars) : "";
+      message.classList.toggle("hidden", !key);
+    };
+
+    const setPlaying = (value: boolean) => {
+      playing = value;
+      clearTimeout(timer);
+      $("dbg-icon-play").classList.toggle("hidden", value);
+      $("dbg-icon-pause").classList.toggle("hidden", !value);
+      playBtn.setAttribute("aria-label", t(value ? "pause" : "play"));
+      // Announcing every step would talk over a screen reader while it plays
+      status.setAttribute("aria-live", value ? "off" : "polite");
+      if (value) schedule();
+    };
+
+    const schedule = () => {
+      clearTimeout(timer);
+      timer = window.setTimeout(() => {
+        if (index >= steps().length - 1) return setPlaying(false);
+        index++;
+        renderStep();
+        schedule();
+      }, Number(speed.value));
+    };
+
+    const goTo = (i: number) => {
+      index = Math.max(0, Math.min(i, steps().length - 1));
+      renderStep();
+    };
+
+    const scopeLabel = (label: string) => (["global", "block", "anonymous"].includes(label) ? t(label) : label);
+    const frameLabel = (name: string) => (name === "program" ? t("program") : name === "anonymous" ? t("anonymous") : `${name}()`);
+
+    const renderVariables = (step: TraceStep, previous?: TraceStep) => {
+      const finished = step.line === 0;
+      varsTitle.textContent = finished ? t("finished") : t("now", { name: frameLabel(step.stack[step.stack.length - 1]) });
+      // Deep recursion: the tail is what matters
+      const frames = step.stack.map(frameLabel);
+      stackEl.textContent = frames.length > 4 ? `… › ${frames.slice(-4).join(" › ")}` : frames.join(" › ");
+      stackEl.classList.toggle("hidden", finished || frames.length < 2);
+
+      if (!step.groups.length) return vars.replaceChildren(el("p", "text-slate-600", t("noVars")));
+      vars.replaceChildren(
+        ...step.groups.map((group) => {
+          const box = el("div", "mb-3 last:mb-0");
+          const head = el("div", "flex items-center gap-2 text-[10px] uppercase tracking-widest text-slate-500 mb-1");
+          head.append(el("span", "", scopeLabel(group.label)));
+          if (group.remembered) head.append(el("span", "px-1.5 py-px rounded bg-purple-500 text-slate-950 font-bold normal-case tracking-normal", t("remembered")));
+          box.append(head);
+          const old = previous?.groups.find((g) => g.label === group.label && g.remembered === group.remembered);
+          for (const variable of group.variables) {
+            const before = old?.variables.find((v) => v.name === variable.name)?.value;
+            const row = el("div", `px-1.5 -mx-1.5 rounded break-words transition-colors ${before !== undefined && before !== variable.value ? "bg-purple-500/30" : ""}`);
+            row.append(el("span", "text-slate-100", variable.name), el("span", "text-slate-500", " = "), el("span", "text-amber-300", variable.value));
+            box.append(row);
+          }
+          return box;
+        })
+      );
+    };
+
+    const renderConsole = (step: TraceStep, isLast: boolean) => {
+      const rows = result!.output.slice(0, step.output).map((line) => {
+        const row = el("div", "text-emerald-300 whitespace-pre-wrap break-words");
+        row.append(el("span", "text-slate-600", "› "), document.createTextNode(line));
+        return row;
+      });
+      if (isLast && result!.error) rows.push(el("div", "text-red-400 whitespace-pre-wrap break-words", result!.error));
+      if (!rows.length) rows.push(el("p", "text-slate-600", t("noOutput")));
+      consoleEl.replaceChildren(...rows);
+      consoleEl.scrollTop = consoleEl.scrollHeight;
+    };
+
+    const renderStep = () => {
+      const all = steps();
+      const step = all[index];
+      if (!step) return;
+      const isLast = index === all.length - 1;
+
+      strip.classList.toggle("hidden", step.line === 0);
+      if (step.line > 0) {
+        const top = (step.line - 1) * ROW_PX;
+        strip.style.top = `${top}px`;
+        // Scroll only this box: the page must stay where the visitor is reading
+        if (top < view.scrollTop || top + ROW_PX * 2 > view.scrollTop + view.clientHeight) view.scrollTop = Math.max(0, top - view.clientHeight / 2);
+      }
+      [...linesEl.children].forEach((row, i) => row.firstElementChild!.classList.toggle("!text-purple-300", i === step.line - 1));
+
+      const parts = [t("step", { n: index + 1, m: all.length })];
+      if (step.line > 0) parts.push(t("line", { n: step.line }));
+      status.textContent = parts.join(" · ");
+
+      slider.value = String(index);
+      slider.setAttribute("aria-valuetext", status.textContent);
+      restartBtn.disabled = prevBtn.disabled = index === 0;
+      nextBtn.disabled = isLast;
+      playBtn.disabled = all.length < 2;
+
+      renderVariables(step, all[index - 1]);
+      renderConsole(step, isLast);
+      showMessage(isLast && result!.truncated ? "truncated" : null);
+    };
+
+    const renderLabels = () => {
+      restartBtn.setAttribute("aria-label", t("restart"));
+      prevBtn.setAttribute("aria-label", t("prev"));
+      nextBtn.setAttribute("aria-label", t("next"));
+      playBtn.setAttribute("aria-label", t(playing ? "pause" : "play"));
+      slider.setAttribute("aria-label", t("progress"));
+    };
+
+    const renderCode = () => {
+      linesEl.replaceChildren(
+        ...result!.lines.map((segments, i) => {
+          const row = el("div", "flex h-6 whitespace-pre pr-4");
+          row.append(el("span", "w-10 shrink-0 pr-3 text-right text-slate-600 select-none", String(i + 1)));
+          const code = el("span", "");
+          code.append(...segments.map((s) => el("span", KIND_CLASS[s.kind], s.text)));
+          row.append(code);
+          return row;
+        })
+      );
+    };
+
+    const clearPanels = () => {
+      vars.replaceChildren(el("p", "text-slate-600", t("noVars")));
+      consoleEl.replaceChildren(el("p", "text-slate-600", t("noOutput")));
+      varsTitle.textContent = "Variables";
+      varsTitle.dataset.i18n = "debugger.variables";
+      stackEl.classList.add("hidden");
+      strip.classList.add("hidden");
+      status.textContent = t("idle");
+      slider.value = "0";
+      slider.max = "0";
+      slider.disabled = restartBtn.disabled = prevBtn.disabled = playBtn.disabled = nextBtn.disabled = true;
+    };
+
+    const enterEdit = (focus: boolean) => {
+      setPlaying(false);
+      result = null;
+      view.classList.add("hidden");
+      edit.classList.remove("hidden");
+      editBtn.classList.add("hidden");
+      clearPanels();
+      if (focus) input.focus();
+    };
+
+    const stopWorker = () => {
+      clearTimeout(watchdog);
+      worker?.terminate();
+      worker = null;
+    };
+
+    const fail = (key: string, vars?: Record<string, string | number>) => {
+      stopWorker();
+      enterEdit(false);
+      showMessage(key, vars);
+    };
+
+    const onResult = (r: TraceResult) => {
+      stopWorker();
+      if (!r.ok) return r.kind === "syntax" ? fail("syntax", { n: r.line, msg: r.message }) : fail("unsupported");
+
+      result = r;
+      index = 0;
+      delete varsTitle.dataset.i18n;
+      renderCode();
+      edit.classList.add("hidden");
+      view.classList.remove("hidden");
+      view.scrollTop = 0;
+      editBtn.classList.remove("hidden");
+      slider.max = String(r.steps.length - 1);
+      slider.disabled = false;
+      renderStep();
+      // Motion is opt-in for visitors who asked for less of it: they step through by hand
+      setPlaying(!reducedMotion.matches && r.steps.length > 1);
+    };
+
+    const run = () => {
+      hasRun = true;
+      stopWorker();
+      setPlaying(false);
+      showMessage(null);
+      status.textContent = t("running");
+
+      let w: Worker;
+      try {
+        w = new Worker(new URL("../lib/debugger-worker.ts", import.meta.url), { type: "module" });
+      } catch {
+        return fail("workerFail");
+      }
+      worker = w;
+      w.onerror = () => fail("workerFail");
+      w.onmessage = (event) => {
+        if (w !== worker) return;
+        const msg = event.data;
+        if (msg.type === "ready") w.postMessage(input.value);
+        else if (msg.type === "started") watchdog = window.setTimeout(() => fail("timeout"), RUN_TIMEOUT_MS);
+        else if (msg.type === "result") onResult(msg.result);
+      };
+    };
+
+    const markSample = (active: number) => {
+      document.querySelectorAll<HTMLButtonElement>("[data-dbg-sample]").forEach((b, i) => b.setAttribute("aria-pressed", String(i === active)));
+    };
+
+    // Controls
+    runBtn.addEventListener("click", run);
+    editBtn.addEventListener("click", () => enterEdit(true));
+    restartBtn.addEventListener("click", () => { setPlaying(false); goTo(0); });
+    prevBtn.addEventListener("click", () => { setPlaying(false); goTo(index - 1); });
+    nextBtn.addEventListener("click", () => { setPlaying(false); goTo(index + 1); });
+    playBtn.addEventListener("click", () => {
+      if (playing) return setPlaying(false);
+      if (index >= steps().length - 1) goTo(0);
+      setPlaying(true);
+    });
+    slider.addEventListener("input", () => { setPlaying(false); goTo(Number(slider.value)); });
+    speed.addEventListener("change", () => { if (playing) schedule(); });
+
+    input.addEventListener("input", () => { updateGutter(); markSample(-1); showMessage(null); });
+    input.addEventListener("scroll", () => { gutter.scrollTop = input.scrollTop; });
+    input.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) { e.preventDefault(); run(); }
+    });
+
+    document.querySelectorAll<HTMLButtonElement>("[data-dbg-sample]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const i = Number(btn.dataset.dbgSample);
+        input.value = data.samples[i];
+        updateGutter();
+        markSample(i);
+        run();
+      });
+    });
+
+    // First run when the section comes into view, so visitors see it working without doing anything.
+    // The worker (and the parser inside it) only downloads at that moment. Playback pauses off-screen.
+    new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          if (!hasRun) run();
+          else if (pausedOffscreen) setPlaying(true);
+          pausedOffscreen = false;
+        } else if (playing) {
+          pausedOffscreen = true;
+          setPlaying(false);
+        }
+      },
+      { threshold: 0.25 }
+    ).observe($("debugger"));
+
+    // Built in JS, so re-render when the page language changes
+    new MutationObserver(() => {
+      renderLabels();
+      if (result) renderStep();
+      else {
+        vars.replaceChildren(el("p", "text-slate-600", t("noVars")));
+        consoleEl.replaceChildren(el("p", "text-slate-600", t("noOutput")));
+        status.textContent = t("idle");
+      }
+      if (messageState) showMessage(messageState.key, messageState.vars);
+    }).observe(document.documentElement, { attributes: true, attributeFilter: ["lang"] });
+
+    updateGutter();
+    renderLabels();
+    clearPanels();
+  }
+</script>
