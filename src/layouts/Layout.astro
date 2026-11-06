@@ -174,6 +174,26 @@ const customSeo = Boolean(title);
 
     <slot />
     <CommandPalette />
+    <!-- Inline, because it has to run when the bundled scripts below fail to load. That also leaves
+         gsap unable to reveal what starts hidden, so this reveals it. Setting data-booted hides the
+         loader, and makes the bundled script skip the animation if it arrives late. -->
+    <script is:inline>
+      setTimeout(() => {
+        if (window.__bootDone) return;
+        document.documentElement.dataset.booted = "";
+        document.querySelectorAll(".opacity-0.translate-y-10, .hero-image").forEach((el) => {
+          el.classList.remove("opacity-0", "translate-y-10", "scale-50");
+        });
+        // The custom cursor needs gsap too, so bring back the native one until it arrives (if it ever does)
+        const cursors = document.querySelectorAll(".custom-cursor, .cursor-follower");
+        const showCustomCursor = (show) => {
+          document.body.style.cursor = show ? "" : "auto";
+          cursors.forEach((el) => { el.style.display = show ? "" : "none"; });
+        };
+        showCustomCursor(false);
+        window.addEventListener("loaderComplete", () => showCustomCursor(true), { once: true });
+      }, 6000);
+    </script>
     <script>
       import { gsap } from "gsap";
       import { ScrollTrigger } from "gsap/ScrollTrigger";
