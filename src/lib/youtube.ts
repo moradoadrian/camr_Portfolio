@@ -1,5 +1,5 @@
 // Reads the channel's public RSS feed at build time (no API key needed).
-// Any failure returns an empty list so the page still builds and simply hides the section.
+// Any failure falls back to a saved list so the page still builds with videos in it.
 
 export const YOUTUBE_URL = "https://www.youtube.com/@moradoadrian";
 const CHANNEL_ID = "UCQSVO1M6wTYw6Dx34JQ5zGg";
@@ -12,6 +12,34 @@ export interface Short {
   thumbnail: string;
   published: string; // YYYY-MM-DD
 }
+
+// Hard-coded rather than read from the feed, so the player stays up when the feed is down
+const FEATURED_ID = "J_JxIvZd1CY";
+export const FEATURED_SHORT = {
+  id: FEATURED_ID,
+  title: "API explicada fácil",
+  url: `https://www.youtube.com/shorts/${FEATURED_ID}`,
+  thumbnail: `https://i.ytimg.com/vi/${FEATURED_ID}/maxresdefault.jpg`,
+};
+
+const savedShort = (id: string, title: string, published: string): Short => ({
+  id,
+  title,
+  url: `https://www.youtube.com/shorts/${id}`,
+  thumbnail: `https://i.ytimg.com/vi/${id}/hqdefault.jpg`,
+  published,
+});
+
+// Used when the feed fails, so the grid survives a build during a YouTube outage.
+// Saved by hand on 2026-11-06: videos uploaded later only show up through the feed.
+const SAVED_SHORTS: Short[] = [
+  savedShort(FEATURED_ID, "API explicada fácil", "2026-11-06"),
+  savedShort("_zCHfgWdc0k", "React, Vue o Angular cual aprender primero?", "2026-11-06"),
+  savedShort("8e6WVUXytQs", "Contar hacia atrás con un ciclo for", "2026-11-06"),
+  savedShort("sxmSOX7jqE0", "Por que tu for da una vuelta de mas o de menos?", "2026-11-05"),
+  savedShort("szEslk7au_8", "Que pasa en cada vuelta de un ciclo for?", "2026-11-05"),
+  savedShort("cb3qC5klHHU", "El ciclo for en Javascript explicado fácil", "2026-11-05"),
+];
 
 const ENTITIES: Record<string, string> = { amp: "&", lt: "<", gt: ">", quot: '"', apos: "'" };
 
@@ -52,10 +80,12 @@ export function getLatestShorts(limit = 6): Promise<Short[]> {
     try {
       const res = await fetch(FEED_URL, { signal: AbortSignal.timeout(10_000) });
       if (!res.ok) throw new Error(`${FEED_URL} -> ${res.status}`);
-      return parseShorts(await res.text());
+      const shorts = parseShorts(await res.text());
+      if (shorts.length === 0) throw new Error(`${FEED_URL} -> no shorts found`);
+      return shorts;
     } catch (err) {
-      console.warn("[youtube] could not load the feed, the videos section will be hidden:", err);
-      return [];
+      console.warn("[youtube] could not load the feed, using the saved list of shorts:", err);
+      return SAVED_SHORTS;
     }
   })();
   return cache.then((shorts) => shorts.slice(0, limit));

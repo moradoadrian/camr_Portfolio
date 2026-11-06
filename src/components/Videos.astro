@@ -1,12 +1,12 @@
 ---
 import { siYoutube, siTiktok } from "simple-icons";
-import { getLatestShorts, YOUTUBE_URL } from "../lib/youtube";
+import { FEATURED_SHORT, getLatestShorts, YOUTUBE_URL } from "../lib/youtube";
 
-const shorts = await getLatestShorts();
+// The featured video is left out of the list; five keeps the grid's single row full
+const shorts = (await getLatestShorts()).filter((short) => short.id !== FEATURED_SHORT.id).slice(0, 5);
 ---
 
-{shorts.length > 0 && (
-  <section id="videos" class="py-20 px-4 bg-slate-950/40 border-t border-slate-900 relative overflow-hidden">
+<section id="videos" class="py-20 px-4 bg-slate-950/40 border-t border-slate-900 relative overflow-hidden">
     <div class="max-w-6xl mx-auto relative z-10 font-mono">
       <div class="text-center mb-12">
         <h2 class="text-2xl sm:text-4xl md:text-5xl text-balance font-bold font-pixel text-purple-400 mb-4 tracking-wider" data-i18n="videos.title">
@@ -17,7 +17,49 @@ const shorts = await getLatestShorts();
         </p>
       </div>
 
-      <ul class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
+      <div class="mb-12 flex flex-col sm:flex-row items-center justify-center gap-6 sm:gap-10">
+        <div class="relative w-full max-w-[280px] aspect-[9/16] bg-slate-900 border-2 border-slate-800 rounded-md overflow-hidden">
+          <!-- YouTube only loads on click; without JS this stays a plain link to the video -->
+          <a
+            href={FEATURED_SHORT.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            data-yt-player={FEATURED_SHORT.id}
+            data-yt-title={FEATURED_SHORT.title}
+            class="group absolute inset-0 block"
+          >
+            <img
+              src={FEATURED_SHORT.thumbnail}
+              alt=""
+              width="1280"
+              height="720"
+              loading="lazy"
+              decoding="async"
+              class="absolute inset-0 w-full h-full object-cover"
+            />
+            <span class="absolute inset-0 flex items-center justify-center bg-slate-950/30 group-hover:bg-slate-950/10 transition-colors">
+              <svg class="w-16 h-16 text-white drop-shadow-lg group-hover:scale-110 transition-transform" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d={siYoutube.path}></path></svg>
+              <span class="sr-only" data-i18n="videos.play">Reproducir video</span>
+            </span>
+          </a>
+        </div>
+        <div class="text-center sm:text-left max-w-xs">
+          <p class="text-xs text-purple-400 mb-2" data-i18n="videos.featured">// Video destacado</p>
+          <h3 class="text-lg font-bold text-slate-100 mb-4">{FEATURED_SHORT.title}</h3>
+          <a
+            href={FEATURED_SHORT.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="text-xs text-slate-400 hover:text-red-300 underline underline-offset-2 transition-colors"
+            data-i18n="videos.watch"
+          >
+            Ver en YouTube
+          </a>
+        </div>
+      </div>
+
+      {shorts.length > 0 && (
+      <ul class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
         {shorts.map((short) => (
           <li>
             <a
@@ -48,6 +90,7 @@ const shorts = await getLatestShorts();
           </li>
         ))}
       </ul>
+      )}
 
       <div class="mt-10 flex flex-col sm:flex-row items-center justify-center gap-3">
         <a
@@ -70,5 +113,22 @@ const shorts = await getLatestShorts();
         </a>
       </div>
     </div>
-  </section>
-)}
+</section>
+
+<script>
+  document.querySelectorAll<HTMLAnchorElement>("[data-yt-player]").forEach((link) => {
+    link.addEventListener("click", (event) => {
+      if (event.ctrlKey || event.metaKey || event.shiftKey) return; // keep "open in a new tab"
+      event.preventDefault();
+      const player = document.createElement("iframe");
+      player.src = `https://www.youtube-nocookie.com/embed/${link.dataset.ytPlayer}?autoplay=1&rel=0&playsinline=1`;
+      player.title = link.dataset.ytTitle ?? "YouTube";
+      player.allow = "autoplay; encrypted-media; picture-in-picture; fullscreen";
+      player.allowFullscreen = true;
+      player.referrerPolicy = "strict-origin-when-cross-origin"; // YouTube refuses to play without a referrer
+      player.className = "absolute inset-0 w-full h-full";
+      link.replaceWith(player);
+      player.focus();
+    });
+  });
+</script>
