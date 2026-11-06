@@ -1,4 +1,6 @@
 ---
+import { siYoutube, siTiktok } from "simple-icons";
+
 // Web3Forms access key (https://web3forms.com). It is public by design: it only lets the form
 // deliver to the inbox it was created for. While it is empty, the form falls back to opening
 // the visitor's email app with the message already written.
@@ -263,6 +265,38 @@ const MESSAGE_MAX = 1000;
             <div>
               <p class="text-[9px] text-slate-500 group-hover:text-slate-400 tracking-widest uppercase" data-i18n="contact.codeRepos">CODE_REPOS</p>
               <p class="text-xs text-white font-bold group-hover:text-slate-300">github/moradoadrian</p>
+            </div>
+          </a>
+
+          <!-- YouTube Card -->
+          <a
+            href="https://www.youtube.com/@moradoadrian"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="group relative p-4 bg-slate-950 border-2 border-slate-800 hover:border-red-500 transition-all duration-300 flex items-center gap-4 rounded-md"
+          >
+            <div class="p-2.5 bg-slate-900 group-hover:bg-red-950/40 transition-colors border border-slate-700 rounded">
+              <svg class="w-5 h-5 text-red-500" fill="currentColor" viewBox="0 0 24 24"><path d={siYoutube.path}></path></svg>
+            </div>
+            <div>
+              <p class="text-[9px] text-slate-500 group-hover:text-red-400 tracking-widest uppercase" data-i18n="contact.youtube">YOUTUBE_CHANNEL</p>
+              <p class="text-xs text-white font-bold group-hover:text-red-300">@moradoadrian</p>
+            </div>
+          </a>
+
+          <!-- TikTok Card -->
+          <a
+            href="https://www.tiktok.com/@devmorado"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="group relative p-4 bg-slate-950 border-2 border-slate-800 hover:border-cyan-400 transition-all duration-300 flex items-center gap-4 rounded-md"
+          >
+            <div class="p-2.5 bg-slate-900 group-hover:bg-cyan-950/40 transition-colors border border-slate-700 rounded">
+              <svg class="w-5 h-5 text-cyan-300" fill="currentColor" viewBox="0 0 24 24"><path d={siTiktok.path}></path></svg>
+            </div>
+            <div>
+              <p class="text-[9px] text-slate-500 group-hover:text-cyan-400 tracking-widest uppercase" data-i18n="contact.tiktok">TIKTOK_CHANNEL</p>
+              <p class="text-xs text-white font-bold group-hover:text-cyan-300">@devmorado</p>
             </div>
           </a>
 

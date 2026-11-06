@@ -11,9 +11,10 @@ type Command = { id: string; group: string; key?: string; label: string; icon: s
 const sections: Command[] = [
   { id: "home", group: "nav", key: "navbar.home", label: "Inicio", icon: "⌂", kind: "link", href: "/#top", keywords: "home inicio top" },
   { id: "about", group: "nav", key: "navbar.about", label: "Sobre Mí", icon: "◉", kind: "link", href: "/#about", keywords: "about me sobre mi perfil" },
-  { id: "experience", group: "nav", key: "navbar.experience", label: "Experiencia", icon: "▤", kind: "link", href: "/#experience", keywords: "experience trabajo work ieeg flutter dart react native bodega prep educacion education" },
+  { id: "experience", group: "nav", key: "navbar.experience", label: "Experiencia", icon: "▤", kind: "link", href: "/#experience", keywords: "experience trabajo work ieeg flutter dart react native bodega prep cotejo educacion education" },
   { id: "certifications", group: "nav", key: "navbar.certifications", label: "Certificaciones", icon: "✦", kind: "link", href: "/#certifications", keywords: "certifications cursos" },
   { id: "projects", group: "nav", key: "navbar.projects", label: "Proyectos", icon: "▦", kind: "link", href: "/#projects", keywords: "projects portafolio portfolio" },
+  { id: "videos", group: "nav", key: "cmdk.videos", label: "Últimos videos", icon: "▶", kind: "link", href: "/#videos", keywords: "videos shorts youtube tiktok canal channel programacion programming" },
   { id: "terminal", group: "nav", key: "cmdk.terminal", label: "Terminal interactiva", icon: ">_", kind: "link", href: "/#terminal", keywords: "terminal shell consola console" },
   { id: "match", group: "nav", key: "cmdk.match", label: "Analizar una vacante", icon: "%", kind: "link", href: "/#match", keywords: "match vacante vacancy job descripcion description compatibilidad fit requisitos requirements" },
   { id: "contact", group: "nav", key: "navbar.contact", label: "Contacto", icon: "✉", kind: "link", href: "/#contact", keywords: "contact contacto formulario form mensaje message" },
@@ -35,6 +36,8 @@ const actions: Command[] = [
   { id: "lang", group: "actions", key: "cmdk.lang", label: "Cambiar idioma (ES / EN)", icon: "⇄", kind: "lang", keywords: "language idioma english español spanish ingles" },
   { id: "github", group: "actions", label: "GitHub", icon: "⌥", kind: "external", href: "https://github.com/moradoadrian", keywords: "github repos codigo code" },
   { id: "linkedin", group: "actions", label: "LinkedIn", icon: "in", kind: "external", href: "https://www.linkedin.com/in/moradoadrian/", keywords: "linkedin perfil profile" },
+  { id: "youtube", group: "actions", label: "YouTube", icon: "▶", kind: "external", href: "https://www.youtube.com/@moradoadrian", keywords: "youtube canal channel videos shorts programacion programming" },
+  { id: "tiktok", group: "actions", label: "TikTok", icon: "♪", kind: "external", href: "https://www.tiktok.com/@devmorado", keywords: "tiktok devmorado canal channel videos programacion programming" },
   { id: "whatsapp", group: "actions", label: "WhatsApp", icon: "☏", kind: "external", href: "https://wa.me/524614210058", keywords: "whatsapp telefono phone chat" },
 ];
 

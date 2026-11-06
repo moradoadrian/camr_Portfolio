@@ -1,0 +1,74 @@
+---
+import { siYoutube, siTiktok } from "simple-icons";
+import { getLatestShorts, YOUTUBE_URL } from "../lib/youtube";
+
+const shorts = await getLatestShorts();
+---
+
+{shorts.length > 0 && (
+  <section id="videos" class="py-20 px-4 bg-slate-950/40 border-t border-slate-900 relative overflow-hidden">
+    <div class="max-w-6xl mx-auto relative z-10 font-mono">
+      <div class="text-center mb-12">
+        <h2 class="text-2xl sm:text-4xl md:text-5xl text-balance font-bold font-pixel text-purple-400 mb-4 tracking-wider" data-i18n="videos.title">
+          &lt;Ultimos_Videos /&gt;
+        </h2>
+        <p class="text-xs text-slate-500 max-w-md mx-auto" data-i18n="videos.subtitle">
+          // Programación explicada en videos cortos
+        </p>
+      </div>
+
+      <ul class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
+        {shorts.map((short) => (
+          <li>
+            <a
+              href={short.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="group block h-full bg-slate-950 border-2 border-slate-800 hover:border-purple-500/80 rounded-md overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_0_25px_rgba(168,85,247,0.2)]"
+            >
+              <div class="relative aspect-[9/16] overflow-hidden bg-slate-900">
+                <img
+                  src={short.thumbnail}
+                  alt=""
+                  width="480"
+                  height="360"
+                  loading="lazy"
+                  decoding="async"
+                  class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                />
+                <span class="absolute inset-0 flex items-center justify-center bg-slate-950/40 opacity-0 group-hover:opacity-100 transition-opacity" aria-hidden="true">
+                  <svg class="w-10 h-10 text-white" fill="currentColor" viewBox="0 0 24 24"><path d={siYoutube.path}></path></svg>
+                </span>
+              </div>
+              <div class="p-3">
+                <h3 class="text-[11px] leading-snug text-slate-200 group-hover:text-purple-300 transition-colors line-clamp-3">{short.title}</h3>
+                <time datetime={short.published} class="block mt-2 text-[10px] text-slate-500">{short.published}</time>
+              </div>
+            </a>
+          </li>
+        ))}
+      </ul>
+
+      <div class="mt-10 flex flex-col sm:flex-row items-center justify-center gap-3">
+        <a
+          href={YOUTUBE_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex items-center gap-2 px-5 py-2.5 border-2 border-slate-700 hover:border-red-500 text-slate-300 hover:text-red-300 text-xs font-bold tracking-wider transition-colors"
+        >
+          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d={siYoutube.path}></path></svg>
+          YouTube @moradoadrian
+        </a>
+        <a
+          href="https://www.tiktok.com/@devmorado"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex items-center gap-2 px-5 py-2.5 border-2 border-slate-700 hover:border-cyan-400 text-slate-300 hover:text-cyan-300 text-xs font-bold tracking-wider transition-colors"
+        >
+          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d={siTiktok.path}></path></svg>
+          TikTok @devmorado
+        </a>
+      </div>
+    </div>
+  </section>
+)}

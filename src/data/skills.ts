@@ -42,10 +42,10 @@ export const sources: Source[] = [
 export const skills: Skill[] = [
   // Frontend
   { id: "angular", label: "Angular", aliases: ["angular"], sources: ["civil", "ieeg", "surticel", "constancias", "logpath", "anotaciones", "posmiche", "purplewings"] },
-  { id: "typescript", label: "TypeScript", aliases: ["typescript", "ts"], sources: ["surticel", "purplewings", "stack"] },
+  { id: "typescript", label: "TypeScript", aliases: ["typescript", "ts"], sources: ["surticel", "purplewings", "botvideo", "stack"] },
   { id: "javascript", label: "JavaScript", aliases: ["javascript", "js", "ecmascript", "es6"], sources: ["stack", "infoexpo"] },
   { id: "htmlcss", label: "HTML / CSS", aliases: ["html", "html5", "css", "css3"], sources: ["infoexpo", "stack", "master"] },
-  { id: "tailwind", label: "Tailwind CSS", aliases: ["tailwind", "tailwindcss", "tailwind css"], sources: ["surticel", "celebraya", "logpath", "anotaciones", "posmiche"] },
+  { id: "tailwind", label: "Tailwind CSS", aliases: ["tailwind", "tailwindcss", "tailwind css"], sources: ["ieeg", "surticel", "celebraya", "logpath", "anotaciones", "posmiche"] },
   { id: "materialdesign", label: "Material Design", aliases: ["material design", "angular material"], sources: ["constancias"] },
   { id: "responsive", label: "Diseño responsivo", en: "Responsive design", aliases: ["responsive", "responsivo", "diseno responsivo", "responsive design", "mobile first"], sources: ["infoexpo", "surticel", "posmiche"] },
   { id: "uxui", label: "UI / UX", aliases: ["ux", "ui", "ui/ux", "ux/ui", "experiencia de usuario", "user experience", "diseno de interfaces", "interfaces de usuario", "user interface"], sources: ["master", "purplewings", "infoexpo"] },
@@ -66,7 +66,7 @@ export const skills: Skill[] = [
   { id: "fastapi", label: "FastAPI", aliases: ["fastapi"], sources: ["civil", "constancias"] },
   { id: "php", label: "PHP", aliases: ["php"], sources: ["infoexpo"] },
   { id: "symfony", label: "Symfony", aliases: ["symfony"], sources: ["infoexpo"] },
-  { id: "node", label: "Node.js", aliases: ["node", "nodejs", "node.js"], sources: ["stack"] },
+  { id: "node", label: "Node.js", aliases: ["node", "nodejs", "node.js"], sources: ["botvideo", "stack"] },
   { id: "rest", label: "APIs REST", en: "REST APIs", aliases: ["api rest", "apis rest", "rest api", "rest apis", "restful", "consumo de apis", "apis"], sources: ["civil", "constancias", "ieeg"] },
   { id: "microservices", label: "Microservicios", en: "Microservices", aliases: ["microservicios", "microservices", "microservicio"], sources: ["ieeg"] },
   { id: "sql", label: "SQL", aliases: ["sql", "bases de datos relacionales", "relational databases"], sources: ["mac", "infoexpo"] },
@@ -83,7 +83,8 @@ export const skills: Skill[] = [
   { id: "scrum", label: "Scrum / Ágil", en: "Scrum / Agile", aliases: ["scrum", "agile", "agil", "metodologias agiles", "agile methodologies", "sprint", "sprints", "daily", "dailies"], sources: ["ieeg", "cert-agile"] },
   { id: "designthinking", label: "Design Thinking", aliases: ["design thinking"], sources: ["cert-agile"] },
   { id: "docs", label: "Documentación técnica", en: "Technical documentation", aliases: ["confluence", "documentacion tecnica", "technical documentation"], sources: ["ieeg"] },
-  { id: "ai", label: "IA en el desarrollo", en: "AI in development", aliases: ["ia", "ai", "inteligencia artificial", "artificial intelligence", "llm", "llms", "claude", "ia generativa", "generative ai"], sources: ["ieeg", "cert-ia", "iaplan"] },
+  { id: "ai", label: "IA en el desarrollo", en: "AI in development", aliases: ["ia", "ai", "inteligencia artificial", "artificial intelligence", "llm", "llms", "claude", "ia generativa", "generative ai", "anthropic"], sources: ["botvideo", "ieeg", "cert-ia", "iaplan"] },
+  { id: "remotion", label: "Remotion (video con código)", en: "Remotion (video as code)", aliases: ["remotion"], sources: ["botvideo"] },
   { id: "devops", label: "DevOps (en formación)", en: "DevOps (in training)", aliases: ["devops"], sources: ["iaplan"] },
   { id: "security", label: "Seguridad", en: "Security", aliases: ["ciberseguridad", "cybersecurity", "seguridad informatica", "security", "owasp", "sha-256", "criptografia", "cryptography"], sources: ["cert-sec", "constancias"] },
 

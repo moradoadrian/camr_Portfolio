@@ -14,6 +14,8 @@ const termData = {
     linkedin: "https://www.linkedin.com/in/moradoadrian/",
     whatsapp: "https://wa.me/524614210058",
     github: `https://github.com/${GITHUB_USER}`,
+    youtube: "https://www.youtube.com/@moradoadrian",
+    tiktok: "https://www.tiktok.com/@devmorado",
   },
   experience: [
     { period: { es: "Feb 2026 - Presente", en: "Feb 2026 - Present" }, company: "IEEG", role: { es: "Ingeniero de Software", en: "Software Engineer" }, note: "Flutter · Angular · C# · Scrum" },
@@ -23,6 +25,7 @@ const termData = {
   ],
   projects: [
     { name: "surticel", desc: { es: "Plataforma de pedidos B2B (PWA)", en: "B2B ordering platform (PWA)" }, url: "https://surticel.com" },
+    { name: "bot-video-creator", desc: { es: "Videos de programación con IA", en: "AI programming videos" }, url: "https://www.youtube.com/@moradoadrian" },
     { name: "celebra-ya", desc: { es: "Estudio de invitaciones digitales", en: "Digital invitation studio" }, url: "https://celebra-ya.com" },
     { name: "purple-wings", desc: { es: "App de pedidos por WhatsApp", en: "WhatsApp ordering app" }, url: "https://purple-wings.netlify.app/#/inicio" },
     { name: "logpath", desc: { es: "Telemetría POS (hackathon midudev)", en: "POS telemetry (midudev hackathon)" }, url: "https://github.com/moradoadrian/LogPath" },
@@ -234,6 +237,8 @@ const quickCommands = ["help", "projects", "experience", "github", "contact", "s
         row("linkedin", { text: "in/moradoadrian", href: c.linkedin });
         row("whatsapp", { text: lang() === "es" ? "escríbeme" : "message me", href: c.whatsapp });
         row("github", { text: "moradoadrian", href: c.github });
+        row("youtube", { text: "@moradoadrian", href: c.youtube });
+        row("tiktok", { text: "@devmorado", href: c.tiktok });
       },
     },
     cv: {
