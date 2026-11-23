@@ -33,7 +33,7 @@ const cardSizes = "(min-width: 768px) 470px, 100vw";
     </div>
 
     <!-- Featured (Highlighted) Case Study Card - Full Width on desktop -->
-    <div class="project-featured-card group relative rounded-md mb-16 opacity-0 translate-y-10 p-[2px] bg-gradient-to-br from-purple-500/70 via-slate-800 to-emerald-500/60 shadow-[0_0_40px_rgba(168,85,247,0.15)] hover:shadow-[0_0_60px_rgba(168,85,247,0.25)] transition-shadow duration-500">
+    <div class="project-featured-card group relative rounded-md mb-16 p-[2px] bg-gradient-to-br from-purple-500/70 via-slate-800 to-emerald-500/60 shadow-[0_0_40px_rgba(168,85,247,0.15)] hover:shadow-[0_0_60px_rgba(168,85,247,0.25)] transition-shadow duration-500">
       <div class="relative bg-slate-950 rounded-[5px] p-6 md:p-8">
         <div class="absolute top-0 left-0 flex items-stretch font-mono text-[10px] tracking-widest uppercase font-bold">
           <span class="bg-purple-600 text-white px-3 py-1 rounded-br-md" data-i18n="proj.featuredLabel">SISTEMA_DESTACADO_PRINCIPAL</span>
@@ -173,7 +173,7 @@ const cardSizes = "(min-width: 768px) 470px, 100vw";
     <div class="grid md:grid-cols-2 gap-8">
       {
         generalProjects.map((project, i) => (
-          <div class="project-card group relative bg-slate-950 border-2 border-slate-800 hover:border-purple-500/80 transition-all duration-300 hover:shadow-[0_0_25px_rgba(168,85,247,0.12)] p-6 rounded-md flex flex-col justify-between opacity-0 translate-y-10 md:[&:last-child:nth-child(odd)]:col-span-2 md:[&:last-child:nth-child(odd)]:w-full md:[&:last-child:nth-child(odd)]:max-w-[calc(50%-1rem)] md:[&:last-child:nth-child(odd)]:mx-auto">
+          <div class="project-card group relative bg-slate-950 border-2 border-slate-800 hover:border-purple-500/80 transition-all duration-300 hover:shadow-[0_0_25px_rgba(168,85,247,0.12)] p-6 rounded-md flex flex-col justify-between md:[&:last-child:nth-child(odd)]:col-span-2 md:[&:last-child:nth-child(odd)]:w-full md:[&:last-child:nth-child(odd)]:max-w-[calc(50%-1rem)] md:[&:last-child:nth-child(odd)]:mx-auto">
 
             <div>
               <!-- Mini browser frame -->
@@ -282,32 +282,36 @@ const cardSizes = "(min-width: 768px) 470px, 100vw";
 
   gsap.registerPlugin(ScrollTrigger);
 
-  // Fade in & Slide Up scroll reveal
-  gsap.to(".project-featured-card", {
-    scrollTrigger: {
-      trigger: ".project-featured-card",
-      start: "top bottom-=80",
-      toggleActions: "play none none reverse",
-    },
-    opacity: 1,
-    y: 0,
-    duration: 0.8,
-    ease: "power3.out"
-  });
-
-  const cards = document.querySelectorAll(".project-card");
-  cards.forEach((card, i) => {
-    gsap.to(card, {
+  const mm = gsap.matchMedia();
+  mm.add("(prefers-reduced-motion: no-preference)", () => {
+    gsap.from(".project-featured-card", {
       scrollTrigger: {
-        trigger: card,
+        trigger: ".project-featured-card",
         start: "top bottom-=80",
         toggleActions: "play none none reverse",
       },
-      opacity: 1,
-      y: 0,
-      duration: 0.8,
-      delay: (i % 2) * 0.12,
-      ease: "power3.out"
+      opacity: 0,
+      y: 32,
+      duration: 0.7,
+      ease: "power3.out",
+      clearProps: "transform,opacity",
+    });
+
+    const cards = document.querySelectorAll(".project-card");
+    cards.forEach((card, i) => {
+      gsap.from(card, {
+        scrollTrigger: {
+          trigger: card,
+          start: "top bottom-=80",
+          toggleActions: "play none none reverse",
+        },
+        opacity: 0,
+        y: 32,
+        duration: 0.7,
+        delay: (i % 2) * 0.1,
+        ease: "power3.out",
+        clearProps: "transform,opacity",
+      });
     });
   });
 </script>

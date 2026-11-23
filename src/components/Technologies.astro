@@ -282,17 +282,17 @@ const techCategories = [
                     <div class={`tech-logo-wrapper ${skill.name === 'Git' ? 'w-[54px] h-[54px]' : 'w-12 h-12'} flex items-center justify-center mb-1`} set:html={skill.icon} />
                     
                     <div class="w-full text-center flex flex-col items-center">
-                      <span class="text-[10px] font-mono font-bold text-slate-300 group-hover/skill:text-purple-300 transition-colors tracking-tight truncate w-full px-1">
+                      <span class="text-[11px] font-mono font-bold text-slate-200 group-hover/skill:text-purple-300 transition-colors tracking-tight truncate w-full px-1">
                         {skill.name}
                       </span>
                       
                       <!-- Experience Level & Years -->
-                      <span class="text-[8px] font-mono text-slate-500 tracking-tighter truncate w-full mt-0.5">
+                      <span class="text-[10px] font-mono text-slate-400 tracking-tighter truncate w-full mt-0.5">
                         <span data-i18n={`tech.years.${skill.years.charAt(0)}`}>{skill.years}</span> · <span data-i18n={`tech.${skill.level.toLowerCase()}`}>{skill.level}</span>
                       </span>
 
                       <!-- Terminal Progress Bar indicator -->
-                      <span class="text-[7px] font-mono text-purple-500/40 group-hover/skill:text-purple-400/80 transition-colors select-none tracking-tighter mt-1">
+                      <span aria-hidden="true" class="text-[8px] font-mono text-purple-400/50 group-hover/skill:text-purple-400/90 transition-colors select-none tracking-tighter mt-1">
                         [{skill.progress}]
                       </span>
                     </div>
@@ -356,26 +356,23 @@ const techCategories = [
 
   gsap.registerPlugin(ScrollTrigger);
 
-  const categories = document.querySelectorAll(".tech-category");
-
-  categories.forEach((category, index) => {
-    gsap.fromTo(category, 
-      {
-        opacity: 0,
-        y: 40,
-      },
-      {
+  const mm = gsap.matchMedia();
+  mm.add("(prefers-reduced-motion: no-preference)", () => {
+    const categories = document.querySelectorAll(".tech-category");
+    categories.forEach((category, index) => {
+      gsap.from(category, {
         scrollTrigger: {
           trigger: category,
           start: "top bottom-=100",
           toggleActions: "play none none reverse",
         },
-        opacity: 1,
-        y: 0,
-        duration: 0.8,
-        delay: index * 0.12,
+        opacity: 0,
+        y: 36,
+        duration: 0.75,
+        delay: index * 0.1,
         ease: "power3.out",
-      }
-    );
+        clearProps: "transform,opacity",
+      });
+    });
   });
 </script>

@@ -186,16 +186,17 @@ const links = [
   const mobileMenu = document.getElementById("mobile-menu");
   const mobileLinks = document.querySelectorAll(".mobile-link");
 
-  // Scroll effect
+  // Scroll effect (passive + state-guarded)
+  let isScrolled = false;
   window.addEventListener("scroll", () => {
-    if (window.scrollY > 50) {
-      navbar?.classList.add("bg-slate-950/98", "shadow-[0_4px_30px_rgba(0,0,0,0.8)]", "border-purple-500/20");
-      navbar?.classList.remove("bg-slate-950/90");
-    } else {
-      navbar?.classList.remove("bg-slate-950/98", "shadow-[0_4px_30px_rgba(0,0,0,0.8)]", "border-purple-500/20");
-      navbar?.classList.add("bg-slate-950/90");
-    }
-  });
+    const next = window.scrollY > 50;
+    if (next === isScrolled) return;
+    isScrolled = next;
+    navbar?.classList.toggle("bg-slate-950/98", next);
+    navbar?.classList.toggle("shadow-[0_4px_30px_rgba(0,0,0,0.8)]", next);
+    navbar?.classList.toggle("border-purple-500/20", next);
+    navbar?.classList.toggle("bg-slate-950/90", !next);
+  }, { passive: true });
 
   // Mobile menu toggle
   const toggleMenu = () => {

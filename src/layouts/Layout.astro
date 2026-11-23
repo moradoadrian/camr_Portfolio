@@ -10,11 +10,10 @@ interface Props {
   title?: string;
   description?: string;
   image?: string;
-  // The boot animation only makes sense on the landing page
   bootLoader?: boolean;
 }
 
-const { title, description, image, bootLoader = true } = Astro.props;
+const { title, description, image } = Astro.props;
 
 // Crawlers and link previews never run the i18n script, so the static head uses the default (es) copy.
 // Social networks require absolute URLs for og:image / og:url.
@@ -112,37 +111,21 @@ const customSeo = Boolean(title);
       href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=VT323&family=Fira+Code:wght@300;400;500;600&display=swap"
       rel="stylesheet"
     />
-
-    <!-- The boot animation plays once per browser session. Decided before first paint so later visits never flash it. -->
-    <script is:inline>
-      try { if (sessionStorage.getItem("booted")) document.documentElement.dataset.booted = ""; } catch {}
-    </script>
   </head>
   <body
     class="bg-slate-950 text-slate-200 font-mono overflow-x-clip"
     id="top"
   >
-    <!-- Scroll Progress Bar -->
-    <div id="scroll-progress" class="fixed top-0 left-0 h-[3px] bg-purple-500 z-[100] w-0 transition-all duration-100 shadow-[0_0_8px_rgba(168,85,247,0.8)]"></div>
+    <!-- Skip to main content (keyboard accessibility) -->
+    <a
+      href="#main-content"
+      class="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[200] focus:px-4 focus:py-2 focus:bg-purple-600 focus:text-white focus:text-xs focus:font-bold focus:rounded focus:shadow-lg"
+    >
+      Saltar al contenido principal
+    </a>
 
-    <!-- Initial System Loader -->
-    {bootLoader && (
-      <div id="initial-loader" class="fixed inset-0 bg-slate-950 z-[99999] flex items-center justify-center font-mono text-xs md:text-sm text-purple-400 p-6">
-        <div class="max-w-md w-full border border-purple-500/20 bg-slate-900/50 p-6 rounded shadow-2xl relative">
-          <div class="flex items-center justify-between border-b border-purple-500/20 pb-2 mb-4 text-[10px] text-slate-500">
-            <span>&gt; INITIALIZING_SYSTEM.EXE</span>
-            <span>VER 3.0.0</span>
-          </div>
-          <div id="loader-terminal-content" class="space-y-1.5 h-32 overflow-y-auto">
-            <!-- Lines will type in here -->
-          </div>
-          <div class="flex items-center gap-1 mt-4 pt-2 border-t border-purple-500/20 text-[10px] text-slate-500">
-            <span>$</span>
-            <span class="w-1.5 h-3 bg-purple-400 animate-pulse"></span>
-          </div>
-        </div>
-      </div>
-    )}
+    <!-- Scroll Progress Bar (GPU-composited via scaleX) -->
+    <div id="scroll-progress" class="fixed top-0 left-0 h-[3px] w-full origin-left scale-x-0 bg-purple-500 z-[100] will-change-transform shadow-[0_0_8px_rgba(168,85,247,0.8)]"></div>
 
     <!-- Back to Top Button -->
     <a
@@ -174,26 +157,6 @@ const customSeo = Boolean(title);
 
     <slot />
     <CommandPalette />
-    <!-- Inline, because it has to run when the bundled scripts below fail to load. That also leaves
-         gsap unable to reveal what starts hidden, so this reveals it. Setting data-booted hides the
-         loader, and makes the bundled script skip the animation if it arrives late. -->
-    <script is:inline>
-      setTimeout(() => {
-        if (window.__bootDone) return;
-        document.documentElement.dataset.booted = "";
-        document.querySelectorAll(".opacity-0.translate-y-10, .hero-image").forEach((el) => {
-          el.classList.remove("opacity-0", "translate-y-10", "scale-50");
-        });
-        // The custom cursor needs gsap too, so bring back the native one until it arrives (if it ever does)
-        const cursors = document.querySelectorAll(".custom-cursor, .cursor-follower");
-        const showCustomCursor = (show) => {
-          document.body.style.cursor = show ? "" : "auto";
-          cursors.forEach((el) => { el.style.display = show ? "" : "none"; });
-        };
-        showCustomCursor(false);
-        window.addEventListener("loaderComplete", () => showCustomCursor(true), { once: true });
-      }, 6000);
-    </script>
     <script>
       import { gsap } from "gsap";
       import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -348,74 +311,31 @@ const customSeo = Boolean(title);
         });
       }
 
-      // Scroll Progress Bar & Back-to-Top Button Update
+      // Scroll Progress Bar & Back-to-Top Button Update (passive + rAF-throttled)
       const progressBar = document.getElementById("scroll-progress");
       const backToTopBtn = document.getElementById("back-to-top");
-      window.addEventListener("scroll", () => {
+      let scrollTicking = false;
+      const updateScrollUI = () => {
+        scrollTicking = false;
         const scrollPosition = window.scrollY;
         const documentHeight = document.documentElement.scrollHeight - window.innerHeight;
-        
+
         if (documentHeight > 0) {
-          const scrollPercent = (scrollPosition / documentHeight) * 100;
-          if (progressBar) progressBar.style.width = `${scrollPercent}%`;
-          
-          if (scrollPosition / documentHeight > 0.3) {
-            backToTopBtn?.classList.remove("translate-y-20", "opacity-0");
-          } else {
-            backToTopBtn?.classList.add("translate-y-20", "opacity-0");
-          }
+          const ratio = Math.min(1, Math.max(0, scrollPosition / documentHeight));
+          if (progressBar) progressBar.style.transform = `scaleX(${ratio})`;
+
+          const showBackToTop = ratio > 0.3;
+          backToTopBtn?.classList.toggle("translate-y-20", !showBackToTop);
+          backToTopBtn?.classList.toggle("opacity-0", !showBackToTop);
         }
-      });
-
-      // Initial Loader Logic
-      const loader = document.getElementById("initial-loader");
-      const loaderContent = document.getElementById("loader-terminal-content");
-      
-      const loadingSteps = [
-        { text: "Initializing Portfolio...", delay: 80 },
-        { text: "Loading Components...", delay: 200 },
-        { text: "Loading Projects...", delay: 350 },
-        { text: "Loading Certifications...", delay: 500 },
-        { text: "Done.", delay: 650 }
-      ];
-
-      // Listeners that register after this runs (e.g. the hero) check the flag instead of waiting for the event
-      const bootDone = () => {
-        (window as any).__bootDone = true;
-        window.dispatchEvent(new Event("loaderComplete"));
       };
-      const alreadyBooted = "booted" in document.documentElement.dataset;
-
-      if (loader && loaderContent && !alreadyBooted) {
-        try { sessionStorage.setItem("booted", "1"); } catch {}
-        document.documentElement.style.overflow = "hidden";
-
-        loadingSteps.forEach(step => {
-          setTimeout(() => {
-            const p = document.createElement("p");
-            p.innerText = `> ${step.text}`;
-            p.className = step.text === "Done." ? "text-green-400 font-bold" : "text-purple-300";
-            loaderContent.appendChild(p);
-          }, step.delay);
-        });
-
-        // Hide loader & emit complete event
-        setTimeout(() => {
-          gsap.to(loader, {
-            opacity: 0,
-            duration: 0.4,
-            ease: "power2.out",
-            onComplete: () => {
-              loader.classList.add("hidden");
-              document.documentElement.style.overflow = "";
-              bootDone();
-            }
-          });
-        }, 900);
-      } else {
-        loader?.remove();
-        bootDone();
-      }
+      window.addEventListener("scroll", () => {
+        if (!scrollTicking) {
+          scrollTicking = true;
+          requestAnimationFrame(updateScrollUI);
+        }
+      }, { passive: true });
+      updateScrollUI();
     </script>
   </body>
 </html>

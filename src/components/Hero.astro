@@ -13,7 +13,7 @@ const photo = await responsive("profile.jpg", [320, 512, 700]);
   >
     <!-- Profile Image -->
     <div
-      class="hero-image relative w-64 h-64 md:w-[350px] md:h-[350px] shrink-0 opacity-0 scale-50"
+      class="hero-image relative w-64 h-64 md:w-[350px] md:h-[350px] shrink-0"
     >
       <div
         class="absolute inset-0 bg-purple-600 opacity-20 translate-x-3 translate-y-3"
@@ -44,33 +44,32 @@ const photo = await responsive("profile.jpg", [320, 512, 700]);
     <!-- Text Content -->
     <div class="text-center md:text-left">
       <h2
-        class="hero-subtitle text-xl md:text-2xl text-purple-400 font-pixel mb-2 opacity-0 translate-y-10"
+        class="hero-subtitle text-xl md:text-2xl text-purple-400 font-pixel mb-2"
         data-i18n="hero.subtitle"
       >
         &lt;Hola_Mundo /&gt;
       </h2>
       <h1
-        class="hero-title text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold font-pixel text-white mb-4 opacity-0 translate-y-10 tracking-tight leading-tight"
+        class="hero-title text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold font-pixel text-white mb-4 tracking-tight leading-tight"
       >
-        <!-- Real text in the HTML for crawlers and screen readers; the script retypes it -->
         <span class="hero-first-name block">César Adrián</span>
         <span class="hero-last-name block text-purple-500">Morado Rodríguez</span>
       </h1>
       <p
-        class="hero-role text-lg md:text-xl text-slate-300 mb-4 opacity-0 translate-y-10 font-mono border-l-2 border-purple-500 pl-4"
+        class="hero-role text-lg md:text-xl text-slate-300 mb-4 font-mono border-l-2 border-purple-500 pl-4"
       >
         &gt; <span data-i18n="hero.role">Software Engineer | Angular · Flutter · TypeScript</span><span class="animate-pulse">_</span>
       </p>
       
       <p
-        class="hero-description text-sm md:text-base text-slate-400 mb-6 max-w-xl leading-relaxed font-mono opacity-0 translate-y-10 text-pretty md:text-left"
+        class="hero-description text-sm md:text-base text-slate-400 mb-6 max-w-xl leading-relaxed font-mono text-pretty md:text-left"
         data-i18n="hero.description"
       >
         Desarrollo aplicaciones web escalables enfocadas en el rendimiento, la experiencia de usuario y arquitectura limpia para instituciones gubernamentales y empresas privadas.
       </p>
 
       <!-- Profile status: one compact card on phones, loose chips + stat row from md up -->
-      <div class="hero-info mx-auto md:mx-0 mb-8 w-full max-w-sm md:max-w-none font-mono opacity-0 translate-y-10 rounded-md border border-slate-800 bg-slate-900/60 backdrop-blur-sm md:border-0 md:bg-transparent md:backdrop-blur-none">
+      <div class="hero-info mx-auto md:mx-0 mb-8 w-full max-w-sm md:max-w-none font-mono rounded-md border border-slate-800 bg-slate-900/60 backdrop-blur-sm md:border-0 md:bg-transparent md:backdrop-blur-none">
         <ul class="flex flex-col gap-2 p-4 text-xs text-slate-300 md:flex-row md:flex-wrap md:gap-3 md:p-0 md:mb-5 md:text-slate-400">
           <li class="flex items-center gap-2.5 md:gap-1.5 md:bg-slate-900/60 md:border md:border-slate-800 md:px-2.5 md:py-1 md:rounded">
             <svg class="w-3.5 h-3.5 shrink-0 text-purple-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657 13.414 20.9a2 2 0 0 1-2.827 0l-4.244-4.243a8 8 0 1 1 11.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/></svg>
@@ -106,7 +105,7 @@ const photo = await responsive("profile.jpg", [320, 512, 700]);
       </div>
 
       <div
-        class="hero-buttons flex flex-wrap gap-4 justify-center md:justify-start opacity-0 translate-y-10 font-pixel text-lg"
+        class="hero-buttons flex flex-wrap gap-4 justify-center md:justify-start font-pixel text-lg"
       >
         <a
           href="#projects"
@@ -156,74 +155,17 @@ const photo = await responsive("profile.jpg", [320, 512, 700]);
 <script>
   import { gsap } from "gsap";
 
-  /**
-   * Typewriter effect — animates PLAIN TEXT only.
-   * Never pass HTML strings to this function.
-   */
-  const typeWriterPlain = (
-    element: HTMLElement,
-    text: string,
-    speed = 20,
-    callback?: () => void
-  ) => {
-    element.textContent = "";
-    element.classList.remove("opacity-0", "translate-y-10");
-    let i = 0;
-    const interval = setInterval(() => {
-      if (i < text.length) {
-        element.textContent += text.charAt(i);
-        i++;
-      } else {
-        clearInterval(interval);
-        if (callback) callback();
-      }
-    }, speed);
-  };
-
-  const startHero = () => {
-    // --- Subtitle ---
-    const subtitleEl = document.querySelector<HTMLElement>(".hero-subtitle");
-    // The subtitle text is plain (e.g. "<Hola_Mundo />") — safe to read as textContent
-    const subtitleText = subtitleEl?.textContent?.trim() ?? "<Hola_Mundo />";
-
-    // --- Title: two independent spans for plain-text animation ---
-    const firstNameEl  = document.querySelector<HTMLElement>(".hero-first-name");
-    const lastNameEl   = document.querySelector<HTMLElement>(".hero-last-name");
-    // Read the names from the markup (single source) before the typewriter clears them
-    const firstName    = firstNameEl?.textContent?.trim() ?? "";
-    const lastName     = lastNameEl?.textContent?.trim() ?? "";
-    // Make the h1 wrapper visible immediately (it controls layout)
-    const titleEl      = document.querySelector<HTMLElement>(".hero-title");
-    if (titleEl) titleEl.classList.remove("opacity-0", "translate-y-10");
-
+  // Respect prefers-reduced-motion and never hide LCP elements (photo / h1) at opacity 0 before paint
+  const mm = gsap.matchMedia();
+  mm.add("(prefers-reduced-motion: no-preference)", () => {
     const tl = gsap.timeline({ defaults: { ease: "power2.out" } });
-
-    // 1. Photo: fade + scale
-    tl.to(".hero-image", { opacity: 1, scale: 1, duration: 0.7 });
-
-    // 2. Typewriter subtitle (plain text)
-    if (subtitleEl) {
-      typeWriterPlain(subtitleEl, subtitleText, 35, () => {
-        // 3. Typewriter firstName then lastName
-        if (firstNameEl) {
-          typeWriterPlain(firstNameEl, firstName, 25, () => {
-            if (lastNameEl) {
-              typeWriterPlain(lastNameEl, lastName, 25);
-            }
-          });
-        }
-      });
-    }
-
-    // 4. Staggered fade-up for the rest of the hero content
-    tl.to(".hero-role",        { opacity: 1, y: 0, duration: 0.4 }, "-=0.3")
-      .to(".hero-description", { opacity: 1, y: 0, duration: 0.4 }, "-=0.3")
-      .to(".hero-info",        { opacity: 1, y: 0, duration: 0.4 }, "-=0.3")
-      .to(".hero-badges",      { opacity: 1, y: 0, duration: 0.4 }, "-=0.3")
-      .to(".hero-buttons",     { opacity: 1, y: 0, duration: 0.5 }, "-=0.3");
-  };
-
-  // The layout may have finished booting before this script ran (loader skipped on repeat visits)
-  if ((window as any).__bootDone) startHero();
-  else window.addEventListener("loaderComplete", startHero, { once: true });
+    tl.from(".hero-image", { scale: 0.96, duration: 0.45 })
+      .from(".hero-subtitle, .hero-role, .hero-description, .hero-info, .hero-buttons", {
+        y: 14,
+        opacity: 0,
+        duration: 0.4,
+        stagger: 0.07,
+        clearProps: "transform,opacity",
+      }, "-=0.25");
+  });
 </script>
