@@ -5,9 +5,14 @@ import {
   siJavascript,
   siHtml5,
   siTailwindcss,
+  siAstro,
+  siFlutter,
+  siDart,
+  siReact,
   siPython,
   siPhp,
   siNodedotjs,
+  siSupabase,
   siFirebase,
   siMysql,
   siPostgresql,
@@ -92,6 +97,13 @@ const techCategories = [
         level: "Advanced",
         progress: "■■■■■■■■□□",
         icon: brandIcon(siTailwindcss)
+      },
+      {
+        name: "Astro",
+        years: "2+ Yrs",
+        level: "Advanced",
+        progress: "■■■■■■■■□□",
+        icon: brandIcon(siAstro)
       }
     ]
   },
@@ -134,11 +146,25 @@ const techCategories = [
     icon: "📦",
     skills: [
       {
+        name: "Supabase",
+        years: "2+ Yrs",
+        level: "Advanced",
+        progress: "■■■■■■■■□□",
+        icon: brandIcon(siSupabase)
+      },
+      {
         name: "Firebase",
         years: "3+ Yrs",
         level: "Advanced",
         progress: "■■■■■■■■□□",
         icon: brandIcon(siFirebase)
+      },
+      {
+        name: "PostgreSQL",
+        years: "3+ Yrs",
+        level: "Advanced",
+        progress: "■■■■■■■■□□",
+        icon: brandIcon(siPostgresql)
       },
       {
         name: "MySQL",
@@ -153,26 +179,33 @@ const techCategories = [
         level: "Advanced",
         progress: "■■■■■■■■□□",
         icon: `<svg viewBox="0 0 24 24" class="w-full h-full object-contain" xmlns="http://www.w3.org/2000/svg"><title>Oracle</title><path d="M16.412 4.412h-8.82a7.588 7.588 0 0 0-.008 15.176h8.828a7.588 7.588 0 0 0 0-15.176zm-.193 12.502H7.786a4.915 4.915 0 0 1 0-9.828h8.433a4.914 4.914 0 1 1 0 9.828z" fill="#F80000"/></svg>`
-      },
-      {
-        name: "PostgreSQL",
-        years: "3+ Yrs",
-        level: "Advanced",
-        progress: "■■■■■■■■□□",
-        icon: brandIcon(siPostgresql)
       }
     ]
   },
   {
-    name: "TOOLS_&_OTHERS",
-    icon: "🛠️",
+    name: "MOBILE_&_TOOLS",
+    icon: "📱",
     skills: [
       {
-        name: "Git",
-        years: "5+ Yrs",
-        level: "Expert",
-        progress: "■■■■■■■■■■",
-        icon: brandIcon(siGit)
+        name: "Flutter",
+        years: "2+ Yrs",
+        level: "Advanced",
+        progress: "■■■■■■■■□□",
+        icon: brandIcon(siFlutter)
+      },
+      {
+        name: "Dart",
+        years: "2+ Yrs",
+        level: "Advanced",
+        progress: "■■■■■■■■□□",
+        icon: brandIcon(siDart)
+      },
+      {
+        name: "React Native",
+        years: "2+ Yrs",
+        level: "Intermediate",
+        progress: "■■■■■■□□□□",
+        icon: brandIcon(siReact)
       },
       {
         name: "Capacitor",
@@ -180,6 +213,13 @@ const techCategories = [
         level: "Advanced",
         progress: "■■■■■■■□□□",
         icon: brandIcon(siCapacitor)
+      },
+      {
+        name: "Git",
+        years: "5+ Yrs",
+        level: "Expert",
+        progress: "■■■■■■■■■■",
+        icon: brandIcon(siGit)
       },
       {
         name: "VS Code",
@@ -234,8 +274,8 @@ const techCategories = [
               <div class="grid grid-cols-2 gap-3">
                 {category.skills.map((skill) => (
                   <div 
-                    class={`flex flex-col items-center justify-between p-3 ${skill.name === 'Git' ? 'p-2' : ''} bg-slate-955/40 border border-slate-900 hover:bg-purple-950/15 hover:border-purple-500/30 transition-all duration-300 group/skill relative overflow-hidden rounded cursor-default min-h-[140px]`}
-                    data-i18n-tooltip={`tooltip.${skill.name.toLowerCase().replace(/\s+/g, '').replace('.', '')}`}
+                    class={`flex flex-col items-center justify-between p-3 ${skill.name === 'Git' ? 'p-2' : ''} bg-slate-950/60 border border-slate-900 hover:bg-purple-950/15 hover:border-purple-500/30 transition-all duration-300 group/skill relative overflow-hidden rounded cursor-default min-h-[140px]`}
+                    data-i18n-tooltip={`tooltip.${skill.name.toLowerCase().replace('#', 'sharp').replace(/\s+/g, '').replace('.', '')}`}
                     data-tooltip=""
                   >
                     <!-- Tech Logo wrapper to enforce uniform size and centering -->

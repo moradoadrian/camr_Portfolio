@@ -1,0 +1,55 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Footer from "../components/Footer.astro";
+---
+
+<Layout
+  title="404 · Ruta no encontrada | César Adrián Morado"
+  description="La página que buscas no existe en el portafolio de César Adrián Morado."
+  bootLoader={false}
+>
+  <main class="relative z-10 min-h-[75vh] flex items-center justify-center px-4 pt-28 pb-16 font-mono">
+    <div class="max-w-xl w-full bg-slate-950 border-2 border-slate-800 rounded-md overflow-hidden shadow-2xl">
+      <div class="bg-slate-900 px-4 py-2.5 flex items-center gap-2 border-b border-slate-800">
+        <span class="w-2.5 h-2.5 rounded-full bg-red-500/80"></span>
+        <span class="w-2.5 h-2.5 rounded-full bg-yellow-500/80"></span>
+        <span class="w-2.5 h-2.5 rounded-full bg-green-500/80"></span>
+        <span class="ml-2 text-xs text-slate-500">404.sh</span>
+      </div>
+
+      <div class="p-6 sm:p-8 text-center">
+        <p class="text-[11px] tracking-[0.25em] text-purple-400 uppercase mb-3" data-i18n="notfound.kicker">
+          // ERROR_DE_RUTA
+        </p>
+        <h1 class="font-pixel text-7xl sm:text-8xl text-white leading-none mb-2">
+          4<span class="text-purple-500">0</span>4
+        </h1>
+        <h2 class="font-pixel text-2xl sm:text-3xl text-slate-200 mb-4" data-i18n="notfound.title">
+          Ruta no encontrada
+        </h2>
+        <p class="text-xs sm:text-sm text-slate-400 leading-relaxed text-pretty mb-8" data-i18n="notfound.desc">
+          El recurso que buscas no existe o fue movido. Puedes volver al inicio, explorar mis proyectos o abrir la paleta de comandos.
+        </p>
+
+        <div class="flex flex-wrap items-center justify-center gap-3 font-pixel text-base">
+          <a
+            href="/"
+            class="px-5 py-2.5 bg-purple-600 hover:bg-purple-500 text-white transition-all hover:-translate-y-0.5 hover:shadow-[0_0_20px_rgba(168,85,247,0.45)]"
+            data-i18n="notfound.home"
+          >
+            [ VOLVER_AL_INICIO ]
+          </a>
+          <a
+            href="/#projects"
+            class="px-5 py-2.5 border border-purple-500/60 text-purple-300 hover:bg-purple-500/10 hover:border-purple-400 transition-all hover:-translate-y-0.5"
+            data-i18n="notfound.projects"
+          >
+            [ VER_PROYECTOS ]
+          </a>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <Footer />
+</Layout>

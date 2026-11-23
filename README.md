@@ -1,47 +1,49 @@
-# Astro Starter Kit: Basics
+# Portafolio — César Adrián Morado Rodríguez
 
-```sh
-npm create astro@latest -- --template basics
+Portafolio personal construido con **Astro 5**, **Tailwind CSS** y **GSAP**, diseñado con estética retro-terminal y enfocado en rendimiento, casos de estudio reales y herramientas interactivas para recruiters y clientes.
+
+🌐 **Sitio en producción:** [camr-portfolio.vercel.app](https://camr-portfolio.vercel.app)
+
+---
+
+## Características principales
+
+- **Casos de estudio detallados (`/projects/[slug]`)**: arquitectura, problema, solución, impacto y capturas optimizadas en WebP/AVIF.
+- **Depurador visual de JavaScript**: ejecuta código paso a paso en un Web Worker aislado usando `acorn`, mostrando línea activa, call stack, variables y consola.
+- **Analizador de vacantes (`Job Match`)**: compara descripciones de puestos en el navegador contra la experiencia del portafolio con enlaces de evidencia.
+- **Terminal interactiva y paleta de comandos (`Ctrl+K` / `⌘K`)**: navegación rápida, historial de comandos, autocompletado y easter eggs.
+- **Datos en build time**: estadísticas y calendario de contribuciones de GitHub + últimos Shorts de YouTube vía RSS con fallback seguro.
+- **Soporte bilingüe (ES / EN)** y formulario de contacto conectado a Web3Forms con fallback a `mailto:`.
+
+---
+
+## Stack técnico
+
+- [Astro 5](https://astro.build/) + `@astrojs/sitemap`
+- [Tailwind CSS](https://tailwindcss.com/)
+- [GSAP](https://gsap.com/) (ScrollTrigger)
+- [Acorn](https://github.com/acornjs/acorn) (AST para el depurador visual)
+- [Simple Icons](https://simpleicons.org/)
+
+---
+
+## Desarrollo local
+
+```bash
+npm install
+npm run dev      # Inicia servidor local en http://localhost:4321
+npm run build    # Genera build de producción en ./dist/
+npm run preview  # Previsualiza el build localmente
 ```
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
-
-## 🚀 Project Structure
-
-Inside of your Astro project, you'll see the following folders and files:
+## Estructura del proyecto
 
 ```text
-/
-├── public/
-│   └── favicon.svg
-├── src
-│   ├── assets
-│   │   └── astro.svg
-│   ├── components
-│   │   └── Welcome.astro
-│   ├── layouts
-│   │   └── Layout.astro
-│   └── pages
-│       └── index.astro
-└── package.json
+src/
+├── assets/        # Imágenes optimizadas en build time (perfil, proyectos, certificados)
+├── components/    # Secciones y widgets interactivos (Hero, Projects, Debugger, JobMatch, etc.)
+├── data/          # Datos estructurados (projects.ts, skills.ts)
+├── layouts/       # Layout principal, SEO, JSON-LD e i18n
+├── lib/           # Utilidades (images.ts, github.ts, youtube.ts, debugger.ts, tech-icons.ts)
+└── pages/         # Rutas (index.astro, 404.astro, projects/[slug].astro)
 ```
-
-To learn more about the folder structure of an Astro project, refer to [our guide on project structure](https://docs.astro.build/en/basics/project-structure/).
-
-## 🧞 Commands
-
-All commands are run from the root of the project, from a terminal:
-
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
-
-## 👀 Want to learn more?
-
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
-# camr_Portfolio
