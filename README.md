@@ -32,6 +32,7 @@ Portafolio personal construido con **Astro 5**, **Tailwind CSS** y **GSAP**, dis
 ```bash
 npm install
 npm run dev      # Inicia servidor local en http://localhost:4321
+npm test         # Ejecuta la suite de pruebas unitarias (Vitest)
 npm run build    # Genera build de producción en ./dist/
 npm run preview  # Previsualiza el build localmente
 ```

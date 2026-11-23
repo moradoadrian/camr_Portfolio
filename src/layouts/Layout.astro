@@ -3,7 +3,7 @@ import Navbar from "../components/Navbar.astro";
 import CustomCursor from "../components/CustomCursor.astro";
 import CommandPalette from "../components/CommandPalette.astro";
 import 'overlayscrollbars/overlayscrollbars.css';
-import es from "../../public/assets/i18n/es.json";
+import es from "../data/i18n/es.json";
 
 interface Props {
   // Per-page SEO (project pages). Omitted on the home page, which uses the i18n seo.* copy.
@@ -161,8 +161,8 @@ const customSeo = Boolean(title);
       import { gsap } from "gsap";
       import { ScrollTrigger } from "gsap/ScrollTrigger";
       import { OverlayScrollbars } from 'overlayscrollbars';
-      import es from '../../public/assets/i18n/es.json';
-      import en from '../../public/assets/i18n/en.json';
+      import es from '../data/i18n/es.json';
+      import en from '../data/i18n/en.json';
 
       gsap.registerPlugin(ScrollTrigger);
 

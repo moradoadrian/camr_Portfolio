@@ -177,9 +177,9 @@ const MAX_CHARS = 8000;
 </section>
 
 <script>
+  import { createJobMatcher, type MatchSkill as Skill, type MatchGap as Gap } from "../lib/job-match";
+
   type Source = { id: string; es: string; en: string; href: string };
-  type Skill = { id: string; label: string; en?: string; aliases: string[]; sources: string[] };
-  type Gap = { label: string; en?: string; aliases: string[] };
   type Lang = "es" | "en";
   type Data = {
     skills: Skill[];
@@ -196,34 +196,7 @@ const MAX_CHARS = 8000;
     const data = JSON.parse(dataEl.textContent ?? "{}") as Data;
     const sourceById = new Map(data.sources.map((s) => [s.id, s]));
     const $ = (id: string) => document.getElementById(id)!;
-
-    // Lowercase + strip accents so "Diseño móvil" matches the alias "diseno movil"
-    const normalize = (s: string) => s.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
-    const escapeRe = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-
-    // Longest aliases first, and each match is blanked out, so "react native" is not also read as "react"
-    const entries = [
-      ...data.skills.flatMap((s, i) => s.aliases.map((a) => ({ alias: a, kind: "skill" as const, index: i }))),
-      ...data.gaps.flatMap((g, i) => g.aliases.map((a) => ({ alias: a, kind: "gap" as const, index: i }))),
-    ]
-      .sort((a, b) => b.alias.length - a.alias.length)
-      .map((e) => ({ ...e, re: new RegExp(`(?<![a-z0-9])${escapeRe(e.alias)}(?![a-z0-9])`, "g") }));
-
-    const analyze = (text: string) => {
-      let haystack = ` ${normalize(text)} `;
-      const hits = new Set<number>();
-      const misses = new Set<number>();
-      for (const e of entries) {
-        e.re.lastIndex = 0;
-        if (!e.re.test(haystack)) continue;
-        (e.kind === "skill" ? hits : misses).add(e.index);
-        haystack = haystack.replace(e.re, (m) => " ".repeat(m.length));
-      }
-      return {
-        hits: [...hits].sort((a, b) => a - b).map((i) => data.skills[i]),
-        misses: [...misses].sort((a, b) => a - b).map((i) => data.gaps[i]),
-      };
-    };
+    const analyze = createJobMatcher(data.skills, data.gaps);
 
     const lang = (): Lang => (document.documentElement.lang === "en" ? "en" : "es");
     const t = (key: string, vars: Record<string, string | number> = {}) =>
