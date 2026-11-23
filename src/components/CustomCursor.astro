@@ -4,18 +4,18 @@
 
 <div
   aria-hidden="true"
-  class="custom-cursor hidden fixed top-0 left-0 w-4 h-4 bg-purple-500 pointer-events-none z-[9999] mix-blend-difference opacity-0 will-change-transform"
+  class="custom-cursor fixed top-0 left-0 w-4 h-4 pointer-events-none z-[10001] mix-blend-difference opacity-0 will-change-transform"
 >
+  <span class="custom-cursor-dot block w-full h-full bg-purple-500 transition-[transform,background-color] duration-150 ease-out"></span>
 </div>
 <div
   aria-hidden="true"
-  class="cursor-follower hidden fixed top-0 left-0 w-8 h-8 border-2 border-purple-400 pointer-events-none z-[9998] opacity-0 will-change-transform"
+  class="cursor-follower fixed top-0 left-0 w-8 h-8 pointer-events-none z-[10000] opacity-0 will-change-transform"
 >
+  <span class="cursor-follower-ring block w-full h-full border-2 border-purple-400 transition-[transform,border-color] duration-200 ease-out"></span>
 </div>
 
 <script>
-  import { gsap } from "gsap";
-
   const canUseCustomCursor =
     window.matchMedia("(pointer: fine)").matches &&
     !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -24,14 +24,6 @@
   const follower = document.querySelector<HTMLElement>(".cursor-follower");
 
   if (canUseCustomCursor && cursor && follower) {
-    cursor.classList.remove("hidden");
-    follower.classList.remove("hidden");
-
-    const setCursorX = gsap.quickSetter(cursor, "x", "px");
-    const setCursorY = gsap.quickSetter(cursor, "y", "px");
-    const setFollowerX = gsap.quickSetter(follower, "x", "px");
-    const setFollowerY = gsap.quickSetter(follower, "y", "px");
-
     let mouseX = 0;
     let mouseY = 0;
     let followerX = 0;
@@ -39,52 +31,59 @@
     let visible = false;
     let rafId = 0;
 
-    // Only animate while the follower is catching up — zero idle CPU usage
+    const show = () => {
+      if (visible) return;
+      visible = true;
+      cursor.style.opacity = "1";
+      follower.style.opacity = "1";
+      document.documentElement.classList.add("custom-cursor-active");
+    };
+
+    const hide = () => {
+      if (!visible) return;
+      visible = false;
+      cursor.style.opacity = "0";
+      follower.style.opacity = "0";
+      document.documentElement.classList.remove("custom-cursor-active");
+    };
+
     const tick = () => {
       const dx = mouseX - followerX;
       const dy = mouseY - followerY;
       followerX += dx * 0.18;
       followerY += dy * 0.18;
 
-      setFollowerX(followerX - 16);
-      setFollowerY(followerY - 16);
+      follower.style.transform = `translate3d(${followerX - 16}px, ${followerY - 16}px, 0)`;
 
       if (Math.abs(dx) > 0.25 || Math.abs(dy) > 0.25) {
         rafId = requestAnimationFrame(tick);
       } else {
         followerX = mouseX;
         followerY = mouseY;
-        setFollowerX(followerX - 16);
-        setFollowerY(followerY - 16);
+        follower.style.transform = `translate3d(${followerX - 16}px, ${followerY - 16}px, 0)`;
         rafId = 0;
       }
     };
 
-    document.addEventListener("mousemove", (e) => {
+    window.addEventListener("mousemove", (e) => {
       mouseX = e.clientX;
       mouseY = e.clientY;
 
       if (!visible) {
-        visible = true;
         followerX = mouseX;
         followerY = mouseY;
-        cursor.style.opacity = "1";
-        follower.style.opacity = "1";
+        follower.style.transform = `translate3d(${followerX - 16}px, ${followerY - 16}px, 0)`;
+        show();
       }
 
-      setCursorX(mouseX - 8);
-      setCursorY(mouseY - 8);
+      cursor.style.transform = `translate3d(${mouseX - 8}px, ${mouseY - 8}px, 0)`;
 
       if (!rafId) rafId = requestAnimationFrame(tick);
     }, { passive: true });
 
-    document.addEventListener("mouseleave", () => {
-      visible = false;
-      cursor.style.opacity = "0";
-      follower.style.opacity = "0";
-    });
+    document.addEventListener("mouseleave", hide);
+    window.addEventListener("blur", hide);
 
-    // Event delegation so dynamically rendered links/buttons (Terminal, JobMatch) work too
     const interactiveSelector = "a, button, [role='button'], input, textarea, select, label";
     let hovered = false;
 
@@ -92,21 +91,25 @@
       const isInteractive = Boolean((e.target as Element | null)?.closest(interactiveSelector));
       if (isInteractive === hovered) return;
       hovered = isInteractive;
-      if (hovered) {
-        gsap.to(cursor, { scale: 0.5, backgroundColor: "#fff", duration: 0.18, overwrite: "auto" });
-        gsap.to(follower, { scale: 1.5, borderColor: "#fff", rotation: 45, duration: 0.25, overwrite: "auto" });
-      } else {
-        gsap.to(cursor, { scale: 1, backgroundColor: "#a855f7", duration: 0.18, overwrite: "auto" });
-        gsap.to(follower, { scale: 1, borderColor: "#c084fc", rotation: 0, duration: 0.25, overwrite: "auto" });
-      }
+      cursor.classList.toggle("is-hover", hovered);
+      follower.classList.toggle("is-hover", hovered);
     }, { passive: true });
   }
 </script>
 
 <style is:global>
-  @media (pointer: fine) and (prefers-reduced-motion: no-preference) {
-    body {
-      cursor: none;
-    }
+  html.custom-cursor-active,
+  html.custom-cursor-active body {
+    cursor: none;
+  }
+
+  .custom-cursor.is-hover .custom-cursor-dot {
+    transform: scale(0.5);
+    background-color: #ffffff;
+  }
+
+  .cursor-follower.is-hover .cursor-follower-ring {
+    transform: scale(1.5) rotate(45deg);
+    border-color: #ffffff;
   }
 </style>
