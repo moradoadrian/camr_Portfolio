@@ -1,0 +1,21 @@
+name: Scheduled Redeploy (GitHub & YouTube refresh)
+
+on:
+  schedule:
+    # Every Monday at 12:00 UTC to refresh build-time GitHub contributions and YouTube Shorts
+    - cron: "0 12 * * 1"
+  workflow_dispatch:
+
+jobs:
+  redeploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Vercel Deploy Hook
+        env:
+          VERCEL_DEPLOY_HOOK_URL: ${{ secrets.VERCEL_DEPLOY_HOOK_URL }}
+        run: |
+          if [ -z "$VERCEL_DEPLOY_HOOK_URL" ]; then
+            echo "VERCEL_DEPLOY_HOOK_URL secret is not configured. Skipping."
+            exit 0
+          fi
+          curl -fsS -X POST "$VERCEL_DEPLOY_HOOK_URL"

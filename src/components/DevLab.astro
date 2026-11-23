@@ -1,0 +1,115 @@
+---
+import Debugger from "./Debugger.astro";
+import JobMatch from "./JobMatch.astro";
+import Terminal from "./Terminal.astro";
+
+const tabs = [
+  { id: "debugger", key: "lab.tabDebugger", label: "Depurador JS", icon: "{}" },
+  { id: "match", key: "lab.tabMatch", label: "Job Match", icon: "%" },
+  { id: "terminal", key: "lab.tabTerminal", label: "Terminal", icon: ">_" },
+] as const;
+---
+
+<section id="lab" class="py-24 px-4 relative border-t border-slate-900 bg-slate-950/30 overflow-hidden">
+  <div class="max-w-6xl mx-auto relative z-10 font-mono">
+    <div class="text-center mb-10">
+      <h2 class="text-2xl sm:text-4xl md:text-5xl text-balance font-bold font-pixel text-purple-400 mb-4 tracking-wider" data-i18n="lab.title">
+        &lt;Dev_Lab /&gt;
+      </h2>
+      <p class="text-xs text-slate-400 max-w-xl mx-auto text-pretty" data-i18n="lab.subtitle">
+        // Herramientas interactivas que corren 100% en tu navegador: depurador visual, compatibilidad de vacantes y terminal.
+      </p>
+    </div>
+
+    <!-- Tab Bar -->
+    <div class="flex flex-wrap justify-center gap-2 mb-8" role="tablist" aria-label="Herramientas interactivas">
+      {tabs.map((tab, idx) => (
+        <button
+          type="button"
+          role="tab"
+          id={`lab-tab-${tab.id}`}
+          aria-controls={`lab-panel-${tab.id}`}
+          aria-selected={idx === 0 ? "true" : "false"}
+          data-lab-tab={tab.id}
+          class="lab-tab inline-flex items-center gap-2 px-4 py-2.5 text-xs font-bold uppercase tracking-wider rounded border border-slate-800 bg-slate-900/60 text-slate-400 hover:border-purple-500/50 hover:text-purple-200 transition-all"
+        >
+          <span class="text-purple-400" aria-hidden="true">{tab.icon}</span>
+          <span data-i18n={tab.key}>{tab.label}</span>
+        </button>
+      ))}
+    </div>
+
+    <!-- Panels (preserving #debugger, #match, #terminal deep-link support) -->
+    <div class="lab-panels">
+      <div id="lab-panel-debugger" role="tabpanel" aria-labelledby="lab-tab-debugger" data-lab-panel="debugger">
+        <Debugger />
+      </div>
+      <div id="lab-panel-match" role="tabpanel" aria-labelledby="lab-tab-match" data-lab-panel="match" class="hidden">
+        <JobMatch />
+      </div>
+      <div id="lab-panel-terminal" role="tabpanel" aria-labelledby="lab-tab-terminal" data-lab-panel="terminal" class="hidden">
+        <Terminal />
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .lab-tab[aria-selected="true"] {
+    @apply border-purple-500 bg-purple-500/15 text-white shadow-[0_0_20px_rgba(168,85,247,0.2)];
+  }
+  /* Strip redundant outer vertical padding & top borders from nested tool sections */
+  .lab-panels :global(> div > section) {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    padding-left: 0;
+    padding-right: 0;
+    border-top: 0;
+    background: transparent;
+  }
+</style>
+
+<script>
+  const tabBtns = [...document.querySelectorAll<HTMLButtonElement>("[data-lab-tab]")];
+  const panels = [...document.querySelectorAll<HTMLElement>("[data-lab-panel]")];
+  const validTabs = new Set(tabBtns.map((b) => b.dataset.labTab!));
+
+  const activateTab = (id: string, focusPanel = false) => {
+    if (!validTabs.has(id)) return;
+    tabBtns.forEach((btn) => {
+      btn.setAttribute("aria-selected", String(btn.dataset.labTab === id));
+    });
+    panels.forEach((panel) => {
+      panel.classList.toggle("hidden", panel.dataset.labPanel !== id);
+    });
+    if (focusPanel) {
+      document.getElementById("lab")?.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
+  tabBtns.forEach((btn) => {
+    btn.addEventListener("click", () => activateTab(btn.dataset.labTab!));
+  });
+
+  // Sync deep links (#debugger, #match, #terminal) from CommandPalette, Footer, or URL
+  const syncFromHash = () => {
+    const hash = location.hash.replace("#", "");
+    if (validTabs.has(hash)) activateTab(hash, true);
+  };
+
+  window.addEventListener("hashchange", syncFromHash);
+  syncFromHash();
+
+  // Also intercept in-page clicks to #debugger, #match, #terminal (e.g., Footer "sudo hire-me")
+  document.addEventListener("click", (e) => {
+    const link = (e.target as Element | null)?.closest<HTMLAnchorElement>("a[href*='#']");
+    if (!link) return;
+    const url = new URL(link.href, location.href);
+    const hash = url.hash.replace("#", "");
+    if (url.pathname === location.pathname && validTabs.has(hash)) {
+      e.preventDefault();
+      activateTab(hash, true);
+      history.replaceState(null, "", `#${hash}`);
+    }
+  });
+</script>

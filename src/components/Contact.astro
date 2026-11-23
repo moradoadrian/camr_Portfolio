@@ -1,11 +1,12 @@
 ---
 import { siYoutube, siTiktok } from "simple-icons";
+import { PROFILE } from "../data/profile";
 
 // Web3Forms access key (https://web3forms.com). It is public by design: it only lets the form
 // deliver to the inbox it was created for. While it is empty, the form falls back to opening
 // the visitor's email app with the message already written.
-const WEB3FORMS_KEY = "c32732b3-7e48-4ca1-b20d-c76fadb0af3c";
-const EMAIL = "moradoadrian@gmail.com";
+const WEB3FORMS_KEY = import.meta.env.PUBLIC_WEB3FORMS_KEY ?? "c32732b3-7e48-4ca1-b20d-c76fadb0af3c";
+const EMAIL = PROFILE.email;
 
 const reasons = [
   { value: "job", key: "contact.form.reasonJob", label: "Vacante" },
@@ -302,7 +303,7 @@ const MESSAGE_MAX = 1000;
 
           <!-- Download CV Card -->
           <a
-            href="/Ing-Cesar-Adrian-Morado-Rodriguez-2026.pdf"
+            href={PROFILE.cvUrl}
             target="_blank"
             class="group relative p-4 bg-slate-950 hover:bg-slate-900 border-2 border-slate-800 hover:border-purple-500 transition-all duration-300 flex items-center gap-4 rounded-md"
           >

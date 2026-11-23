@@ -13,12 +13,15 @@ export interface Impact {
   text: string;
 }
 
+export type ProjectCategory = "web" | "gov" | "mobile" | "ai";
+
 export interface Project {
   key: string; // also the URL slug
   title: string;
   subtitle?: string;
   domain?: string;
   url?: string; // live site
+  categories: ProjectCategory[];
   overview: string;
   problem: string;
   challenge?: string;
@@ -45,6 +48,7 @@ export const projects: Project[] = [
   {
     key: "surticel",
     featured: true,
+    categories: ["web", "mobile"],
     title: "Surticel",
     subtitle: "Plataforma de pedidos B2B · Fruta y verdura",
     url: "https://surticel.com",
@@ -75,6 +79,7 @@ export const projects: Project[] = [
   },
   {
     key: "botvideo",
+    categories: ["ai"],
     title: "Bot Video Creator",
     subtitle: "Videos de programación con IA · YouTube y TikTok",
     domain: "youtube.com/@moradoadrian",
@@ -100,6 +105,7 @@ export const projects: Project[] = [
   },
   {
     key: "celebraya",
+    categories: ["web"],
     title: "Celebra-Ya Studio",
     domain: "celebra-ya.com",
     url: "https://celebra-ya.com",
@@ -120,6 +126,7 @@ export const projects: Project[] = [
   },
   {
     key: "constancias",
+    categories: ["gov", "web"],
     title: "Constancias de Inexistencia",
     overview: "Emisión y gestión de actas de inexistencia para la Dirección General del Registro Civil. Digitaliza trámites administrativos gubernamentales clave, agilizando el servicio al ciudadano mediante validación criptográfica y firmas digitales.",
     problem: "Los procesos de búsqueda y emisión de constancias tardaban entre 10 y 15 días hábiles debido al procesamiento manual y archivos heredados fragmentados.",
@@ -147,6 +154,7 @@ export const projects: Project[] = [
   },
   {
     key: "logpath",
+    categories: ["web"],
     title: "LogPath (midudev Hackathon)",
     overview: "Arquitectura de telemetría Edge-to-Cloud para puntos de venta (POS). Audita transacciones en tiempo real con interceptor de fallas.",
     problem: "Falta de visibilidad e imposibilidad de diagnosticar problemas en terminales de pago remotas antes de recibir quejas del cliente.",
@@ -162,6 +170,7 @@ export const projects: Project[] = [
   },
   {
     key: "anotaciones",
+    categories: ["gov", "web"],
     title: "Anotaciones Judiciales",
     overview: "Plataforma digital para la Dirección General del Registro Civil para asentar y auditar anotaciones marginales y rectificaciones legales.",
     problem: "Anotaciones en actas manuales propensas a errores de transcripción, pérdida física y demoras de búsqueda en libros físicos.",
@@ -174,6 +183,7 @@ export const projects: Project[] = [
   },
   {
     key: "posmiche",
+    categories: ["mobile"],
     title: "POS Miche LTS",
     overview: "Punto de venta y control de inventarios multiplataforma de alta velocidad para dispositivos móviles y escritorio.",
     problem: "Puntos de venta convencionales lentos, incompatibles con tabletas Android y dependientes de conectividad continua.",
@@ -186,6 +196,7 @@ export const projects: Project[] = [
   },
   {
     key: "purplewings",
+    categories: ["web", "mobile"],
     title: "Purple Wings",
     domain: "purple-wings.netlify.app",
     url: "https://purple-wings.netlify.app/#/inicio",

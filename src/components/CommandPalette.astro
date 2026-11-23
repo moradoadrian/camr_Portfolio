@@ -1,8 +1,9 @@
 ---
 import { projects } from "../data/projects";
+import { PROFILE } from "../data/profile";
 
-const EMAIL = "moradoadrian@gmail.com";
-const CV = "/Ing-Cesar-Adrian-Morado-Rodriguez-2026.pdf";
+const EMAIL = PROFILE.email;
+const CV = PROFILE.cvUrl;
 
 // kind: "link" navigates, "external" opens a new tab, anything else is handled in the script.
 // keywords hold both languages so search works whatever the page language is.
@@ -35,11 +36,11 @@ const actions: Command[] = [
   { id: "copy-email", group: "actions", key: "cmdk.copyEmail", label: "Copiar correo", icon: "⧉", kind: "copy", keywords: `copy email correo mail ${EMAIL}` },
   { id: "cv", group: "actions", key: "cmdk.cv", label: "Descargar CV", icon: "⇩", kind: "external", href: CV, keywords: "cv resume curriculum pdf download descargar" },
   { id: "lang", group: "actions", key: "cmdk.lang", label: "Cambiar idioma (ES / EN)", icon: "⇄", kind: "lang", keywords: "language idioma english español spanish ingles" },
-  { id: "github", group: "actions", label: "GitHub", icon: "⌥", kind: "external", href: "https://github.com/moradoadrian", keywords: "github repos codigo code" },
-  { id: "linkedin", group: "actions", label: "LinkedIn", icon: "in", kind: "external", href: "https://www.linkedin.com/in/moradoadrian/", keywords: "linkedin perfil profile" },
-  { id: "youtube", group: "actions", label: "YouTube", icon: "▶", kind: "external", href: "https://www.youtube.com/@moradoadrian", keywords: "youtube canal channel videos shorts programacion programming" },
-  { id: "tiktok", group: "actions", label: "TikTok", icon: "♪", kind: "external", href: "https://www.tiktok.com/@devmorado", keywords: "tiktok devmorado canal channel videos programacion programming" },
-  { id: "whatsapp", group: "actions", label: "WhatsApp", icon: "☏", kind: "external", href: "https://wa.me/524614210058", keywords: "whatsapp telefono phone chat" },
+  { id: "github", group: "actions", label: "GitHub", icon: "⌥", kind: "external", href: PROFILE.socials.github, keywords: "github repos codigo code" },
+  { id: "linkedin", group: "actions", label: "LinkedIn", icon: "in", kind: "external", href: PROFILE.socials.linkedin, keywords: "linkedin perfil profile" },
+  { id: "youtube", group: "actions", label: "YouTube", icon: "▶", kind: "external", href: PROFILE.socials.youtube, keywords: "youtube canal channel videos shorts programacion programming" },
+  { id: "tiktok", group: "actions", label: "TikTok", icon: "♪", kind: "external", href: PROFILE.socials.tiktok, keywords: "tiktok devmorado canal channel videos programacion programming" },
+  { id: "whatsapp", group: "actions", label: "WhatsApp", icon: "☏", kind: "external", href: PROFILE.whatsappUrl, keywords: "whatsapp telefono phone chat" },
 ];
 
 const groups = [
@@ -210,11 +211,12 @@ const groups = [
       if (kind === "external") {
         window.open(href, "_blank", "noopener");
       } else {
-        // Same-page anchors scroll; anything else is a normal navigation
+        // Same-page anchors scroll (and notify DevLab tabs via hashchange); anything else is a normal navigation
         const url = new URL(href, location.href);
         if (url.pathname === location.pathname && url.hash) {
-          document.querySelector(url.hash)?.scrollIntoView({ behavior: "smooth" });
           history.replaceState(null, "", url.hash);
+          window.dispatchEvent(new HashChangeEvent("hashchange"));
+          document.querySelector(url.hash)?.scrollIntoView({ behavior: "smooth" });
         } else {
           location.href = href;
         }

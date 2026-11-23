@@ -1,5 +1,8 @@
 ---
 import { getGitHubData, GITHUB_USER } from "../lib/github";
+import { PROFILE } from "../data/profile";
+import { projects } from "../data/projects";
+import en from "../../public/assets/i18n/en.json";
 
 const gh = await getGitHubData();
 
@@ -8,14 +11,14 @@ const termData = {
   github: gh
     ? { user: GITHUB_USER, contributions: gh.contributionsLastYear, repos: gh.publicRepos, since: gh.memberSince, languages: gh.topLanguages.map((l) => l.name) }
     : { user: GITHUB_USER },
-  cv: "/Ing-Cesar-Adrian-Morado-Rodriguez-2026.pdf",
+  cv: PROFILE.cvUrl,
   contact: {
-    email: "moradoadrian@gmail.com",
-    linkedin: "https://www.linkedin.com/in/moradoadrian/",
-    whatsapp: "https://wa.me/524614210058",
-    github: `https://github.com/${GITHUB_USER}`,
-    youtube: "https://www.youtube.com/@moradoadrian",
-    tiktok: "https://www.tiktok.com/@devmorado",
+    email: PROFILE.email,
+    linkedin: PROFILE.socials.linkedin,
+    whatsapp: PROFILE.whatsappUrl,
+    github: PROFILE.socials.github,
+    youtube: PROFILE.socials.youtube,
+    tiktok: PROFILE.socials.tiktok,
   },
   experience: [
     { period: { es: "Feb 2026 - Presente", en: "Feb 2026 - Present" }, company: "IEEG", role: { es: "Ingeniero de Software", en: "Software Engineer" }, note: "Flutter · Angular · C# · Scrum" },
@@ -23,16 +26,14 @@ const termData = {
     { period: { es: "Nov 2020 - Ene 2024", en: "Nov 2020 - Jan 2024" }, company: "Hospitales MAC", role: { es: "Soporte y Desarrollo", en: "Support & Development" }, note: "Oracle · Tasy EMR" },
     { period: { es: "May 2018 - Nov 2020", en: "May 2018 - Nov 2020" }, company: "Infoexpo", role: { es: "Desarrollador FrontEnd", en: "Frontend Developer" }, note: "PHP · Symfony · PostgreSQL" },
   ],
-  projects: [
-    { name: "surticel", desc: { es: "Plataforma de pedidos B2B (PWA)", en: "B2B ordering platform (PWA)" }, url: "https://surticel.com" },
-    { name: "bot-video-creator", desc: { es: "Videos de programación con IA", en: "AI programming videos" }, url: "https://www.youtube.com/@moradoadrian" },
-    { name: "celebra-ya", desc: { es: "Estudio de invitaciones digitales", en: "Digital invitation studio" }, url: "https://celebra-ya.com" },
-    { name: "purple-wings", desc: { es: "App de pedidos por WhatsApp", en: "WhatsApp ordering app" }, url: "https://purple-wings.netlify.app/#/inicio" },
-    { name: "logpath", desc: { es: "Telemetría POS (hackathon midudev)", en: "POS telemetry (midudev hackathon)" }, url: "https://github.com/moradoadrian/LogPath" },
-    { name: "constancias", desc: { es: "Constancias de inexistencia · Registro Civil", en: "Non-existence certificates · Civil Registry" } },
-    { name: "anotaciones", desc: { es: "Anotaciones judiciales · Registro Civil", en: "Court annotations · Civil Registry" } },
-    { name: "pos-miche", desc: { es: "Punto de venta híbrido", en: "Hybrid point of sale" } },
-  ],
+  projects: projects.map((p) => ({
+    name: p.key,
+    desc: {
+      es: p.subtitle ?? p.overview.slice(0, 72) + (p.overview.length > 72 ? "…" : ""),
+      en: en[`proj.${p.key}.subtitle` as keyof typeof en] ?? (en[`proj.${p.key}.overview` as keyof typeof en] ?? p.overview).slice(0, 72) + "…",
+    },
+    url: p.url ?? p.links[0]?.url ?? `/projects/${p.key}`,
+  })),
   skills: {
     frontend: ["Angular", "TypeScript", "Flutter", "Tailwind", "Astro"],
     backend: ["C#/.NET", "Python/FastAPI", "Node.js", "PHP"],

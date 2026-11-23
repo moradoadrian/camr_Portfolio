@@ -1,18 +1,10 @@
 ---
 import { siGithub, siWhatsapp, siYoutube, siTiktok, siAstro, siTailwindcss, siGreensock } from "simple-icons";
+import { PROFILE, NAV_LINKS as nav } from "../data/profile";
 
-const email = "moradoadrian@gmail.com";
-const cv = "/Ing-Cesar-Adrian-Morado-Rodriguez-2026.pdf";
+const email = PROFILE.email;
+const cv = PROFILE.cvUrl;
 const builtAt = new Date().toISOString().slice(0, 10);
-
-const nav = [
-  { key: "home", name: "Inicio", href: "/#top" },
-  { key: "about", name: "Sobre Mí", href: "/#about" },
-  { key: "experience", name: "Experiencia", href: "/#experience" },
-  { key: "certifications", name: "Certificaciones", href: "/#certifications" },
-  { key: "projects", name: "Proyectos", href: "/#projects" },
-  { key: "contact", name: "Contacto", href: "/#contact" },
-];
 
 const icon = (path: string) =>
   `<svg viewBox="0 0 24 24" class="w-4 h-4" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="${path}"/></svg>`;
@@ -21,11 +13,11 @@ const linkedinPath = "M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.03
 const mailPath = "M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4-8 5-8-5V6l8 5 8-5v2z";
 
 const socials = [
-  { label: "GitHub", href: "https://github.com/moradoadrian", svg: icon(siGithub.path) },
-  { label: "LinkedIn", href: "https://www.linkedin.com/in/moradoadrian/", svg: icon(linkedinPath) },
-  { label: "YouTube", href: "https://www.youtube.com/@moradoadrian", svg: icon(siYoutube.path) },
-  { label: "TikTok", href: "https://www.tiktok.com/@devmorado", svg: icon(siTiktok.path) },
-  { label: "WhatsApp", href: "https://wa.me/524614210058", svg: icon(siWhatsapp.path) },
+  { label: "GitHub", href: PROFILE.socials.github, svg: icon(siGithub.path) },
+  { label: "LinkedIn", href: PROFILE.socials.linkedin, svg: icon(linkedinPath) },
+  { label: "YouTube", href: PROFILE.socials.youtube, svg: icon(siYoutube.path) },
+  { label: "TikTok", href: PROFILE.socials.tiktok, svg: icon(siTiktok.path) },
+  { label: "WhatsApp", href: PROFILE.whatsappUrl, svg: icon(siWhatsapp.path) },
   { label: "Email", href: `mailto:${email}`, svg: icon(mailPath) },
 ];
 

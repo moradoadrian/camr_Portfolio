@@ -11,6 +11,14 @@ const caseStudyRows = [
   { label: "roleLabel", fallback: "Rol:", field: "role" },
 ] as const;
 
+const projectFilters = [
+  { id: "all", key: "proj.filter.all", label: "Todos" },
+  { id: "web", key: "proj.filter.web", label: "Web / SaaS" },
+  { id: "gov", key: "proj.filter.gov", label: "Gobierno" },
+  { id: "mobile", key: "proj.filter.mobile", label: "Mobile / POS" },
+  { id: "ai", key: "proj.filter.ai", label: "IA" },
+] as const;
+
 // Featured fills half the 6xl container on desktop; grid cards half of it minus padding
 const featuredImg = await responsive(featuredProject.image, [480, 800, 1100]);
 const featuredSizes = "(min-width: 1024px) 540px, (min-width: 640px) 90vw, 100vw";
@@ -80,7 +88,7 @@ const cardSizes = "(min-width: 768px) 470px, 100vw";
                   decoding="async"
                   class="absolute inset-0 w-full h-full object-cover object-top group-hover:object-bottom transition-[object-position] duration-[5000ms] ease-in-out"
                 />
-                <div class="absolute bottom-2 right-2 font-mono text-[9px] uppercase tracking-widest bg-slate-950/80 text-slate-400 px-2 py-1 rounded border border-slate-800 opacity-100 group-hover:opacity-0 transition-opacity" data-i18n="proj.hoverHint">
+                <div class="hidden [@media(hover:hover)]:block absolute bottom-2 right-2 font-mono text-[9px] uppercase tracking-widest bg-slate-950/80 text-slate-400 px-2 py-1 rounded border border-slate-800 opacity-100 group-hover:opacity-0 transition-opacity" data-i18n="proj.hoverHint">
                   ↓ hover para recorrer
                 </div>
               </div>
@@ -169,11 +177,28 @@ const cardSizes = "(min-width: 768px) 470px, 100vw";
       </div>
     </div>
 
+    <!-- Category Filters -->
+    <div class="flex flex-wrap items-center justify-center gap-2 mb-10 font-mono" role="group" aria-label="Filtrar proyectos por categoría">
+      {projectFilters.map((f, idx) => (
+        <button
+          type="button"
+          data-proj-filter={f.id}
+          aria-pressed={idx === 0 ? "true" : "false"}
+          class="proj-filter-btn px-3.5 py-1.5 text-xs rounded border border-slate-800 bg-slate-900/60 text-slate-400 hover:border-purple-500/60 hover:text-purple-200 aria-pressed:border-purple-500 aria-pressed:bg-purple-500/15 aria-pressed:text-white transition-all"
+        >
+          <span data-i18n={f.key}>{f.label}</span>
+        </button>
+      ))}
+    </div>
+
     <!-- Other Prominent Projects Grid -->
-    <div class="grid md:grid-cols-2 gap-8">
+    <div class="grid md:grid-cols-2 gap-8" id="projects-grid">
       {
         generalProjects.map((project, i) => (
-          <div class="project-card group relative bg-slate-950 border-2 border-slate-800 hover:border-purple-500/80 transition-all duration-300 hover:shadow-[0_0_25px_rgba(168,85,247,0.12)] p-6 rounded-md flex flex-col justify-between md:[&:last-child:nth-child(odd)]:col-span-2 md:[&:last-child:nth-child(odd)]:w-full md:[&:last-child:nth-child(odd)]:max-w-[calc(50%-1rem)] md:[&:last-child:nth-child(odd)]:mx-auto">
+          <div
+            data-categories={project.categories.join(",")}
+            class="project-card group relative bg-slate-950 border-2 border-slate-800 hover:border-purple-500/80 transition-all duration-300 hover:shadow-[0_0_25px_rgba(168,85,247,0.12)] p-6 rounded-md flex flex-col justify-between"
+          >
 
             <div>
               <!-- Mini browser frame -->
@@ -201,7 +226,7 @@ const cardSizes = "(min-width: 768px) 470px, 100vw";
                   />
                   <div class="absolute inset-0 bg-gradient-to-t from-slate-950/60 via-transparent to-transparent group-hover:from-slate-950/20 transition-colors duration-300"></div>
                   {project.scroll && (
-                    <div class="absolute bottom-2 right-2 font-mono text-[9px] uppercase tracking-widest bg-slate-950/80 text-slate-400 px-2 py-1 rounded border border-slate-800 group-hover:opacity-0 transition-opacity" data-i18n="proj.hoverHint">
+                    <div class="hidden [@media(hover:hover)]:block absolute bottom-2 right-2 font-mono text-[9px] uppercase tracking-widest bg-slate-950/80 text-slate-400 px-2 py-1 rounded border border-slate-800 group-hover:opacity-0 transition-opacity" data-i18n="proj.hoverHint">
                       ↓ hover para recorrer
                     </div>
                   )}
@@ -312,6 +337,23 @@ const cardSizes = "(min-width: 768px) 470px, 100vw";
         ease: "power3.out",
         clearProps: "transform,opacity",
       });
+    });
+  });
+
+  // Category filter buttons
+  const filterBtns = document.querySelectorAll<HTMLButtonElement>("[data-proj-filter]");
+  const projectCards = document.querySelectorAll<HTMLElement>("#projects-grid .project-card");
+
+  filterBtns.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const selected = btn.dataset.projFilter ?? "all";
+      filterBtns.forEach((b) => b.setAttribute("aria-pressed", String(b === btn)));
+      projectCards.forEach((card) => {
+        const cats = (card.dataset.categories ?? "").split(",");
+        const show = selected === "all" || cats.includes(selected);
+        card.classList.toggle("hidden", !show);
+      });
+      ScrollTrigger.refresh();
     });
   });
 </script>
